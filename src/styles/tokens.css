@@ -1,83 +1,176 @@
-/* Design tokens. Light = "daylight", dark = "night flight". Art ink stays dark in both themes. */
+/* ─────────────────────────────────────────────────────────────────────────
+   Design Tokens — Make Pigs Fly (makepigs.fly)
+   Aesthetic: Neo-Editorial Aero-Pop & Tactile Storybook Studio
+   Light = "Daylight Sortie", Dark = "Night Flight Stratosphere"
+   ───────────────────────────────────────────────────────────────────────── */
 :root {
   --font: ui-rounded, 'SF Pro Rounded', 'Hiragino Maru Gothic ProN', 'Arial Rounded MT Bold', Nunito,
     'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC', 'Noto Sans JP', system-ui, sans-serif;
   --mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, 'Liberation Mono', monospace;
 
-  --sky-top: #bfe3ff;
-  --sky-bottom: #fff1dc;
-  --stage-sky-top: #9fd6ff;
-  --stage-sky-bottom: #e8f6ff;
+  /* Atmospheric Sky Backdrop */
+  --sky-top: #a8daff;
+  --sky-mid: #dff1ff;
+  --sky-bottom: #fff3df;
+  --sky-glow: rgba(255, 208, 115, 0.38);
+  --sky-dot: rgba(38, 26, 46, 0.045);
+
+  /* Stage Viewport Sky */
+  --stage-sky-top: #7ec4ff;
+  --stage-sky-mid: #bce4ff;
+  --stage-sky-bottom: #eef9ff;
+
+  /* Tactile Surfaces & Ink */
   --paper: #fffdf8;
-  --paper-2: #fff3e3;
-  --ink: #2a1e2e;
-  --ink-soft: #6b5a6e;
-  --line: #2a1e2e;
-  --shadow: #2a1e2e;
-  --accent: #ffc83d;
-  --accent-ink: #2a1e2e;
-  --go: #2fa866;
-  --stop: #e5484d;
-  --link: #1f6fd1;
-  --grass: #84d06f;
-  --grass-deep: #57ad4b;
+  --paper-2: #f9efe0;
+  --paper-3: #f1e3ce;
+  --paper-glass: rgba(255, 253, 248, 0.88);
+  --surface-highlight: rgba(255, 255, 255, 0.9);
+  --ink: #231829;
+  --ink-soft: #65536b;
+  --ink-muted: #938199;
+  --line: #231829;
+  --line-soft: rgba(35, 24, 41, 0.14);
+  --shadow: #231829;
+  --shadow-ambient: rgba(35, 24, 41, 0.12);
+
+  /* Brand & Semantic Accents */
+  --accent: #ffc425;
+  --accent-hover: #ffcf4d;
+  --accent-deep: #e59e00;
+  --accent-soft: #fff2c6;
+  --accent-ink: #231829;
+
+  --coral: #ff789e;
+  --coral-soft: #ffe0ea;
+  --go: #1ea866;
+  --go-soft: #d7f7e7;
+  --stop: #e54348;
+  --stop-soft: #ffe0e1;
+  --link: #1964d2;
+
+  /* Landscape & Stage Nature */
+  --grass: #7AD366;
+  --grass-deep: #4FA843;
+  --hill-far: #b8e4c9;
+  --hill-near: #95d6a4;
   --cloud: #ffffff;
 
-  --art-ink: #2a1e2e;
-  --pig: #ff9fb6;
-  --pig-deep: #f0718f;
-  --pig-light: #ffc6d3;
+  /* Pig & Skit Art Palette (art-ink stays dark so illustrations pop cleanly) */
+  --art-ink: #231829;
+  --pig: #ff9eb6;
+  --pig-deep: #ec6b8c;
+  --pig-light: #ffd0dc;
   --pig-ink: var(--art-ink);
-  --pig-cheek: #ff7398;
+  --pig-cheek: #ff5c8a;
 
-  --radius: 16px;
-  --radius-lg: 22px;
+  /* Spatial & Structural Tokens */
+  --radius-sm: 12px;
+  --radius: 18px;
+  --radius-lg: 26px;
+  --radius-xl: 32px;
   --border: 3px;
   --lift: 4px;
+  --lift-lg: 7px;
+
+  --ease-spring: cubic-bezier(0.22, 1.35, 0.36, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --sky-top: #0f1433;
-    --sky-bottom: #3a2c5e;
-    --stage-sky-top: #182150;
-    --stage-sky-bottom: #4b3a73;
-    --paper: #1f1b36;
-    --paper-2: #2a2548;
-    --ink: #f6eefc;
-    --ink-soft: #b9abc9;
-    --line: #f6eefc;
-    --shadow: #05040c;
-    --accent: #ffcf5a;
-    --go: #46c985;
-    --stop: #ff6b6f;
-    --link: #8cc2ff;
-    --grass: #3f8a5c;
-    --grass-deep: #2c6744;
-    --cloud: #b8b2dc;
+    --sky-top: #090d24;
+    --sky-mid: #161b42;
+    --sky-bottom: #2d2050;
+    --sky-glow: rgba(139, 92, 246, 0.22);
+    --sky-dot: rgba(255, 255, 255, 0.04);
+
+    --stage-sky-top: #10173d;
+    --stage-sky-mid: #232963;
+    --stage-sky-bottom: #473675;
+
+    --paper: #1b1730;
+    --paper-2: #262042;
+    --paper-3: #322a54;
+    --paper-glass: rgba(27, 23, 48, 0.88);
+    --surface-highlight: rgba(255, 255, 255, 0.09);
+    --ink: #f7f2fc;
+    --ink-soft: #b8abca;
+    --ink-muted: #847699;
+    --line: #f4ebff;
+    --line-soft: rgba(244, 235, 255, 0.14);
+    --shadow: #06040f;
+    --shadow-ambient: rgba(0, 0, 0, 0.42);
+
+    --accent: #ffca3a;
+    --accent-hover: #ffd666;
+    --accent-deep: #d99b00;
+    --accent-soft: rgba(255, 202, 58, 0.16);
+    --accent-ink: #1b1528;
+
+    --coral: #ff85a7;
+    --coral-soft: rgba(255, 133, 167, 0.18);
+    --go: #3dd68c;
+    --go-soft: rgba(61, 214, 140, 0.16);
+    --stop: #ff696e;
+    --stop-soft: rgba(255, 105, 110, 0.18);
+    --link: #82bfff;
+
+    --grass: #3c8c5c;
+    --grass-deep: #286642;
+    --hill-far: #2d2754;
+    --hill-near: #264d4c;
+    --cloud: #c7c1e8;
+
     color-scheme: dark;
   }
 }
 
 :root[data-theme='dark'] {
-  --sky-top: #0f1433;
-  --sky-bottom: #3a2c5e;
-  --stage-sky-top: #182150;
-  --stage-sky-bottom: #4b3a73;
-  --paper: #1f1b36;
-  --paper-2: #2a2548;
-  --ink: #f6eefc;
-  --ink-soft: #b9abc9;
-  --line: #f6eefc;
-  --shadow: #05040c;
-  --accent: #ffcf5a;
-  --go: #46c985;
-  --stop: #ff6b6f;
-  --link: #8cc2ff;
-  --grass: #3f8a5c;
-  --grass-deep: #2c6744;
-  --cloud: #b8b2dc;
+  --sky-top: #090d24;
+  --sky-mid: #161b42;
+  --sky-bottom: #2d2050;
+  --sky-glow: rgba(139, 92, 246, 0.22);
+  --sky-dot: rgba(255, 255, 255, 0.04);
+
+  --stage-sky-top: #10173d;
+  --stage-sky-mid: #232963;
+  --stage-sky-bottom: #473675;
+
+  --paper: #1b1730;
+  --paper-2: #262042;
+  --paper-3: #322a54;
+  --paper-glass: rgba(27, 23, 48, 0.88);
+  --surface-highlight: rgba(255, 255, 255, 0.09);
+  --ink: #f7f2fc;
+  --ink-soft: #b8abca;
+  --ink-muted: #847699;
+  --line: #f4ebff;
+  --line-soft: rgba(244, 235, 255, 0.14);
+  --shadow: #06040f;
+  --shadow-ambient: rgba(0, 0, 0, 0.42);
+
+  --accent: #ffca3a;
+  --accent-hover: #ffd666;
+  --accent-deep: #d99b00;
+  --accent-soft: rgba(255, 202, 58, 0.16);
+  --accent-ink: #1b1528;
+
+  --coral: #ff85a7;
+  --coral-soft: rgba(255, 133, 167, 0.18);
+  --go: #3dd68c;
+  --go-soft: rgba(61, 214, 140, 0.16);
+  --stop: #ff696e;
+  --stop-soft: rgba(255, 105, 110, 0.18);
+  --link: #82bfff;
+
+  --grass: #3c8c5c;
+  --grass-deep: #286642;
+  --hill-far: #2d2754;
+  --hill-near: #264d4c;
+  --cloud: #c7c1e8;
+
   color-scheme: dark;
 }
