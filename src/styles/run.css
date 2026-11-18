@@ -1,6 +1,9 @@
 .run {
   max-width: 980px;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 .run-box {
@@ -8,9 +11,12 @@
   aspect-ratio: 16 / 9;
   overflow: hidden;
   border: var(--border) solid var(--line);
-  border-radius: 18px;
+  border-radius: 24px;
   background: var(--stage-sky-top);
-  box-shadow: 6px 6px 0 var(--shadow);
+  box-shadow:
+    inset 0 2px 6px rgba(0, 0, 0, 0.12),
+    var(--lift-lg) var(--lift-lg) 0 var(--shadow),
+    0 18px 38px var(--shadow-ambient);
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
@@ -21,6 +27,7 @@
 @media (max-width: 600px) {
   .run-box {
     aspect-ratio: 1 / 0.85;
+    border-radius: 20px;
   }
 }
 
@@ -32,11 +39,13 @@
   display: block;
 }
 
+/* Cockpit Telemetry HUD */
 .run-hud {
   position: absolute;
-  top: 10px;
-  left: 10px;
-  right: 10px;
+  top: 12px;
+  left: 14px;
+  right: 14px;
+  z-index: 4;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -45,42 +54,64 @@
 }
 
 .hud-pill {
-  padding: 2px 10px;
+  padding: 4px 13px;
   font-family: var(--mono);
-  font-weight: 800;
-  font-size: 0.95rem;
-  color: #2a1e2e;
-  background: rgba(255, 253, 248, 0.92);
+  font-weight: 900;
+  font-size: 0.96rem;
+  color: #231829;
+  background: rgba(255, 253, 248, 0.94);
+  backdrop-filter: blur(6px);
   border: 2.5px solid var(--art-ink);
   border-radius: 999px;
+  box-shadow:
+    inset 0 1.5px 0 #ffffff,
+    2.5px 2.5px 0 var(--art-ink);
   white-space: nowrap;
 }
 
 .hud-boost {
   font-family: var(--font);
-  background: var(--accent);
+  background: linear-gradient(180deg, #ffe066 0%, #ffc425 100%);
+  color: #231829;
 }
 
+/* Arcade Flight-Recorder Overlays */
 .run-overlay {
   position: absolute;
   inset: 0;
+  z-index: 5;
   display: grid;
   place-items: center;
   padding: 16px;
-  background: rgba(20, 16, 36, 0.18);
+  background: rgba(15, 11, 28, 0.24);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
 }
 
 .run-panel {
-  max-width: min(440px, 100%);
+  width: min(440px, 100%);
   max-height: 100%;
   overflow: auto;
-  padding: 16px 20px;
+  padding: 18px 22px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   text-align: center;
   cursor: default;
+}
+
+.run-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+  background: var(--paper-2);
+  border: 1.5px solid var(--line-soft);
+  border-radius: 999px;
 }
 
 .run-panel h2 {
@@ -88,6 +119,7 @@
   font-size: clamp(1.4rem, 4vw, 2rem);
   font-weight: 900;
   line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 
 .run-panel p {
@@ -96,30 +128,56 @@
 
 .run-hint,
 .run-pct {
-  font-size: 0.88rem;
+  font-size: 0.86rem;
+  font-weight: 700;
   color: var(--ink-soft);
 }
 
 .run-cause {
   font-weight: 800;
+  font-size: 1rem;
+  color: var(--ink);
+}
+
+.run-score-box {
+  width: 100%;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: var(--paper-2);
+  border: 2px solid var(--line-soft);
+  border-radius: 16px;
 }
 
 .run-distance {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   font-weight: 900;
   font-family: var(--mono);
+  letter-spacing: -0.02em;
 }
 
 .run-newbest {
-  padding: 0 10px;
+  display: inline-block;
+  padding: 2px 12px;
+  font-size: 0.88rem;
   font-weight: 900;
   color: var(--accent-ink);
   background: var(--accent);
-  border-radius: 8px;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  box-shadow: 2px 2px 0 var(--shadow);
 }
 
 .run-challenge {
-  font-weight: 800;
+  padding: 4px 12px;
+  font-weight: 900;
+  font-size: 0.94rem;
+  color: var(--accent-ink);
+  background: var(--coral-soft);
+  border: 2px solid var(--line);
+  border-radius: 999px;
 }
 
 .run-row {
@@ -127,18 +185,31 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
-  margin-top: 4px;
+  margin-top: 2px;
 }
 
 .run-controls {
-  margin: 12px 0 0;
+  margin: 0 auto;
+  padding: 6px 16px;
+  display: inline-block;
   text-align: center;
-  font-size: 0.88rem;
+  font-size: 0.86rem;
+  font-weight: 800;
   color: var(--ink-soft);
+  background: var(--paper-glass);
+  border: 1.5px solid var(--line-soft);
+  border-radius: 999px;
 }
 
 @media (max-width: 600px) {
   .run-hint {
     display: none;
+  }
+  .run-panel {
+    padding: 14px 16px;
+    gap: 8px;
+  }
+  .run-score-box {
+    padding: 8px 10px;
   }
 }

@@ -30,7 +30,8 @@ export function createMode(): Mode {
   };
 }
 
-const isTyping = (el: EventTarget | null) => el instanceof HTMLElement && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT|BUTTON|A)$/.test(el.tagName));
+const isTyping = (el: EventTarget | null) =>
+  el instanceof HTMLElement && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT|BUTTON|A)$/.test(el.tagName));
 
 function mountRun({ root, route, signal }: ModeContext): (n: number | null) => void {
   const game = (shared ??= new Game(randomSeed()));
@@ -40,7 +41,7 @@ function mountRun({ root, route, signal }: ModeContext): (n: number | null) => v
 
   // ── DOM ─────────────────────────────────────────────────
   const canvas = h('canvas', { class: 'run-canvas', role: 'img', 'aria-label': t('run.canvasLabel') });
-  const hudDist = h('span', { class: 'hud-pill' });
+  const hudDist = h('span', { class: 'hud-pill hud-dist' });
   const hudBoost = h('span', { class: 'hud-pill hud-boost', text: t('run.boost'), hidden: true });
   const hudBest = h('span', { class: 'hud-pill hud-best' });
   const hud = h('div', { class: 'run-hud', 'aria-hidden': 'true' }, hudDist, hudBoost, hudBest);
@@ -50,27 +51,62 @@ function mountRun({ root, route, signal }: ModeContext): (n: number | null) => v
   const ready = h(
     'div',
     { class: 'run-overlay' },
-    h('div', { class: 'run-panel card' }, h('h2', { text: t('run.title') }), challengeLine, startBtn, h('p', { class: 'run-hint', text: t('run.controls') })),
+    h(
+      'div',
+      { class: 'run-panel card' },
+      h('span', { class: 'run-badge', 'aria-hidden': 'true', text: 'SORTIE // READY FOR TAKEOFF' }),
+      h('h2', { text: t('run.title') }),
+      challengeLine,
+      startBtn,
+      h('p', { class: 'run-hint', text: t('run.controls') }),
+    ),
   );
 
   const resumeBtn = h('button', { class: 'btn btn-primary', type: 'button', text: t('run.resume') });
-  const paused = h('div', { class: 'run-overlay' }, h('div', { class: 'run-panel card' }, h('h2', { text: t('run.paused') }), resumeBtn));
+  const paused = h(
+    'div',
+    { class: 'run-overlay' },
+    h(
+      'div',
+      { class: 'run-panel card' },
+      h('span', { class: 'run-badge', 'aria-hidden': 'true', text: 'HOLDING PATTERN // PAUSED' }),
+      h('h2', { text: t('run.paused') }),
+      resumeBtn,
+    ),
+  );
 
   const overCause = h('p', { class: 'run-cause' });
   const overDist = h('p', { class: 'run-distance' });
   const overPct = h('p', { class: 'run-pct' });
   const overBest = h('p', { class: 'run-newbest', text: t('run.over.newBest') });
   const againBtn = h('button', { class: 'btn btn-primary', type: 'button', text: t('run.again') });
-  const challengeBtn = h('button', { class: 'btn btn-small', type: 'button', text: t('run.challenge') });
+  const challengeBtn = h('button', { class: 'btn btn-small btn-accent', type: 'button', text: t('run.challenge') });
   const over = h(
     'div',
     { class: 'run-overlay' },
-    h('div', { class: 'run-panel card' }, h('h2', { text: t('run.over.title') }), overCause, overDist, overPct, overBest, h('div', { class: 'run-row' }, againBtn, challengeBtn)),
+    h(
+      'div',
+      { class: 'run-panel card' },
+      h('span', { class: 'run-badge', 'aria-hidden': 'true', text: 'FLIGHT RECORDER // TELEMETRY' }),
+      h('h2', { text: t('run.over.title') }),
+      overCause,
+      h('div', { class: 'run-score-box' }, overDist, overBest, overPct),
+      h('div', { class: 'run-row' }, againBtn, challengeBtn),
+    ),
   );
 
   const live = h('p', { class: 'visually-hidden', 'aria-live': 'polite' });
   const box = h('div', { class: 'run-box' }, canvas, hud, ready, paused, over);
-  root.append(h('section', { class: 'run' }, h('h1', { class: 'visually-hidden', text: t('run.title') }), box, h('p', { class: 'run-controls', text: t('run.controls') }), live));
+  root.append(
+    h(
+      'section',
+      { class: 'run' },
+      h('h1', { class: 'visually-hidden', text: t('run.title') }),
+      box,
+      h('p', { class: 'run-controls', text: t('run.controls') }),
+      live,
+    ),
+  );
 
   // ── Rendering ───────────────────────────────────────────
   const renderer = new Renderer(canvas);
@@ -260,7 +296,11 @@ function mountRun({ root, route, signal }: ModeContext): (n: number | null) => v
       hudBoost.hidden = false;
       window.clearTimeout(boostTimer);
       boostTimer = window.setTimeout(() => (hudBoost.hidden = true), 1800);
-      if (!prefersReducedMotion()) box.animate([{ transform: 'translateY(0)' }, { transform: 'translateY(-4px)' }, { transform: 'none' }], { duration: 200 });
+      if (!prefersReducedMotion()) {
+        box.animate([{ transform: 'translateY(0)' }, { transform: 'translateY(-4px)' }, { transform: 'none' }], {
+          duration: 200,
+        });
+      }
     },
     { signal },
   );

@@ -6,6 +6,7 @@ import { balloonY, type Obstacle } from './spawner';
 
 export interface Palette {
   skyTop: string;
+  skyMid: string;
   skyBottom: string;
   ink: string;
   grass: string;
@@ -14,6 +15,7 @@ export interface Palette {
   hillFar: string;
   hillNear: string;
   accent: string;
+  dark: boolean;
 }
 
 export function readPalette(el: Element): Palette {
@@ -21,15 +23,17 @@ export function readPalette(el: Element): Palette {
   const v = (name: string, fallback: string) => cs.getPropertyValue(name).trim() || fallback;
   const dark = cs.colorScheme.includes('dark') && !cs.colorScheme.includes('light');
   return {
-    skyTop: v('--stage-sky-top', '#9fd6ff'),
-    skyBottom: v('--stage-sky-bottom', '#e8f6ff'),
-    ink: v('--art-ink', '#2a1e2e'),
-    grass: v('--grass', '#84d06f'),
-    grassDeep: v('--grass-deep', '#57ad4b'),
+    skyTop: v('--stage-sky-top', '#7ec4ff'),
+    skyMid: v('--stage-sky-mid', '#bce4ff'),
+    skyBottom: v('--stage-sky-bottom', '#eef9ff'),
+    ink: v('--art-ink', '#231829'),
+    grass: v('--grass', '#7AD366'),
+    grassDeep: v('--grass-deep', '#4FA843'),
     cloud: v('--cloud', '#ffffff'),
-    hillFar: dark ? '#3b3466' : '#bfe6c4',
-    hillNear: dark ? '#2f5a52' : '#a5dca0',
-    accent: v('--accent', '#ffc83d'),
+    hillFar: v('--hill-far', dark ? '#2d2754' : '#b8e4c9'),
+    hillNear: v('--hill-near', dark ? '#264d4c' : '#95d6a4'),
+    accent: v('--accent', '#ffc425'),
+    dark,
   };
 }
 
@@ -70,6 +74,7 @@ export class Renderer {
     if (!this.sky) {
       this.sky = ctx.createLinearGradient(0, 0, 0, WORLD_H);
       this.sky.addColorStop(0, pal.skyTop);
+      this.sky.addColorStop(0.58, pal.skyMid);
       this.sky.addColorStop(1, pal.skyBottom);
     }
     ctx.fillStyle = this.sky;
@@ -88,20 +93,74 @@ export class Renderer {
   private drawBackdrop(game: Game, pal: Palette): void {
     const { ctx } = this;
     const W = this.worldW;
+
+    // Celestial sun or night stars
+    const orbX = W * 0.82;
+    const orbY = 58;
+    if (pal.dark) {
+      ctx.fillStyle = '#ffffff';
+      for (let i = 0; i < 14; i++) {
+        const sx = ((i * 97 + 30) % W);
+        const sy = 18 + ((i * 43) % 140);
+        const r = 1 + (i % 2) * 0.8;
+        ctx.globalAlpha = 0.35 + 0.45 * Math.abs(Math.sin(game.time * 2 + i));
+        ctx.beginPath();
+        ctx.arc(sx, sy, r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 0.16;
+      ctx.fillStyle = '#ffe9a8';
+      ctx.beginPath();
+      ctx.arc(orbX, orbY, 34, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 0.92;
+      ctx.beginPath();
+      ctx.arc(orbX, orbY, 20, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    } else {
+      ctx.fillStyle = 'rgba(255, 228, 115, 0.25)';
+      ctx.beginPath();
+      ctx.arc(orbX, orbY, 42, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#ffe066';
+      ctx.beginPath();
+      ctx.arc(orbX, orbY, 24, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
     // Drifting clouds (decorative, no collision).
     ctx.fillStyle = pal.cloud;
-    ctx.globalAlpha = 0.8;
+    ctx.globalAlpha = 0.86;
     for (let i = 0; i < 4; i++) {
       const span = W + 220;
-      const x = ((i * 260 - game.distance * 0.12 - game.time * 6) % span + span) % span - 110;
+      const x = (((i * 260 - game.distance * 0.12 - game.time * 6) % span) + span) % span - 110;
       const y = 40 + ((i * 53) % 90);
       const s = 0.7 + (i % 3) * 0.25;
       this.puff(x, y, s);
     }
     ctx.globalAlpha = 1;
+
     // Two layers of rolling hills.
     this.hills(pal.hillFar, GROUND_Y - 58, 34, 0.18, game.distance, 260);
     this.hills(pal.hillNear, GROUND_Y - 30, 24, 0.4, game.distance, 180);
+
+    // High-speed wind lines during rocket boost or dive
+    if (game.boostT > 0 || (game.diving && game.state === 'playing')) {
+      ctx.strokeStyle = pal.cloud;
+      ctx.globalAlpha = game.boostT > 0 ? 0.55 : 0.3;
+      ctx.lineWidth = 2;
+      for (let i = 0; i < 6; i++) {
+        const span = W + 160;
+        const wx = (((i * 170 - game.time * 720) % span) + span) % span - 80;
+        const wy = 45 + ((i * 67) % (GROUND_Y - 80));
+        ctx.beginPath();
+        ctx.moveTo(wx, wy);
+        ctx.lineTo(wx + (game.boostT > 0 ? 56 : 32), wy);
+        ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+    }
   }
 
   private puff(x: number, y: number, s: number): void {
@@ -140,7 +199,7 @@ export class Renderer {
     ctx.moveTo(0, GROUND_Y);
     ctx.lineTo(this.worldW, GROUND_Y);
     ctx.stroke();
-    // Grass tufts scroll with the world.
+    // Grass tufts and meadow flowers scroll with the world.
     ctx.lineWidth = 2;
     const off = game.distance % 46;
     for (let x = -off; x < this.worldW; x += 46) {
@@ -150,6 +209,12 @@ export class Renderer {
       ctx.moveTo(x + 6, GROUND_Y + 10);
       ctx.lineTo(x + 8, GROUND_Y + 4);
       ctx.stroke();
+
+      // Tiny pasture daisy
+      ctx.fillStyle = pal.accent;
+      ctx.beginPath();
+      ctx.arc(x + 24, GROUND_Y + 8, 2.2, 0, Math.PI * 2);
+      ctx.fill();
     }
   }
 
@@ -314,7 +379,7 @@ export class Renderer {
         const cx = o.x + o.w / 2;
         // updraft
         ctx.strokeStyle = pal.cloud;
-        ctx.globalAlpha = 0.6;
+        ctx.globalAlpha = 0.65;
         ctx.lineWidth = 2;
         for (let i = 0; i < 4; i++) {
           const lx = o.x + 8 + i * ((o.w - 16) / 3);
@@ -357,14 +422,14 @@ export class Renderer {
 
     // Rocket mode flame.
     if (game.boostT > 0) {
-      const flick = 0.8 + Math.sin(game.time * 60) * 0.2;
+      const flick = 0.8 + Math.sin(game.time * 60) * 0.22;
       ctx.fillStyle = '#ff6b3d';
       ctx.beginPath();
-      ctx.ellipse(-PIG_W * 0.55, 4, 18 * flick, 8, 0, 0, Math.PI * 2);
+      ctx.ellipse(-PIG_W * 0.56, 4, 21 * flick, 9, 0, 0, Math.PI * 2);
       ctx.fill();
       ctx.fillStyle = '#ffd23f';
       ctx.beginPath();
-      ctx.ellipse(-PIG_W * 0.5, 4, 10 * flick, 4.5, 0, 0, Math.PI * 2);
+      ctx.ellipse(-PIG_W * 0.5, 4, 12 * flick, 5, 0, 0, Math.PI * 2);
       ctx.fill();
     }
 
@@ -376,7 +441,7 @@ export class Renderer {
     if (this.pigImg) {
       ctx.drawImage(this.pigImg, -PIG_W * 0.55, -PIG_H * 0.56, PIG_W, PIG_H);
     } else {
-      ctx.fillStyle = '#ff9fb6';
+      ctx.fillStyle = '#ff9eb6';
       ctx.strokeStyle = pal.ink;
       ctx.lineWidth = 3;
       ctx.beginPath();
