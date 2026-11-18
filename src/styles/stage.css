@@ -1,0 +1,159 @@
+/* The skit stage: a fixed-aspect box that is also a size container, so props can use cqw/cqh. */
+.stage-wrap {
+  width: 100%;
+}
+
+.stage {
+  position: relative;
+  container-type: size;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border: var(--border) solid var(--line);
+  border-radius: 18px;
+  background: linear-gradient(180deg, var(--stage-sky-top), var(--stage-sky-bottom));
+  isolation: isolate;
+}
+
+@media (max-width: 600px) {
+  .stage {
+    aspect-ratio: 1 / 0.86;
+  }
+}
+
+.stage-far,
+.stage-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.stage-far {
+  z-index: 0;
+}
+.stage-back {
+  z-index: 2;
+}
+.stage-front {
+  z-index: 4;
+}
+
+.stage-ground {
+  position: absolute;
+  left: -4%;
+  right: -4%;
+  bottom: -1px;
+  height: 18cqh;
+  z-index: 1;
+  background: var(--grass);
+  border-top: var(--border) solid var(--art-ink);
+  border-radius: 50% 50% 0 0 / 18px 18px 0 0;
+  box-shadow: inset 0 -5cqh 0 var(--grass-deep);
+}
+
+.cloud {
+  position: absolute;
+  width: 16cqw;
+  height: 5cqw;
+  border-radius: 999px;
+  background: var(--cloud);
+  opacity: 0.85;
+  animation: drift 38s linear infinite;
+}
+.cloud::before,
+.cloud::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: inherit;
+}
+.cloud::before {
+  width: 7cqw;
+  height: 7cqw;
+  left: 2.5cqw;
+  top: -3.6cqw;
+}
+.cloud::after {
+  width: 5cqw;
+  height: 5cqw;
+  left: 8cqw;
+  top: -2.4cqw;
+}
+.cloud.c1 {
+  top: 14cqh;
+  left: 8cqw;
+}
+.cloud.c2 {
+  top: 30cqh;
+  left: 62cqw;
+  transform: scale(0.7);
+  animation-duration: 52s;
+  animation-delay: -20s;
+}
+.cloud.c3 {
+  top: 8cqh;
+  left: 78cqw;
+  transform: scale(0.55);
+  animation-duration: 64s;
+  animation-delay: -40s;
+}
+@keyframes drift {
+  from {
+    translate: 0 0;
+  }
+  to {
+    translate: -110cqw 0;
+  }
+}
+
+.pig {
+  position: absolute;
+  left: 36cqw;
+  bottom: 14cqh;
+  width: 28cqw;
+  z-index: 3;
+  transform-origin: 50% 100%;
+}
+
+.pig > svg {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.pig .leg {
+  transform-box: fill-box;
+  transform-origin: 50% 12%;
+}
+
+.pig .pig-tail {
+  transform-box: fill-box;
+  transform-origin: 100% 50%;
+}
+
+.caption {
+  min-height: 2.8em;
+  margin: 14px 0 0;
+  font-size: clamp(1.05rem, 2.6vw, 1.35rem);
+  font-weight: 800;
+  line-height: 1.35;
+  text-align: center;
+  text-wrap: balance;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cloud {
+    animation: none;
+  }
+}
+
+/* Narrow stages (phones): a bigger pig reads better. */
+@container (max-width: 480px) {
+  .pig {
+    left: 31cqw;
+    width: 36cqw;
+  }
+}

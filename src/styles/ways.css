@@ -1,0 +1,122 @@
+.ways {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.ways-head {
+  text-align: center;
+}
+
+.ways-head h1 {
+  margin: 8px 0 4px;
+  font-size: clamp(1.6rem, 4.6vw, 2.5rem);
+  font-weight: 900;
+  line-height: 1.15;
+}
+
+.ways-sub {
+  margin: 0;
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+
+.ways-progress {
+  display: inline-block;
+  margin: 10px 0 0;
+  padding: 2px 12px;
+  font-weight: 900;
+  background: var(--paper);
+  border: var(--border) solid var(--line);
+  border-radius: 999px;
+}
+
+.ways-player {
+  padding: clamp(12px, 2.4vw, 22px);
+}
+
+.ways-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.ways-method {
+  margin: 0;
+  min-height: 1.4em;
+  font-weight: 800;
+  color: var(--ink-soft);
+}
+
+.ways-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.ways-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.way-card {
+  width: 100%;
+  min-height: 92px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 12px 14px;
+  font: inherit;
+  text-align: left;
+  color: var(--ink);
+  background: var(--paper);
+  border: var(--border) solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 3px 3px 0 var(--shadow);
+  cursor: pointer;
+  transition: transform 0.08s ease;
+}
+
+.way-card:hover {
+  transform: translate(-1px, -1px);
+}
+
+.way-card.is-current {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.way-card.is-locked {
+  cursor: help;
+  color: var(--ink-soft);
+  background: repeating-linear-gradient(-45deg, var(--paper) 0 10px, var(--paper-2) 10px 20px);
+  box-shadow: none;
+}
+
+.way-num {
+  font-family: var(--mono);
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+
+.way-name {
+  font-weight: 900;
+  font-size: 1.05rem;
+  line-height: 1.2;
+}
+
+.ways-done {
+  text-align: center;
+  font-weight: 800;
+}

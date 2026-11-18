@@ -1,0 +1,83 @@
+/* Design tokens. Light = "daylight", dark = "night flight". Art ink stays dark in both themes. */
+:root {
+  --font: ui-rounded, 'SF Pro Rounded', 'Hiragino Maru Gothic ProN', 'Arial Rounded MT Bold', Nunito,
+    'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC', 'Noto Sans JP', system-ui, sans-serif;
+  --mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+
+  --sky-top: #bfe3ff;
+  --sky-bottom: #fff1dc;
+  --stage-sky-top: #9fd6ff;
+  --stage-sky-bottom: #e8f6ff;
+  --paper: #fffdf8;
+  --paper-2: #fff3e3;
+  --ink: #2a1e2e;
+  --ink-soft: #6b5a6e;
+  --line: #2a1e2e;
+  --shadow: #2a1e2e;
+  --accent: #ffc83d;
+  --accent-ink: #2a1e2e;
+  --go: #2fa866;
+  --stop: #e5484d;
+  --link: #1f6fd1;
+  --grass: #84d06f;
+  --grass-deep: #57ad4b;
+  --cloud: #ffffff;
+
+  --art-ink: #2a1e2e;
+  --pig: #ff9fb6;
+  --pig-deep: #f0718f;
+  --pig-light: #ffc6d3;
+  --pig-ink: var(--art-ink);
+  --pig-cheek: #ff7398;
+
+  --radius: 16px;
+  --radius-lg: 22px;
+  --border: 3px;
+  --lift: 4px;
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --sky-top: #0f1433;
+    --sky-bottom: #3a2c5e;
+    --stage-sky-top: #182150;
+    --stage-sky-bottom: #4b3a73;
+    --paper: #1f1b36;
+    --paper-2: #2a2548;
+    --ink: #f6eefc;
+    --ink-soft: #b9abc9;
+    --line: #f6eefc;
+    --shadow: #05040c;
+    --accent: #ffcf5a;
+    --go: #46c985;
+    --stop: #ff6b6f;
+    --link: #8cc2ff;
+    --grass: #3f8a5c;
+    --grass-deep: #2c6744;
+    --cloud: #b8b2dc;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --sky-top: #0f1433;
+  --sky-bottom: #3a2c5e;
+  --stage-sky-top: #182150;
+  --stage-sky-bottom: #4b3a73;
+  --paper: #1f1b36;
+  --paper-2: #2a2548;
+  --ink: #f6eefc;
+  --ink-soft: #b9abc9;
+  --line: #f6eefc;
+  --shadow: #05040c;
+  --accent: #ffcf5a;
+  --go: #46c985;
+  --stop: #ff6b6f;
+  --link: #8cc2ff;
+  --grass: #3f8a5c;
+  --grass-deep: #2c6744;
+  --cloud: #b8b2dc;
+  color-scheme: dark;
+}

@@ -1,0 +1,434 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--ink);
+  background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 100%) fixed;
+  background-color: var(--sky-top);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+a {
+  color: var(--link);
+}
+
+:focus-visible {
+  outline: 3px dashed var(--link);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ── Header & mode switcher ─────────────────────────────── */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 12px 16px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink);
+  text-decoration: none;
+  margin-right: auto;
+  min-width: 0;
+}
+
+.brand-mark {
+  width: 46px;
+  flex: none;
+}
+
+.brand-mark svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+  min-width: 0;
+}
+
+.brand-name {
+  font-weight: 900;
+  font-size: 1.15rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.brand-domain {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+.mode-nav {
+  display: flex;
+  gap: 8px;
+  padding: 5px;
+  background: var(--paper);
+  border: var(--border) solid var(--line);
+  border-radius: 999px;
+  box-shadow: var(--lift) var(--lift) 0 var(--shadow);
+}
+
+.mode-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 800;
+  white-space: nowrap;
+  transition: background-color 0.15s;
+}
+
+.mode-tab svg,
+.site-controls svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mode-tab:hover {
+  background: var(--paper-2);
+}
+
+.mode-tab[aria-current='page'] {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.site-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lang-picker {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 4px 0 10px;
+  height: 42px;
+  background: var(--paper);
+  border: var(--border) solid var(--line);
+  border-radius: 999px;
+  color: var(--ink);
+}
+
+.lang-picker select {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  padding: 0 8px 0 2px;
+  height: 100%;
+  cursor: pointer;
+}
+
+.lang-picker select option {
+  color: #2a1e2e;
+  background: #fff;
+}
+
+.icon-btn {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border: var(--border) solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.icon-btn .fill {
+  fill: currentColor;
+}
+
+#theme-toggle svg {
+  display: none;
+}
+
+#theme-toggle[data-theme-state='auto'] .ico-auto,
+#theme-toggle[data-theme-state='light'] .ico-light,
+#theme-toggle[data-theme-state='dark'] .ico-dark {
+  display: block;
+}
+
+/* ── Main & footer ──────────────────────────────────────── */
+.mode-root {
+  display: block;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 8px 16px 32px;
+  outline: none;
+  min-height: 60vh;
+}
+
+.boot {
+  text-align: center;
+  padding: 20vh 0;
+  font-weight: 800;
+  color: var(--ink-soft);
+}
+
+.site-footer {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 8px 16px 40px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.site-footer p {
+  margin: 4px 0;
+}
+
+.footer-egg code {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+}
+
+/* ── Buttons & cards ────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 10px 20px;
+  font: inherit;
+  font-weight: 800;
+  font-size: 1rem;
+  line-height: 1.2;
+  color: var(--ink);
+  background: var(--paper);
+  border: var(--border) solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--lift) var(--lift) 0 var(--shadow);
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: calc(var(--lift) + 1px) calc(var(--lift) + 1px) 0 var(--shadow);
+}
+
+.btn:active {
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0 var(--shadow);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: progress;
+  transform: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 1.15rem;
+  min-height: 56px;
+  padding: 12px 28px;
+}
+
+.btn-small {
+  min-height: 40px;
+  padding: 6px 14px;
+  font-size: 0.92rem;
+  box-shadow: 3px 3px 0 var(--shadow);
+}
+
+.card {
+  background: var(--paper);
+  border: var(--border) solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: 6px 6px 0 var(--shadow);
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  z-index: 50;
+  max-width: min(92vw, 560px);
+  padding: 10px 16px;
+  font-weight: 800;
+  color: var(--paper);
+  background: var(--ink);
+  border-radius: 14px;
+  transform: translate(-50%, calc(100% + 48px));
+  opacity: 0;
+  visibility: hidden;
+  transition: transform 0.25s ease, opacity 0.25s ease, visibility 0s 0.25s;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  pointer-events: none;
+}
+
+.toast.show {
+  transform: translate(-50%, 0);
+  opacity: 1;
+  visibility: visible;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  pointer-events: auto;
+}
+
+.toast-extra {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  word-break: break-all;
+  user-select: all;
+}
+
+.load-error {
+  max-width: 520px;
+  margin: 12vh auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+  font-weight: 800;
+}
+
+/* View transitions between modes: a quick lift-off / landing. */
+::view-transition-old(root) {
+  animation: 180ms ease-in both vt-out;
+}
+::view-transition-new(root) {
+  animation: 260ms ease-out both vt-in;
+}
+@keyframes vt-out {
+  to {
+    opacity: 0;
+    transform: translateY(-14px);
+  }
+}
+@keyframes vt-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
+/* ── Phones: mode switcher becomes a bottom tab bar ─────── */
+@media (max-width: 720px) {
+  .site-header {
+    padding: 10px 16px;
+    background: linear-gradient(180deg, var(--sky-top) 70%, transparent);
+  }
+  .brand-mark {
+    width: 40px;
+  }
+  .mode-nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 30;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+    padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+    border-radius: 0;
+    border-width: var(--border) 0 0;
+    box-shadow: none;
+  }
+  .mode-tab {
+    flex-direction: column;
+    gap: 2px;
+    padding: 6px 4px;
+    font-size: 0.8rem;
+    border-radius: 12px;
+    text-align: center;
+    white-space: normal;
+    line-height: 1.15;
+  }
+  .mode-tab svg {
+    width: 22px;
+    height: 22px;
+  }
+  body {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom));
+  }
+  .toast {
+    bottom: calc(88px + env(safe-area-inset-bottom));
+  }
+}
+
+@media (max-width: 380px) {
+  .brand-domain {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}

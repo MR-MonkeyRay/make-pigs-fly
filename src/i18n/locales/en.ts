@@ -1,0 +1,153 @@
+// Source of truth for every message key. Other locales must satisfy `Messages` (= typeof en),
+// so a missing or extra key fails `pnpm typecheck`.
+// Placeholders look like {name}. Arrays must keep their length/order where noted.
+const en = {
+  'site.name': 'Make Pigs Fly',
+  'site.tagline': 'Making the impossible slightly airborne.',
+  'site.title': 'makepigs.fly — Make Pigs Fly',
+  'site.description': 'Promise something “when pigs fly”. Then watch a pig fly. Your move.',
+
+  'nav.label': 'Modes',
+  'nav.dare': 'The Dare',
+  'nav.ways': 'Ways to Fly',
+  'nav.run': 'Hog Wild',
+
+  'ui.language': 'Language',
+  'ui.theme.auto': 'Theme: follows your system',
+  'ui.theme.light': 'Theme: daylight',
+  'ui.theme.dark': 'Theme: night flight',
+  'ui.copied': 'Link copied.',
+  'ui.copyFailed': 'Could not copy. Here is the link:',
+  'ui.loading': 'Fetching the pig…',
+  'ui.loadFailed': 'The pig missed its flight. Check your connection and reload.',
+  'ui.reload': 'Reload',
+
+  'footer.note': 'No pigs were harmed. All valuations are fictional.',
+  'footer.source': 'Source',
+  'footer.egg': 'Psst — open DevTools and run makePigs.fly()',
+
+  // ── The Dare (home) ──────────────────────────────────────────
+  // {promise} is the part people fill in. Keep it inside the sentence.
+  'dare.template': 'When pigs fly, I’ll {promise}.',
+  // 8 promises nobody intends to keep. Rewrite them so they are funny locally.
+  'dare.presets': [
+    'close these 38 browser tabs',
+    'reply to that email from March',
+    'read the documentation first',
+    'go to bed before midnight',
+    'write the tests before the code',
+    'clean out my Downloads folder',
+    'watch just one episode',
+    'fold a fitted sheet properly',
+  ],
+  'dare.fly': 'Let it fly',
+  'dare.flying': 'Pig in progress…',
+  'dare.verdict': 'Pig: flown.',
+  'dare.yourTurn': 'Your move.',
+  'dare.another': 'Another excuse',
+  'dare.write': 'Write my own',
+  'dare.share': 'Send this dare',
+  'dare.unlocked': 'Ways to fly unlocked: {n}/{total} →',
+  'dare.compose.hint': 'Max {max} characters. It goes into the link, so keep it friendly.',
+  'dare.compose.placeholder': 'clean out the garage',
+  'dare.compose.make': 'Make my dare',
+  'dare.compose.cancel': 'Never mind',
+  'dare.compose.empty': 'Promise something first.',
+  'dare.friend.intro': 'Someone sent you a promise:',
+  'dare.friend.check': 'Check if pigs fly',
+  'dare.friend.verdict': 'Pig: flown. They are out of excuses.',
+  'dare.friend.cta': 'Make your own dare',
+  'dare.shareText': 'I made a promise. Check whether pigs fly:',
+
+  // ── Ways to Fly (collection) ─────────────────────────────────
+  'ways.title': 'Ways to Make Pigs Fly',
+  'ways.subtitle': 'Every press, a different way. Collect them all.',
+  'ways.random': 'Fly, randomly',
+  'ways.unlocked': 'Unlocked: {n}/{total}',
+  'ways.locked': '???',
+  'ways.lockedHint': 'Fly randomly to unlock this one',
+  'ways.replay': 'Replay',
+  'ways.shareMethod': 'Share this method',
+  'ways.allDone': 'All {total} found. More pigs are in flight school.',
+  'skit.method': 'Method #{n}: {name}',
+
+  // ── Skits ────────────────────────────────────────────────────
+  'skit.hypeFan.name': 'The Hype Fan',
+  'skit.hypeFan.l1': 'Stand where the hype blows and even a pig can fly.',
+  'skit.hypeFan.sign': 'Hype: {trend}',
+  'skit.hypeFan.trends': ['AI', 'Web3', 'Metaverse', 'Quantum', 'AI Agents', 'NFTs'],
+  'skit.hypeFan.bullets': ['Series B!', 'Unicorn!', 'Disruptive!', 'Synergy!', 'To the moon!', 'Pivot!'],
+  'skit.hypeFan.valuation': 'Valuation',
+  'skit.hypeFan.fictional': '(fictional)',
+  'skit.hypeFan.l2': '…and then the wind stopped.',
+  'skit.hypeFan.l3': 'Pig: flew. Valuation: was a thing.',
+
+  'skit.paperwork.name': 'Paperwork Wings',
+  'skit.paperwork.form': 'Application: Flight Permit',
+  'skit.paperwork.applicant': 'Applicant: Pig',
+  'skit.paperwork.rejected': 'REJECTED',
+  'skit.paperwork.missing': 'Missing: wings ×2',
+  'skit.paperwork.l1': 'Please attach the missing documents.',
+  'skit.paperwork.approved': 'APPROVED',
+  'skit.paperwork.l2': 'Documents complete. Cleared for takeoff.',
+
+  'skit.ground.name': 'The Ground Has Left',
+  'skit.ground.l1': 'Pigs cannot fly.',
+  'skit.ground.l2': 'Pig: I have not moved an inch.',
+  'skit.ground.l3': 'Relative to the ground, the pig is airborne.',
+
+  'skit.mock.name': 'All Tests Passing',
+  'skit.mock.cmd': '$ npm test',
+  'skit.mock.pass': '✓ pig.fly() returns true',
+  'skit.mock.summary': 'Tests: 1 passed, 1 total',
+  'skit.mock.l1': 'All green.',
+  'skit.mock.l2': '(That was the mock.)',
+  'skit.mock.force': '$ pig fly --force',
+  'skit.mock.l3': 'Shipped on a Friday afternoon.',
+
+  // Each locale acts out its OWN "never going to happen" idiom.
+  // kind must be one of: sun-west | hen-teeth | cow-fly | hell-freezes | pigs-literal
+  'skit.idiom.kind': 'hell-freezes',
+  'skit.idiom.name': 'When Hell Freezes Over',
+  'skit.idiom.sign': 'HELL −40°',
+  'skit.idiom.l1': 'Fine. I’ll do it when hell freezes over.',
+  'skit.idiom.l2': 'Hell: frozen. Pig: leaving.',
+
+  'skit.pudding.name': 'Ballast Policy',
+  'skit.pudding.l1': 'Too heavy to take off.',
+  // Exactly 3 items, in this order: a manual, a laptop, a scarf.
+  'skit.pudding.items': ['Emergency manual: tossed.', 'Laptop: tossed.', 'Spare scarf: tossed.'],
+  'skit.pudding.l2': 'Pudding: non-negotiable.',
+  'skit.pudding.l3': 'Payload: one pig, one pudding.',
+
+  // ── Hog Wild (game) ──────────────────────────────────────────
+  'run.title': 'Hog Wild',
+  'run.start': 'Press Space or tap to flap',
+  'run.controls': 'Tap / Space: flap · Let go: glide · ↓ / swipe down: dive · P: pause',
+  'run.canvasLabel': 'Hog Wild game. Press Space or tap to flap.',
+  'run.distance': '{d} m',
+  'run.best': 'Best {d} m',
+  'run.paused': 'Paused',
+  'run.resume': 'Tap or press Space to resume',
+  'run.over.title': 'The pig has landed.',
+  'run.over.distance': 'Flew {d} m',
+  'run.over.percentile': 'Higher than {p}% of pigs (data entirely made up)',
+  'run.over.newBest': 'New personal best!',
+  'run.again': 'Fly again',
+  'run.challenge': 'Challenge a friend',
+  'run.challenged': 'A friend flew {d} m. Your move.',
+  'run.shareText': 'My pig flew {d} m. Beat that:',
+  'run.boost': 'Rocket mode!',
+  'run.cause.ground': 'Touched grass.',
+  'run.cause.kite': 'Tangled in a kite string.',
+  'run.cause.balloon': 'Boarded the wrong balloon.',
+  'run.cause.plane': 'Hit by a paper plane. Embarrassing.',
+  'run.cause.cloud': 'Zapped by a grumpy cloud.',
+  'run.cause.fan': 'Flew into the fan. Not the windy side.',
+
+  // ── Console easter egg ───────────────────────────────────────
+  'egg.banner': 'Hey, developer. Try: makePigs.fly()',
+  'egg.flown': 'Pig dispatched.',
+};
+
+export default en;
