@@ -8,7 +8,7 @@ import { createStage, type StageController } from '../ways/stage';
 import { methodNumber, SKIT_IDS, SKITS, skitById } from '../ways/registry';
 import { loadUnlocked, unlock } from '../ways/progress';
 import { nextSkitId } from '../ways/shuffle';
-import { checkPromise, decodeDare, encodeDare, PROMISE_MAX, splitTemplate } from './codec';
+import { checkPromise, decodeDare, encodeDare, graphemeLength, PROMISE_MAX, splitTemplate } from './codec';
 
 export function createMode(): Mode {
   return { mount };
@@ -26,6 +26,19 @@ function mount({ root, route, signal }: ModeContext): void {
 
   const stage: StageController = createStage(signal);
 
+  // ── Ticket Top Bar ──────────────────────────────────────
+  const statusDot = h('span', { class: 'dare-status-dot' });
+  const statusCode = h('span', {
+    class: 'dare-serial',
+    text: isFriend ? 'DISPATCH // INCOMING DARE' : 'FLIGHT CONTRACT // #MPF-01',
+  });
+  const topBar = h(
+    'div',
+    { class: 'dare-topbar', 'aria-hidden': 'true' },
+    h('div', { class: 'dare-topbar-left' }, statusDot, statusCode),
+    h('div', { class: 'dare-perf' }),
+  );
+
   // ── Sentence ────────────────────────────────────────────
   const promiseEl = h('span', { class: 'dare-promise' });
   const line = h('p', { class: 'dare-line', id: 'dare-line' });
@@ -39,17 +52,34 @@ function mount({ root, route, signal }: ModeContext): void {
   };
   renderLine();
 
+  const heroBox = h(
+    'div',
+    { class: 'dare-hero' },
+    isFriend ? h('p', { class: 'dare-intro', text: t('dare.friend.intro') }) : null,
+    line,
+  );
+
   // ── Controls ────────────────────────────────────────────
-  const flyBtn = h('button', { class: 'btn btn-primary dare-fly', type: 'button', text: t(isFriend ? 'dare.friend.check' : 'dare.fly') });
+  const flyBtn = h('button', {
+    class: 'btn btn-primary dare-fly',
+    type: 'button',
+    text: t(isFriend ? 'dare.friend.check' : 'dare.fly'),
+  });
   const verdict = h('p', { class: 'dare-verdict', tabindex: '-1' });
   const method = h('p', { class: 'dare-method' });
   const unlockedLink = h('a', { class: 'dare-unlocked', href: '#/ways' });
   const anotherBtn = h('button', { class: 'btn btn-small', type: 'button', text: t('dare.another') });
   const writeBtn = h('button', { class: 'btn btn-small', type: 'button', text: t('dare.write') });
   const shareBtn = h('button', { class: 'btn btn-small btn-share', type: 'button', text: t('dare.share') });
-  const ctaBtn = h('a', { class: 'btn btn-small', href: '#/?compose=1', text: t('dare.friend.cta') });
+  const ctaBtn = h('a', { class: 'btn btn-small btn-accent', href: '#/?compose=1', text: t('dare.friend.cta') });
   const afterRow = h('div', { class: 'dare-row' }, ...(isFriend ? [ctaBtn] : [anotherBtn, writeBtn, shareBtn]));
-  const after = h('div', { class: 'dare-after', hidden: true }, verdict, method, afterRow, unlockedLink);
+  const after = h(
+    'div',
+    { class: 'dare-after', hidden: true },
+    h('div', { class: 'dare-verdict-box' }, verdict, method),
+    afterRow,
+    unlockedLink,
+  );
 
   // ── Composer ────────────────────────────────────────────
   const input = h('input', {
@@ -61,10 +91,24 @@ function mount({ root, route, signal }: ModeContext): void {
     autocomplete: 'off',
     enterkeyhint: 'done',
   });
+  const charCount = h('span', { class: 'compose-counter', 'aria-hidden': 'true', text: `0/${PROMISE_MAX}` });
+  const updateCounter = () => {
+    const len = graphemeLength(input.value.trim());
+    charCount.textContent = `${len}/${PROMISE_MAX}`;
+    charCount.classList.toggle('is-over', len > PROMISE_MAX);
+  };
+  input.addEventListener('input', updateCounter, { signal });
+
   const error = h('p', { class: 'compose-error', role: 'alert' });
   const form = h(
     'form',
     { class: 'compose card', hidden: true },
+    h(
+      'div',
+      { class: 'compose-head', 'aria-hidden': 'true' },
+      h('span', { class: 'compose-badge', text: 'CUSTOM DARE TICKET' }),
+      charCount,
+    ),
     h('label', { class: 'compose-label', for: 'compose-input' }, h('span', { text: prefix.trim() }), input, h('span', { text: suffix.trim() })),
     h('p', { class: 'compose-hint', text: t('dare.compose.hint', { max: PROMISE_MAX }) }),
     error,
@@ -79,8 +123,8 @@ function mount({ root, route, signal }: ModeContext): void {
   const card = h(
     'section',
     { class: `dare card${isFriend ? ' is-friend' : ''}`, 'aria-labelledby': 'dare-line' },
-    isFriend ? h('p', { class: 'dare-intro', text: t('dare.friend.intro') }) : null,
-    line,
+    topBar,
+    heroBox,
     stage.wrap,
     h('div', { class: 'dare-actions' }, flyBtn),
     after,
@@ -95,6 +139,7 @@ function mount({ root, route, signal }: ModeContext): void {
     if (flown) resetPig();
     flyBtn.disabled = true;
     flyBtn.textContent = t('dare.flying');
+    card.classList.add('is-flying');
     const id = nextSkitId(SKIT_IDS, loadUnlocked(SKIT_IDS), lastSkit);
     const skit = skitById(id) ?? SKITS[0];
     if (!skit) return;
@@ -102,10 +147,12 @@ function mount({ root, route, signal }: ModeContext): void {
     const unlocked = unlock(skit.id, SKIT_IDS);
     const done = await stage.play(skit);
     if (signal.aborted) return;
+    card.classList.remove('is-flying');
     flyBtn.disabled = false;
     flyBtn.textContent = t(isFriend ? 'dare.friend.check' : 'dare.fly');
     if (!done) return;
     flown = true;
+    card.classList.add('is-flown');
     verdict.replaceChildren(
       ...(isFriend ? [t('dare.friend.verdict')] : [t('dare.verdict'), ' ', h('strong', { text: t('dare.yourTurn') })]),
     );
@@ -119,6 +166,7 @@ function mount({ root, route, signal }: ModeContext): void {
   function resetPig(): void {
     stage.reset({ dropIn: true });
     flown = false;
+    card.classList.remove('is-flown', 'is-flying');
     after.hidden = true;
     flyBtn.hidden = false;
   }
@@ -135,6 +183,7 @@ function mount({ root, route, signal }: ModeContext): void {
     form.hidden = false;
     error.textContent = '';
     input.value = presets.includes(promise) ? '' : promise;
+    updateCounter();
     input.focus();
     form.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   }
