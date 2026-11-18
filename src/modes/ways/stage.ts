@@ -59,12 +59,33 @@ export interface StageController {
 }
 
 export function createStage(outer: AbortSignal): StageController {
-  const far = h('div', { class: 'stage-far' }, h('div', { class: 'cloud c1' }), h('div', { class: 'cloud c2' }), h('div', { class: 'cloud c3' }));
-  const ground = h('div', { class: 'stage-ground' });
+  const far = h(
+    'div',
+    { class: 'stage-far' },
+    h('div', { class: 'stage-orb' }),
+    h('div', { class: 'cloud c1' }),
+    h('div', { class: 'cloud c2' }),
+    h('div', { class: 'cloud c3' }),
+    h('div', { class: 'stage-hill hill-far' }),
+    h('div', { class: 'stage-hill hill-near' }),
+  );
+  const ground = h(
+    'div',
+    { class: 'stage-ground' },
+    h('span', { class: 'stage-tuft t1' }),
+    h('span', { class: 'stage-tuft t2' }),
+    h('span', { class: 'stage-tuft t3' }),
+  );
   const back = h('div', { class: 'stage-layer stage-back' });
   const front = h('div', { class: 'stage-layer stage-front' });
   const pig = createPig('pig');
-  const el = h('div', { class: 'stage' }, far, ground, back, pig.root, front);
+  const hudBadge = h(
+    'div',
+    { class: 'stage-hud', 'aria-hidden': 'true' },
+    h('span', { class: 'stage-hud-dot' }),
+    h('span', { class: 'stage-hud-text', text: 'CAM-01 // PASTURE' }),
+  );
+  const el = h('div', { class: 'stage' }, far, ground, back, pig.root, front, hudBadge);
   const caption = h('p', { class: 'caption', 'aria-live': 'polite' });
   const wrap = h('div', { class: 'stage-wrap' }, el, caption);
 
@@ -74,6 +95,31 @@ export function createStage(outer: AbortSignal): StageController {
   let run: AbortController | null = null;
   let busy = false;
   let paddles: Animation[] = [];
+
+  // Interactive idle pig poke: clicking the pig when idle makes it do a cheerful hop
+  pig.root.addEventListener(
+    'click',
+    () => {
+      if (busy || prefersReducedMotion()) return;
+      pig.svg.animate(
+        [
+          { transform: 'translateY(0) scale(1, 1)' },
+          { transform: 'translateY(4%) scale(1.12, 0.88)', offset: 0.22 },
+          { transform: 'translateY(-18%) rotate(-6deg) scale(0.95, 1.06)', offset: 0.58 },
+          { transform: 'translateY(2%) scale(1.04, 0.96)', offset: 0.85 },
+          { transform: 'none' },
+        ],
+        { duration: 460, easing: 'cubic-bezier(.22, 1.35, .36, 1)' },
+      );
+      if (pig.tail) {
+        pig.tail.animate([{ transform: 'rotate(-22deg)' }, { transform: 'rotate(22deg)' }, { transform: 'none' }], {
+          duration: 320,
+           iterations: 2,
+        });
+      }
+    },
+    { signal: outer },
+  );
 
   outer.addEventListener(
     'abort',
@@ -91,6 +137,11 @@ export function createStage(outer: AbortSignal): StageController {
     props.clear();
     paddles = [];
     Object.assign(pose, REST);
+  }
+
+  function setCaption(text: string): void {
+    caption.textContent = text;
+    caption.classList.toggle('is-active', text.length > 0);
   }
 
   function makeStage(signal: AbortSignal): Stage {
@@ -210,8 +261,16 @@ export function createStage(outer: AbortSignal): StageController {
     };
 
     const say: Stage['say'] = (text) => {
-      caption.textContent = text;
-      if (!reduced) caption.animate([{ transform: 'translateY(6px) scale(.97)', opacity: 0.2 }, { transform: 'none', opacity: 1 }], { duration: 220, easing: 'ease-out' });
+      setCaption(text);
+      if (!reduced) {
+        caption.animate(
+          [
+            { transform: 'translateY(8px) scale(.96)', opacity: 0.15 },
+            { transform: 'none', opacity: 1 },
+          ],
+          { duration: 240, easing: 'cubic-bezier(.22, 1.35, .36, 1)' },
+        );
+      }
     };
 
     return { el, ground, pig, reduced, signal, say, wait, anim, loop, tween, add, movePig, paddle };
@@ -225,12 +284,15 @@ export function createStage(outer: AbortSignal): StageController {
     async play(skit) {
       run?.abort();
       cleanup();
-      caption.textContent = '';
+      setCaption('');
       const ctrl = new AbortController();
       run = ctrl;
       if (outer.aborted) return false;
       busy = true;
       el.dataset.skit = skit.id;
+      el.classList.add('is-playing');
+      const hudText = hudBadge.querySelector('.stage-hud-text');
+      if (hudText) hudText.textContent = `REC // ${skit.id.toUpperCase()}`;
       try {
         await skit.play(makeStage(ctrl.signal));
         return !ctrl.signal.aborted;
@@ -239,7 +301,11 @@ export function createStage(outer: AbortSignal): StageController {
         console.error(err);
         return false;
       } finally {
-        if (run === ctrl) busy = false;
+        if (run === ctrl) {
+          busy = false;
+          el.classList.remove('is-playing');
+          if (hudText) hudText.textContent = 'CAM-01 // AIRBORNE';
+        }
       }
     },
     reset({ dropIn = false } = {}) {
@@ -247,8 +313,11 @@ export function createStage(outer: AbortSignal): StageController {
       run = null;
       busy = false;
       cleanup();
-      caption.textContent = '';
+      setCaption('');
       delete el.dataset.skit;
+      el.classList.remove('is-playing');
+      const hudText = hudBadge.querySelector('.stage-hud-text');
+      if (hudText) hudText.textContent = 'CAM-01 // PASTURE';
       if (dropIn && !prefersReducedMotion()) {
         pig.root.animate(
           [

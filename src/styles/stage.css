@@ -1,6 +1,9 @@
-/* The skit stage: a fixed-aspect box that is also a size container, so props can use cqw/cqh. */
+/* The skit stage: a fixed-aspect Aero-Observation Theater that is also a size container (cqw/cqh). */
 .stage-wrap {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .stage {
@@ -10,14 +13,20 @@
   aspect-ratio: 16 / 10;
   overflow: hidden;
   border: var(--border) solid var(--line);
-  border-radius: 18px;
-  background: linear-gradient(180deg, var(--stage-sky-top), var(--stage-sky-bottom));
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 82% 20%, rgba(255, 244, 184, 0.45) 0%, transparent 42%),
+    linear-gradient(180deg, var(--stage-sky-top) 0%, var(--stage-sky-mid) 58%, var(--stage-sky-bottom) 100%);
+  box-shadow:
+    inset 0 2px 6px rgba(0, 0, 0, 0.08),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.28);
   isolation: isolate;
 }
 
 @media (max-width: 600px) {
   .stage {
     aspect-ratio: 1 / 0.86;
+    border-radius: 18px;
   }
 }
 
@@ -38,6 +47,44 @@
   z-index: 4;
 }
 
+/* Celestial Sun / Moon Orb */
+.stage-orb {
+  position: absolute;
+  right: 11cqw;
+  top: 10cqh;
+  width: 9cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fffbe6 0%, #ffe066 65%, #ffc425 100%);
+  box-shadow:
+    0 0 0 1.2cqw rgba(255, 224, 102, 0.22),
+    0 0 0 2.6cqw rgba(255, 224, 102, 0.1);
+  opacity: 0.92;
+}
+
+/* Distant Rolling Hills */
+.stage-hill {
+  position: absolute;
+  bottom: 12cqh;
+  border-radius: 50% 50% 0 0;
+  opacity: 0.85;
+}
+
+.stage-hill.hill-far {
+  left: -12cqw;
+  width: 72cqw;
+  height: 22cqh;
+  background: var(--hill-far);
+}
+
+.stage-hill.hill-near {
+  right: -14cqw;
+  width: 68cqw;
+  height: 18cqh;
+  background: var(--hill-near);
+}
+
+/* Foreground Meadow Ground */
 .stage-ground {
   position: absolute;
   left: -4%;
@@ -45,19 +92,45 @@
   bottom: -1px;
   height: 18cqh;
   z-index: 1;
-  background: var(--grass);
+  background: linear-gradient(180deg, var(--grass) 0%, var(--grass) 68%, var(--grass-deep) 68%, var(--grass-deep) 100%);
   border-top: var(--border) solid var(--art-ink);
-  border-radius: 50% 50% 0 0 / 18px 18px 0 0;
-  box-shadow: inset 0 -5cqh 0 var(--grass-deep);
+  border-radius: 50% 50% 0 0 / 20px 20px 0 0;
+  box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.28);
 }
 
+.stage-tuft {
+  position: absolute;
+  top: 3.2cqh;
+  width: 2.2cqw;
+  height: 1.4cqh;
+  border-left: 2.5px solid var(--art-ink);
+  border-right: 2.5px solid var(--art-ink);
+  border-radius: 2px;
+  opacity: 0.35;
+  transform: skewX(-12deg);
+}
+.stage-tuft.t1 {
+  left: 18cqw;
+}
+.stage-tuft.t2 {
+  left: 52cqw;
+  top: 4.5cqh;
+  transform: skewX(10deg) scale(0.85);
+}
+.stage-tuft.t3 {
+  left: 78cqw;
+  top: 3.6cqh;
+}
+
+/* Volumetric Drifting Clouds */
 .cloud {
   position: absolute;
   width: 16cqw;
   height: 5cqw;
   border-radius: 999px;
   background: var(--cloud);
-  opacity: 0.85;
+  box-shadow: inset 0 -0.6cqw 0 rgba(35, 24, 41, 0.08);
+  opacity: 0.9;
   animation: drift 38s linear infinite;
 }
 .cloud::before,
@@ -65,17 +138,17 @@
   content: '';
   position: absolute;
   border-radius: 50%;
-  background: inherit;
+  background: var(--cloud);
 }
 .cloud::before {
-  width: 7cqw;
-  height: 7cqw;
-  left: 2.5cqw;
+  width: 7.2cqw;
+  height: 7.2cqw;
+  left: 2.4cqw;
   top: -3.6cqw;
 }
 .cloud::after {
-  width: 5cqw;
-  height: 5cqw;
+  width: 5.2cqw;
+  height: 5.2cqw;
   left: 8cqw;
   top: -2.4cqw;
 }
@@ -84,9 +157,9 @@
   left: 8cqw;
 }
 .cloud.c2 {
-  top: 30cqh;
+  top: 28cqh;
   left: 62cqw;
-  transform: scale(0.7);
+  transform: scale(0.72);
   animation-duration: 52s;
   animation-delay: -20s;
 }
@@ -106,6 +179,50 @@
   }
 }
 
+/* Viewport Telemetry HUD Badge */
+.stage-hud {
+  position: absolute;
+  left: 2.2cqw;
+  bottom: 2.4cqh;
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  font-family: var(--mono);
+  font-size: max(10px, 1.35cqw);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #231829;
+  background: rgba(255, 253, 248, 0.82);
+  backdrop-filter: blur(4px);
+  border: 2px solid var(--art-ink);
+  border-radius: 999px;
+  pointer-events: none;
+  opacity: 0.86;
+}
+
+.stage-hud-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--go);
+  box-shadow: 0 0 0 2px rgba(30, 168, 102, 0.25);
+}
+
+.stage.is-playing .stage-hud-dot {
+  background: var(--stop);
+  box-shadow: 0 0 0 2px rgba(229, 67, 72, 0.3);
+  animation: rec-blink 1s steps(2, start) infinite;
+}
+
+@keyframes rec-blink {
+  to {
+    opacity: 0.25;
+  }
+}
+
+/* The Pig on Stage */
 .pig {
   position: absolute;
   left: 36cqw;
@@ -113,6 +230,11 @@
   width: 28cqw;
   z-index: 3;
   transform-origin: 50% 100%;
+  cursor: pointer;
+}
+
+.stage.is-playing .pig {
+  cursor: default;
 }
 
 .pig > svg {
@@ -122,6 +244,12 @@
   width: 100%;
   height: auto;
   overflow: visible;
+  filter: drop-shadow(0 4px 0 rgba(35, 24, 41, 0.14));
+  transition: transform 0.2s var(--ease-spring);
+}
+
+.stage:not(.is-playing) .pig:hover > svg {
+  transform: translateY(-2%) scale(1.03);
 }
 
 .pig .leg {
@@ -134,18 +262,34 @@
   transform-origin: 100% 50%;
 }
 
+/* Subtitle / Teleprinter Caption Plaque */
 .caption {
-  min-height: 2.8em;
-  margin: 14px 0 0;
-  font-size: clamp(1.05rem, 2.6vw, 1.35rem);
-  font-weight: 800;
+  min-height: 2.9em;
+  width: 100%;
+  max-width: 680px;
+  margin: 12px auto 0;
+  padding: 6px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(1.04rem, 2.5vw, 1.3rem);
+  font-weight: 900;
   line-height: 1.35;
   text-align: center;
   text-wrap: balance;
+  color: var(--ink);
+  border-radius: 14px;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.caption.is-active {
+  background: var(--paper-2);
+  border: 2px solid var(--line-soft);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cloud {
+  .cloud,
+  .stage.is-playing .stage-hud-dot {
     animation: none;
   }
 }
@@ -155,5 +299,8 @@
   .pig {
     left: 31cqw;
     width: 36cqw;
+  }
+  .stage-hud {
+    display: none;
   }
 }
