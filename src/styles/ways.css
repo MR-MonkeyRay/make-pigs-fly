@@ -1,40 +1,86 @@
 .ways {
-  max-width: 900px;
+  max-width: 920px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 20px;
 }
 
 .ways-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
+  gap: 4px;
+}
+
+.ways-kicker {
+  display: inline-block;
+  padding: 3px 11px;
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+  background: var(--paper-glass);
+  border: 1.5px solid var(--line-soft);
+  border-radius: 999px;
 }
 
 .ways-head h1 {
-  margin: 8px 0 4px;
-  font-size: clamp(1.6rem, 4.6vw, 2.5rem);
+  margin: 4px 0 2px;
+  font-size: clamp(1.65rem, 4.6vw, 2.55rem);
   font-weight: 900;
-  line-height: 1.15;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
 }
 
 .ways-sub {
   margin: 0;
   color: var(--ink-soft);
   font-weight: 700;
+  font-size: 1.02rem;
 }
 
-.ways-progress {
-  display: inline-block;
-  margin: 10px 0 0;
-  padding: 2px 12px;
-  font-weight: 900;
+.ways-progress-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+  padding: 5px 14px;
   background: var(--paper);
   border: var(--border) solid var(--line);
   border-radius: 999px;
+  box-shadow:
+    inset 0 2px 0 var(--surface-highlight),
+    3px 3px 0 var(--shadow);
+}
+
+.ways-progress {
+  margin: 0;
+  font-weight: 900;
+  font-size: 0.9rem;
+}
+
+.ways-meter {
+  width: 76px;
+  height: 10px;
+  background: var(--paper-2);
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.ways-meter-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent) 0%, var(--go) 100%);
+  border-radius: 999px;
+  transition: width 0.35s var(--ease-spring);
 }
 
 .ways-player {
-  padding: clamp(12px, 2.4vw, 22px);
+  padding: clamp(14px, 2.5vw, 24px);
 }
 
 .ways-controls {
@@ -42,14 +88,24 @@
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  margin-top: 6px;
+  margin-top: 8px;
 }
 
 .ways-method {
   margin: 0;
-  min-height: 1.4em;
+  min-height: 1.6em;
+  padding: 2px 12px;
+  font-family: var(--mono);
+  font-size: 0.9rem;
   font-weight: 800;
   color: var(--ink-soft);
+  border-radius: 999px;
+}
+
+.ways-method.is-visible {
+  background: var(--paper-2);
+  border: 1.5px solid var(--line-soft);
+  color: var(--ink);
 }
 
 .ways-row {
@@ -59,64 +115,133 @@
   justify-content: center;
 }
 
+/* Collector's Dossier Grid */
 .ways-grid {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+  gap: 14px;
 }
 
 .way-card {
   width: 100%;
-  min-height: 92px;
+  min-height: 108px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: stretch;
   justify-content: space-between;
-  gap: 6px;
-  padding: 12px 14px;
+  gap: 10px;
+  padding: 13px 15px;
   font: inherit;
   text-align: left;
   color: var(--ink);
   background: var(--paper);
   border: var(--border) solid var(--line);
   border-radius: var(--radius);
-  box-shadow: 3px 3px 0 var(--shadow);
+  box-shadow:
+    inset 0 2px 0 var(--surface-highlight),
+    4px 4px 0 var(--shadow);
   cursor: pointer;
-  transition: transform 0.08s ease;
+  transition:
+    transform 0.14s var(--ease-spring),
+    box-shadow 0.14s var(--ease-spring),
+    background-color 0.14s ease;
 }
 
-.way-card:hover {
-  transform: translate(-1px, -1px);
+.way-card:hover:not(.is-locked) {
+  transform: translate(-2px, -2px);
+  background: var(--paper-2);
+  box-shadow:
+    inset 0 2px 0 var(--surface-highlight),
+    6px 6px 0 var(--shadow);
+}
+
+.way-card:active:not(.is-locked) {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--shadow);
 }
 
 .way-card.is-current {
-  background: var(--accent);
+  background: linear-gradient(180deg, var(--accent-hover) 0%, var(--accent) 100%);
   color: var(--accent-ink);
+  transform: translate(-2px, -2px);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.65),
+    6px 6px 0 var(--shadow);
 }
 
 .way-card.is-locked {
   cursor: help;
-  color: var(--ink-soft);
+  color: var(--ink-muted);
   background: repeating-linear-gradient(-45deg, var(--paper) 0 10px, var(--paper-2) 10px 20px);
-  box-shadow: none;
+  box-shadow: inset 0 1px 0 var(--surface-highlight);
+  opacity: 0.88;
+}
+
+.way-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
 
 .way-num {
+  display: inline-block;
+  padding: 2px 8px;
   font-family: var(--mono);
   font-weight: 800;
-  font-size: 0.85rem;
+  font-size: 0.78rem;
+  background: var(--paper-2);
+  border: 1.5px solid var(--line-soft);
+  border-radius: 999px;
+}
+
+.way-card.is-current .way-num {
+  background: rgba(255, 255, 255, 0.55);
+  border-color: rgba(35, 24, 41, 0.35);
+}
+
+.way-icon {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: var(--paper-2);
+  border: 1.5px solid var(--line-soft);
+}
+
+.way-card.is-current .way-icon {
+  background: rgba(255, 255, 255, 0.55);
+  border-color: rgba(35, 24, 41, 0.35);
+}
+
+.way-icon svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .way-name {
   font-weight: 900;
-  font-size: 1.05rem;
-  line-height: 1.2;
+  font-size: 1.04rem;
+  line-height: 1.22;
 }
 
 .ways-done {
+  margin: 0 auto;
+  padding: 8px 18px;
   text-align: center;
-  font-weight: 800;
+  font-weight: 900;
+  color: var(--accent-ink);
+  background: var(--accent);
+  border: var(--border) solid var(--line);
+  border-radius: 999px;
+  box-shadow: 3px 3px 0 var(--shadow);
 }
