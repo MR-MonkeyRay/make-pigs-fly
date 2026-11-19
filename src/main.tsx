@@ -6,20 +6,18 @@ import './styles/tokens.css';
 import './styles/base.css';
 import './styles/components.css';
 
-// Playful DevTools Console Easter Egg for curious engineers
 if (typeof console !== 'undefined') {
   console.log(
     `%c
-   ✈ PORCINE AVIATION ADMINISTRATION (P.A.A.) — MAKEPIGS.FLY
+   makepigs.fly — Yes, pigs actually fly now.
          _,,_
        ,'    \`.      ___
-      /  o  o  \\____/   \\  < OINK! CLEARED FOR TAKEOFF! >
+      /  ^  ^  \\____/   \\  < Oink. Your move. >
      (  ( oo )       ___/
       \\  \`--'      /
        \`--u----u--'
-   Secret Clearance: Try the Konami Code (↑↑↓↓←→←→BA) or click the P.A.A. logo 5×!
 `,
-    'color: #FF4D1C; font-weight: bold; font-family: monospace; font-size: 12px;'
+    'color: #E05383; font-weight: 600; font-family: monospace; font-size: 12px;'
   );
 }
 

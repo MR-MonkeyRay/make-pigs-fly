@@ -1,56 +1,36 @@
 :root {
-  /* Retro-Modern Swiss Aviation Palette */
-  --paper-bg: #faf6ee;
-  --paper-surface: #fffdf8;
-  --paper-muted: #f0e8d8;
-  --paper-border: #d9ceba;
+  /* Luminous Editorial Sky & Cotton Paper Palette */
+  --bg-page: #fbfaf7;
+  --bg-surface: #ffffff;
+  --bg-subtle: #f3f1ec;
 
-  --ink-primary: #161a24;
-  --ink-secondary: #4a5163;
-  --ink-muted: #767d90;
+  --ink: #181e2e;
+  --ink-soft: #4e576c;
+  --ink-muted: #7d869b;
 
-  --sky-cobalt: #1d6fe2;
-  --sky-cobalt-dark: #1453ae;
-  --sky-tint: #e8f2ff;
+  --line: rgba(24, 30, 46, 0.1);
+  --line-strong: rgba(24, 30, 46, 0.18);
 
-  --safety-orange: #ff4d1c;
-  --safety-orange-dark: #d9380d;
-  --safety-orange-tint: #fff0eb;
-
-  --pig-pink: #ff8db2;
-  --pig-pink-deep: #e05383;
-  --pig-pink-tint: #fff0f5;
-
-  --brass-gold: #e5a93c;
-  --brass-gold-soft: #fff5d6;
-
-  --mint-ok: #1d9a6c;
-  --mint-tint: #e5f8f0;
-
-  --cockpit-bg: #171c28;
-  --cockpit-panel: #202738;
-  --cockpit-border: #313b52;
-  --cockpit-text: #f3f6fc;
-  --cockpit-muted: #98a4be;
+  --sky-blue: #3b6fe8;
+  --sky-blue-soft: #eaf2ff;
+  --blush: #e55384;
+  --blush-soft: #fff0f5;
+  --coral: #e04d3c;
+  --gold: #d99b26;
 
   /* Typography */
-  --font-display: 'Syne', 'Space Grotesk', 'Noto Sans SC', 'Noto Sans JP', system-ui, sans-serif;
-  --font-sans: 'Space Grotesk', 'Noto Sans SC', 'Noto Sans JP', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Instrument Serif', 'Noto Serif SC', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', 'Noto Sans SC', 'Noto Sans JP', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  /* Tactile Editorial Radii & Shadows */
-  --radius-sm: 10px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
+  /* Radii & Shadows */
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 28px;
   --radius-pill: 999px;
 
-  --border-ink: 2px solid var(--ink-primary);
-  --shadow-ink-sm: 3px 3px 0 var(--ink-primary);
-  --shadow-ink-md: 5px 5px 0 var(--ink-primary);
-  --shadow-ink-lg: 8px 8px 0 var(--ink-primary);
-  --shadow-soft: 0 18px 40px -18px rgba(22, 26, 36, 0.22);
+  --shadow-card: 0 20px 50px -24px rgba(24, 30, 46, 0.14), 0 2px 8px -2px rgba(24, 30, 46, 0.05);
+  --shadow-float: 0 24px 64px -20px rgba(24, 30, 46, 0.22);
 
-  /* Layout */
-  --container-max: 1140px;
-  --header-height: 70px;
+  --container: 1080px;
 }

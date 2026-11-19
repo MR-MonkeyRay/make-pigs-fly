@@ -1,118 +1,69 @@
-import React, { useRef } from 'react';
-import { Volume2, VolumeX, Trophy, Sparkles } from 'lucide-react';
+import React from 'react';
+import { Volume2, VolumeX } from 'lucide-react';
 import { LOCALES, SUPPORTED_LOCALES, useI18n } from '../i18n';
+import type { SkyMood } from '../i18n/types';
 
 interface HeaderProps {
-  peakAltitude: number;
+  mood: SkyMood;
   audioEnabled: boolean;
   onToggleAudio: () => void;
-  rainbowMode: boolean;
-  onSecretLogoClick: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({
-  peakAltitude,
-  audioEnabled,
-  onToggleAudio,
-  rainbowMode,
-  onSecretLogoClick,
-}) => {
+export const Header: React.FC<HeaderProps> = ({ mood, audioEnabled, onToggleAudio }) => {
   const { locale, setLocale, t } = useI18n();
-  const clicksRef = useRef<number[]>([]);
-
-  const handleBrandClick = () => {
-    const now = Date.now();
-    clicksRef.current = [...clicksRef.current.filter((ts) => now - ts < 1800), now];
-    if (clicksRef.current.length >= 5) {
-      clicksRef.current = [];
-      onSecretLogoClick();
-    }
-  };
 
   return (
-    <header className="site-header">
+    <header className={`site-header mood-${mood}`}>
       <div className="container header-inner">
-        <button
-          type="button"
-          className="brand-btn"
-          onClick={handleBrandClick}
-          title={t.header.agencyName}
-        >
-          <span className={`brand-emblem ${rainbowMode ? 'rainbow' : ''}`} aria-hidden="true">
-            <svg viewBox="0 0 64 64" width="38" height="38">
+        <a href="#" className="brand-link" aria-label="makepigs.fly home">
+          <span className="brand-icon" aria-hidden="true">
+            <svg viewBox="0 0 64 64" width="28" height="28">
               <path
-                d="M14 27 C4 20, 6 12, 16 18 C20 21, 22 24, 22 28 Z"
-                fill="#FFD166"
-                stroke="#161A24"
+                d="M14 28 C5 22, 6 13, 17 19 C20 22, 22 25, 22 29 Z"
+                fill="#FFF7E6"
+                stroke="#24293D"
                 strokeWidth="2.4"
                 strokeLinejoin="round"
               />
               <path
-                d="M50 27 C60 20, 58 12, 48 18 C44 21, 42 24, 42 28 Z"
-                fill="#FFD166"
-                stroke="#161A24"
+                d="M50 28 C59 22, 58 13, 47 19 C44 22, 42 25, 42 29 Z"
+                fill="#FFF7E6"
+                stroke="#24293D"
                 strokeWidth="2.4"
                 strokeLinejoin="round"
               />
-              <circle cx="32" cy="34" r="18" fill="#FFA6C4" stroke="#161A24" strokeWidth="2.8" />
-              <circle cx="25" cy="24" r="5.5" fill="#E8F6FF" stroke="#E5A93C" strokeWidth="2.5" />
-              <circle cx="39" cy="24" r="5.5" fill="#E8F6FF" stroke="#E5A93C" strokeWidth="2.5" />
-              <circle cx="25" cy="33" r="2.2" fill="#161A24" />
-              <circle cx="39" cy="33" r="2.2" fill="#161A24" />
-              <ellipse cx="32" cy="40" rx="8.5" ry="6" fill="#FF7CA8" stroke="#161A24" strokeWidth="2.2" />
-              <circle cx="29" cy="40" r="1.6" fill="#7A1F40" />
-              <circle cx="35" cy="40" r="1.6" fill="#7A1F40" />
+              <circle cx="32" cy="34" r="17" fill="#FFA6C4" stroke="#24293D" strokeWidth="2.6" />
+              <circle cx="25.5" cy="31" r="2.2" fill="#24293D" />
+              <circle cx="38.5" cy="31" r="2.2" fill="#24293D" />
+              <ellipse cx="32" cy="39" rx="8.2" ry="5.6" fill="#FF7CA8" stroke="#24293D" strokeWidth="2.2" />
+              <circle cx="29" cy="39" r="1.5" fill="#701C3B" />
+              <circle cx="35" cy="39" r="1.5" fill="#701C3B" />
             </svg>
           </span>
-          <span className="brand-meta">
-            <span className="brand-top">
-              <span className="brand-domain">makepigs.fly</span>
-              <span className="brand-code">{t.header.agencyCode}</span>
-            </span>
-            <span className="brand-sub">{t.header.agencyName}</span>
-          </span>
-        </button>
+          <span className="brand-wordmark">makepigs.fly</span>
+        </a>
 
-        <nav className="header-nav" aria-label="Primary navigation">
-          <a className="nav-link" href="#flight-lab">
-            {t.header.navLab}
+        <div className="header-right">
+          <a href="#proof" className="header-proof-link">
+            {t.header.sendProofNav}
           </a>
-          <a className="nav-link" href="#departures">
-            {t.header.navBoard}
-          </a>
-          <a className="nav-link" href="#certifier">
-            {t.header.navCertifier}
-          </a>
-          <a className="nav-link" href="#passport">
-            {t.header.navPassport}
-          </a>
-        </nav>
-
-        <div className="header-actions">
-          <span className="peak-pill" title={t.header.bestAlt}>
-            {rainbowMode ? <Sparkles size={13} /> : <Trophy size={13} />}
-            <span>
-              {t.header.bestAlt} {peakAltitude.toLocaleString()}m
-            </span>
-          </span>
 
           <button
             type="button"
-            className="icon-toggle"
+            className="audio-pill"
             onClick={onToggleAudio}
             aria-label={audioEnabled ? t.header.soundOn : t.header.soundOff}
             title={audioEnabled ? t.header.soundOn : t.header.soundOff}
           >
             {audioEnabled ? <Volume2 size={15} /> : <VolumeX size={15} />}
-            <span className="toggle-label">{audioEnabled ? t.header.soundOn : t.header.soundOff}</span>
           </button>
 
-          <div className="lang-switcher" role="group" aria-label="Language switcher">
+          <div className="lang-pill" role="group" aria-label="Language">
             {SUPPORTED_LOCALES.map((code) => (
               <button
                 key={code}
                 type="button"
-                className={`lang-btn ${locale === code ? 'active' : ''}`}
+                className={`lang-option ${locale === code ? 'active' : ''}`}
                 onClick={() => setLocale(code)}
                 aria-pressed={locale === code}
               >

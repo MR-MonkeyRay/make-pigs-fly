@@ -1,17 +1,30 @@
 import React from 'react';
 import { useI18n } from '../i18n';
 
-export const Footer: React.FC = () => {
+interface FooterProps {
+  stardust: boolean;
+  onToggleStardust: () => void;
+}
+
+export const Footer: React.FC<FooterProps> = ({ stardust, onToggleStardust }) => {
   const { t } = useI18n();
 
   return (
     <footer className="site-footer">
       <div className="container footer-inner">
-        <p className="footer-mission">🐷 {t.footer.mission}</p>
-        <p className="footer-secret">🔑 {t.footer.secretHint}</p>
-        <p className="footer-meta">
-          {t.footer.madeWith} • {t.footer.openSource}
-        </p>
+        <button
+          type="button"
+          className={`footer-pig-egg ${stardust ? 'active' : ''}`}
+          onClick={onToggleStardust}
+          title="✨"
+          aria-label="Toggle secret stardust mode"
+        >
+          🐷✨
+        </button>
+
+        <p className="footer-line">{t.footer.line}</p>
+        {stardust && <p className="footer-easter">{t.footer.easterEgg}</p>}
+        <p className="footer-subline">{t.footer.subline}</p>
       </div>
     </footer>
   );
