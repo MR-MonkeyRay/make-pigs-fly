@@ -1,0 +1,56 @@
+:root {
+  /* Retro-Modern Swiss Aviation Palette */
+  --paper-bg: #faf6ee;
+  --paper-surface: #fffdf8;
+  --paper-muted: #f0e8d8;
+  --paper-border: #d9ceba;
+
+  --ink-primary: #161a24;
+  --ink-secondary: #4a5163;
+  --ink-muted: #767d90;
+
+  --sky-cobalt: #1d6fe2;
+  --sky-cobalt-dark: #1453ae;
+  --sky-tint: #e8f2ff;
+
+  --safety-orange: #ff4d1c;
+  --safety-orange-dark: #d9380d;
+  --safety-orange-tint: #fff0eb;
+
+  --pig-pink: #ff8db2;
+  --pig-pink-deep: #e05383;
+  --pig-pink-tint: #fff0f5;
+
+  --brass-gold: #e5a93c;
+  --brass-gold-soft: #fff5d6;
+
+  --mint-ok: #1d9a6c;
+  --mint-tint: #e5f8f0;
+
+  --cockpit-bg: #171c28;
+  --cockpit-panel: #202738;
+  --cockpit-border: #313b52;
+  --cockpit-text: #f3f6fc;
+  --cockpit-muted: #98a4be;
+
+  /* Typography */
+  --font-display: 'Syne', 'Space Grotesk', 'Noto Sans SC', 'Noto Sans JP', system-ui, sans-serif;
+  --font-sans: 'Space Grotesk', 'Noto Sans SC', 'Noto Sans JP', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Tactile Editorial Radii & Shadows */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+
+  --border-ink: 2px solid var(--ink-primary);
+  --shadow-ink-sm: 3px 3px 0 var(--ink-primary);
+  --shadow-ink-md: 5px 5px 0 var(--ink-primary);
+  --shadow-ink-lg: 8px 8px 0 var(--ink-primary);
+  --shadow-soft: 0 18px 40px -18px rgba(22, 26, 36, 0.22);
+
+  /* Layout */
+  --container-max: 1140px;
+  --header-height: 70px;
+}

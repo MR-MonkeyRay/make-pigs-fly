@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1D6FE2"/>
+      <stop offset="100%" stop-color="#69B7FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#sky)"/>
+  <!-- Tiny Golden Wings -->
+  <path d="M14 27 C4 20, 6 12, 16 18 C20 21, 22 24, 22 28 Z" fill="#FFD166" stroke="#161A24" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M50 27 C60 20, 58 12, 48 18 C44 21, 42 24, 42 28 Z" fill="#FFD166" stroke="#161A24" stroke-width="2" stroke-linejoin="round"/>
+  <!-- Ears -->
+  <path d="M18 22 L14 13 L26 17 Z" fill="#FF8DB2" stroke="#161A24" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M46 22 L50 13 L38 17 Z" fill="#FF8DB2" stroke="#161A24" stroke-width="2" stroke-linejoin="round"/>
+  <!-- Head -->
+  <circle cx="32" cy="34" r="18" fill="#FFA6C4" stroke="#161A24" stroke-width="2.5"/>
+  <!-- Aviator Goggles -->
+  <rect x="16" y="21" width="32" height="5" rx="2" fill="#4A3728"/>
+  <circle cx="25" cy="24" r="6" fill="#E8F6FF" stroke="#E5A93C" stroke-width="2.5"/>
+  <circle cx="39" cy="24" r="6" fill="#E8F6FF" stroke="#E5A93C" stroke-width="2.5"/>
+  <line x1="31" y1="24" x2="33" y2="24" stroke="#E5A93C" stroke-width="2.5"/>
+  <!-- Eyes -->
+  <circle cx="25" cy="33" r="2.2" fill="#161A24"/>
+  <circle cx="39" cy="33" r="2.2" fill="#161A24"/>
+  <!-- Snout -->
+  <ellipse cx="32" cy="40" rx="8.5" ry="6" fill="#FF7CA8" stroke="#161A24" stroke-width="2"/>
+  <circle cx="29" cy="40" r="1.6" fill="#7A1F40"/>
+  <circle cx="35" cy="40" r="1.6" fill="#7A1F40"/>
+  <!-- Red Scarf -->
+  <path d="M18 48 Q32 53 46 48 L49 54 Q32 58 15 54 Z" fill="#FF4D1C" stroke="#161A24" stroke-width="2" stroke-linejoin="round"/>
+</svg>
