@@ -1,7 +1,9 @@
 import '../../styles/dare.css';
-import { h } from '../../lib/dom';
+import { fromMarkup, h } from '../../lib/dom';
 import { pick } from '../../lib/rng';
 import { hashUrl, shareLink } from '../../lib/share';
+import { burstConfetti } from '../../lib/confetti';
+import { playClick, playFanfare } from '../../lib/sound';
 import { list, t } from '../../i18n';
 import { FLY_EVENT, type Mode, type ModeContext } from '../types';
 import { createStage, type StageController } from '../ways/stage';
@@ -9,6 +11,9 @@ import { methodNumber, SKIT_IDS, SKITS, skitById } from '../ways/registry';
 import { loadUnlocked, unlock } from '../ways/progress';
 import { nextSkitId } from '../ways/shuffle';
 import { checkPromise, decodeDare, encodeDare, graphemeLength, PROMISE_MAX, splitTemplate } from './codec';
+
+const WING_SPARK_ICON = `<svg class="dare-fly-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" fill="currentColor" stroke="none"/></svg>`;
+const CHECK_SEAL_ICON = `<svg class="verdict-seal-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>`;
 
 export function createMode(): Mode {
   return { mount };
@@ -25,19 +30,6 @@ function mount({ root, route, signal }: ModeContext): void {
   let flown = false;
 
   const stage: StageController = createStage(signal);
-
-  // ── Ticket Top Bar ──────────────────────────────────────
-  const statusDot = h('span', { class: 'dare-status-dot' });
-  const statusCode = h('span', {
-    class: 'dare-serial',
-    text: isFriend ? 'DISPATCH // INCOMING DARE' : 'FLIGHT CONTRACT // #MPF-01',
-  });
-  const topBar = h(
-    'div',
-    { class: 'dare-topbar', 'aria-hidden': 'true' },
-    h('div', { class: 'dare-topbar-left' }, statusDot, statusCode),
-    h('div', { class: 'dare-perf' }),
-  );
 
   // ── Sentence ────────────────────────────────────────────
   const promiseEl = h('span', { class: 'dare-promise' });
@@ -60,11 +52,8 @@ function mount({ root, route, signal }: ModeContext): void {
   );
 
   // ── Controls ────────────────────────────────────────────
-  const flyBtn = h('button', {
-    class: 'btn btn-primary dare-fly',
-    type: 'button',
-    text: t(isFriend ? 'dare.friend.check' : 'dare.fly'),
-  });
+  const flyLabel = h('span', { text: t(isFriend ? 'dare.friend.check' : 'dare.fly') });
+  const flyBtn = h('button', { class: 'btn btn-primary dare-fly', type: 'button' }, fromMarkup(WING_SPARK_ICON), flyLabel);
   const verdict = h('p', { class: 'dare-verdict', tabindex: '-1' });
   const method = h('p', { class: 'dare-method' });
   const unlockedLink = h('a', { class: 'dare-unlocked', href: '#/ways' });
@@ -76,7 +65,13 @@ function mount({ root, route, signal }: ModeContext): void {
   const after = h(
     'div',
     { class: 'dare-after', hidden: true },
-    h('div', { class: 'dare-verdict-box' }, verdict, method),
+    h(
+      'div',
+      { class: 'dare-verdict-box' },
+      h('span', { class: 'verdict-seal', 'aria-hidden': 'true' }, fromMarkup(CHECK_SEAL_ICON)),
+      verdict,
+      method,
+    ),
     afterRow,
     unlockedLink,
   );
@@ -104,13 +99,13 @@ function mount({ root, route, signal }: ModeContext): void {
     'form',
     { class: 'compose card', hidden: true },
     h(
-      'div',
-      { class: 'compose-head', 'aria-hidden': 'true' },
-      h('span', { class: 'compose-badge', text: 'CUSTOM DARE TICKET' }),
-      charCount,
+      'label',
+      { class: 'compose-label', for: 'compose-input' },
+      h('span', { text: prefix.trim() }),
+      input,
+      h('span', { text: suffix.trim() }),
     ),
-    h('label', { class: 'compose-label', for: 'compose-input' }, h('span', { text: prefix.trim() }), input, h('span', { text: suffix.trim() })),
-    h('p', { class: 'compose-hint', text: t('dare.compose.hint', { max: PROMISE_MAX }) }),
+    h('div', { class: 'compose-meta' }, h('p', { class: 'compose-hint', text: t('dare.compose.hint', { max: PROMISE_MAX }) }), charCount),
     error,
     h(
       'div',
@@ -123,7 +118,6 @@ function mount({ root, route, signal }: ModeContext): void {
   const card = h(
     'section',
     { class: `dare card${isFriend ? ' is-friend' : ''}`, 'aria-labelledby': 'dare-line' },
-    topBar,
     heroBox,
     stage.wrap,
     h('div', { class: 'dare-actions' }, flyBtn),
@@ -138,7 +132,7 @@ function mount({ root, route, signal }: ModeContext): void {
     if (stage.busy) return;
     if (flown) resetPig();
     flyBtn.disabled = true;
-    flyBtn.textContent = t('dare.flying');
+    flyLabel.textContent = t('dare.flying');
     card.classList.add('is-flying');
     const id = nextSkitId(SKIT_IDS, loadUnlocked(SKIT_IDS), lastSkit);
     const skit = skitById(id) ?? SKITS[0];
@@ -149,7 +143,7 @@ function mount({ root, route, signal }: ModeContext): void {
     if (signal.aborted) return;
     card.classList.remove('is-flying');
     flyBtn.disabled = false;
-    flyBtn.textContent = t(isFriend ? 'dare.friend.check' : 'dare.fly');
+    flyLabel.textContent = t(isFriend ? 'dare.friend.check' : 'dare.fly');
     if (!done) return;
     flown = true;
     card.classList.add('is-flown');
@@ -160,6 +154,8 @@ function mount({ root, route, signal }: ModeContext): void {
     unlockedLink.textContent = t('dare.unlocked', { n: unlocked.size, total: SKITS.length });
     after.hidden = false;
     flyBtn.hidden = true;
+    playFanfare();
+    burstConfetti({ count: 56 });
     verdict.focus({ preventScroll: true });
   }
 
@@ -172,6 +168,7 @@ function mount({ root, route, signal }: ModeContext): void {
   }
 
   function another(): void {
+    playClick();
     const others = presets.filter((p) => p !== promise);
     promise = pick(others.length ? others : presets);
     renderLine();
@@ -180,6 +177,7 @@ function mount({ root, route, signal }: ModeContext): void {
   }
 
   function openComposer(): void {
+    playClick();
     form.hidden = false;
     error.textContent = '';
     input.value = presets.includes(promise) ? '' : promise;
@@ -189,6 +187,7 @@ function mount({ root, route, signal }: ModeContext): void {
   }
 
   async function share(): Promise<void> {
+    playClick();
     const url = hashUrl(`#/?d=${encodeDare(sentence())}`);
     await shareLink(url, t('dare.shareText'));
   }
@@ -197,7 +196,14 @@ function mount({ root, route, signal }: ModeContext): void {
   anotherBtn.addEventListener('click', another, { signal });
   writeBtn.addEventListener('click', openComposer, { signal });
   shareBtn.addEventListener('click', () => void share(), { signal });
-  form.querySelector('[data-cancel]')?.addEventListener('click', () => (form.hidden = true), { signal });
+  form.querySelector('[data-cancel]')?.addEventListener(
+    'click',
+    () => {
+      playClick();
+      form.hidden = true;
+    },
+    { signal },
+  );
   form.addEventListener(
     'submit',
     (e) => {
