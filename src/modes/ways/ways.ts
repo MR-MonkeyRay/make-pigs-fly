@@ -1,6 +1,8 @@
 import '../../styles/ways.css';
 import { fromMarkup, h } from '../../lib/dom';
 import { hashUrl, shareLink } from '../../lib/share';
+import { burstConfetti } from '../../lib/confetti';
+import { playClick, playFanfare } from '../../lib/sound';
 import { t } from '../../i18n';
 import { FLY_EVENT, type Mode, type ModeContext, type Route } from '../types';
 import { createStage } from './stage';
@@ -10,7 +12,7 @@ import { nextSkitId } from './shuffle';
 
 const SKIT_ICONS: Record<string, string> = {
   'hype-fan': `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 12c-2-4 1-7 3.5-5S14 11 12 12z"/><path d="M12 12c4-1 5.5 2.5 2.5 4.5S11 14 12 12z"/><path d="M12 12c-2 4-5.5 3.5-5.5 0S10 10 12 12z"/></svg>`,
-  'paperwork-wings': `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>`,
+  'paperwork-wings': `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>`,
   'ground-falls': `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10a8 8 0 0 1 16 0Z"/><circle cx="12" cy="17" r="4"/><path d="M6 10l4 4M18 10l-4 4"/></svg>`,
   'mock-pig': `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M8 10l3 2.5L8 15M13 15h3"/></svg>`,
   'impossible-idiom': `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M5.6 18.4l1.8-1.8M16.6 7.4l1.8-1.8"/></svg>`,
@@ -66,7 +68,6 @@ function mountWays({ root, signal }: ModeContext): WaysControl {
       h(
         'header',
         { class: 'ways-head' },
-        h('span', { class: 'ways-kicker', 'aria-hidden': 'true', text: 'FLIGHT ARCHIVE // 06 METHODS' }),
         h('h1', { text: t('ways.title') }),
         h('p', { class: 'ways-sub', text: t('ways.subtitle') }),
         progressWrap,
@@ -111,7 +112,15 @@ function mountWays({ root, signal }: ModeContext): WaysControl {
           ),
           h('span', { class: 'way-name', text: open ? t(skit.nameKey) : t('ways.locked') }),
         );
-        btn.addEventListener('click', () => (open ? go(skit.id) : randomBtn.focus()), { signal });
+        btn.addEventListener(
+          'click',
+          () => {
+            playClick();
+            if (open) go(skit.id);
+            else randomBtn.focus();
+          },
+          { signal },
+        );
         return h('li', {}, btn);
       }),
     );
@@ -141,8 +150,9 @@ function mountWays({ root, signal }: ModeContext): WaysControl {
     const skit = skitById(id);
     if (!skit) return;
     const mine = ++token;
+    const wasUnlocked = loadUnlocked(SKIT_IDS).has(id);
     current = id;
-    unlock(id, SKIT_IDS);
+    const unlockedAfter = unlock(id, SKIT_IDS);
     renderGrid();
     label.textContent = t('skit.method', { n: methodNumber(id), name: t(skit.nameKey) });
     label.classList.add('is-visible');
@@ -150,18 +160,30 @@ function mountWays({ root, signal }: ModeContext): WaysControl {
     shareBtn.hidden = true;
     randomBtn.disabled = true;
     stage.reset();
-    await stage.play(skit);
+    const completed = await stage.play(skit);
     if (signal.aborted || mine !== token) return;
     randomBtn.disabled = false;
     replayBtn.hidden = false;
     shareBtn.hidden = false;
+    if (completed && !wasUnlocked) {
+      playFanfare();
+      burstConfetti({ count: unlockedAfter.size >= SKITS.length ? 84 : 44 });
+    }
   }
 
   randomBtn.addEventListener('click', () => go(nextSkitId(SKIT_IDS, loadUnlocked(SKIT_IDS), current)), { signal });
-  replayBtn.addEventListener('click', () => current && void playId(current), { signal });
+  replayBtn.addEventListener(
+    'click',
+    () => {
+      playClick();
+      if (current) void playId(current);
+    },
+    { signal },
+  );
   shareBtn.addEventListener(
     'click',
     () => {
+      playClick();
       const skit = skitById(current);
       if (skit) void shareLink(hashUrl(`#/ways/${skit.id}`), t('skit.method', { n: methodNumber(skit.id), name: t(skit.nameKey) }));
     },
