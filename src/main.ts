@@ -3,10 +3,13 @@ import './styles/base.css';
 import './styles/stage.css';
 import { applyI18n, detectLocale, getLocale, isLocale, LOCALE_NAMES, LOCALES, setLocale, t } from './i18n';
 import { load, remove, save } from './lib/storage';
+import { mountAmbientSky } from './lib/sky';
+import { isSoundEnabled, playClick, toggleSound } from './lib/sound';
+import { burstConfetti } from './lib/confetti';
 import { prefetchMode, startRouter, type Router } from './router';
 import { installConsoleEgg } from './egg/console';
 import { CSS_PIG, pigMarkup } from './pig/pig';
-import type { ModeId } from './modes/types';
+import { FLY_EVENT, type ModeId } from './modes/types';
 
 type ThemeChoice = 'auto' | 'light' | 'dark';
 const THEMES: ThemeChoice[] = ['auto', 'light', 'dark'];
@@ -35,17 +38,41 @@ function applyTheme(choice: ThemeChoice): void {
   }
 }
 
+function syncSoundButton(): void {
+  const btn = document.getElementById('sound-toggle');
+  if (!btn) return;
+  const on = isSoundEnabled();
+  btn.dataset.soundState = on ? 'on' : 'off';
+  const label = t(on ? 'ui.sound.on' : 'ui.sound.off');
+  btn.setAttribute('aria-label', label);
+  btn.title = label;
+}
+
+function positionNavPill(): void {
+  const nav = document.querySelector<HTMLElement>('.mode-nav');
+  const pill = nav?.querySelector<HTMLElement>('.mode-pill');
+  const active = nav?.querySelector<HTMLElement>('.mode-tab[aria-current="page"]');
+  if (!nav || !pill || !active) return;
+  pill.style.width = `${active.offsetWidth}px`;
+  pill.style.height = `${active.offsetHeight}px`;
+  pill.style.transform = `translate3d(${active.offsetLeft}px, ${active.offsetTop}px, 0)`;
+  pill.classList.add('is-ready');
+}
+
 function setActiveTab(id: ModeId): void {
   document.querySelectorAll<HTMLAnchorElement>('.mode-tab').forEach((a) => {
     if (a.dataset.mode === id) a.setAttribute('aria-current', 'page');
     else a.removeAttribute('aria-current');
   });
   document.body.dataset.mode = id;
+  requestAnimationFrame(positionNavPill);
 }
 
 function renderShell(): void {
   applyI18n(document);
   applyTheme(currentTheme());
+  syncSoundButton();
+  requestAnimationFrame(positionNavPill);
 }
 
 function wireShell(getRouter: () => Router | null): void {
@@ -63,6 +90,7 @@ function wireShell(getRouter: () => Router | null): void {
   select.addEventListener('change', async () => {
     const next = select.value;
     if (!isLocale(next)) return;
+    playClick();
     const applied = await setLocale(next);
     if (applied === null) return; // a newer choice is on its way
     select.value = applied;
@@ -79,8 +107,14 @@ function wireShell(getRouter: () => Router | null): void {
   });
 
   document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    playClick();
     const next = THEMES[(THEMES.indexOf(currentTheme()) + 1) % THEMES.length] ?? 'auto';
     applyTheme(next);
+  });
+
+  document.getElementById('sound-toggle')?.addEventListener('click', () => {
+    toggleSound();
+    syncSoundButton();
   });
 
   document.querySelectorAll<HTMLAnchorElement>('.mode-tab').forEach((a) => {
@@ -88,6 +122,19 @@ function wireShell(getRouter: () => Router | null): void {
     const warm = () => prefetchMode(id);
     a.addEventListener('pointerenter', warm, { once: true });
     a.addEventListener('focus', warm, { once: true });
+    a.addEventListener('click', () => playClick());
+  });
+
+  // Reposition the sliding active pill when viewport resizes or fonts finish loading
+  const nav = document.querySelector<HTMLElement>('.mode-nav');
+  if (nav && typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(() => positionNavPill()).observe(nav);
+  }
+  window.addEventListener('resize', positionNavPill, { passive: true });
+
+  // Easter egg sparkle burst when triggered via DevTools makePigs.fly()
+  window.addEventListener(FLY_EVENT, () => {
+    burstConfetti({ count: 64 });
   });
 
   // 1 / 2 / 3 switch modes (ignored while typing or with modifiers).
@@ -98,12 +145,14 @@ function wireShell(getRouter: () => Router | null): void {
     const idx = ['1', '2', '3'].indexOf(e.key);
     const mode = MODE_ORDER[idx];
     if (mode) {
+      playClick();
       window.location.hash = mode === 'dare' ? '#/' : `#/${mode}`;
     }
   });
 }
 
 async function boot(): Promise<void> {
+  mountAmbientSky();
   const params = new URLSearchParams(window.location.search);
   const locale = detectLocale({
     query: params.get('lang'),
@@ -112,7 +161,7 @@ async function boot(): Promise<void> {
   });
   await setLocale(locale);
   const mark = document.querySelector('.brand-mark');
-  if (mark) mark.innerHTML = pigMarkup(CSS_PIG); // static, trusted art
+  if (mark) mark.innerHTML = pigMarkup(CSS_PIG, 'pig-svg', { miniWing: true }); // static, trusted art
   renderShell();
 
   let router: Router | null = null;
