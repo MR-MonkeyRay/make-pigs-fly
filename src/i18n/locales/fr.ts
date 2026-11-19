@@ -15,6 +15,8 @@ const fr = {
   'ui.theme.auto': 'Thème : selon ton système',
   'ui.theme.light': 'Thème : plein jour',
   'ui.theme.dark': 'Thème : vol de nuit',
+  'ui.sound.on': 'Effets sonores : activés',
+  'ui.sound.off': 'Effets sonores : coupés',
   'ui.copied': 'Lien copié.',
   'ui.copyFailed': 'Copie impossible. Voici le lien :',
   'ui.loading': 'On va chercher le cochon…',

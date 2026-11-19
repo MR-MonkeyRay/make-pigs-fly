@@ -15,6 +15,8 @@ const zhCN = {
   'ui.theme.auto': '主题：跟随系统',
   'ui.theme.light': '主题：日间',
   'ui.theme.dark': '主题：夜航',
+  'ui.sound.on': '音效：开启',
+  'ui.sound.off': '音效：静音',
   'ui.copied': '链接已复制。',
   'ui.copyFailed': '复制失败，链接在这里：',
   'ui.loading': '正在把猪请过来……',

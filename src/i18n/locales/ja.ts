@@ -15,6 +15,8 @@ const ja = {
   'ui.theme.auto': 'テーマ：システムに合わせる',
   'ui.theme.light': 'テーマ：昼間飛行',
   'ui.theme.dark': 'テーマ：夜間飛行',
+  'ui.sound.on': '効果音：オン',
+  'ui.sound.off': '効果音：オフ',
   'ui.copied': 'リンクをコピーしました。',
   'ui.copyFailed': 'コピーできませんでした。リンクはこちら：',
   'ui.loading': 'ブタを呼んでいます…',

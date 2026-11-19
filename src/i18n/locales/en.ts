@@ -16,6 +16,8 @@ const en = {
   'ui.theme.auto': 'Theme: follows your system',
   'ui.theme.light': 'Theme: daylight',
   'ui.theme.dark': 'Theme: night flight',
+  'ui.sound.on': 'Sound effects: on',
+  'ui.sound.off': 'Sound effects: off',
   'ui.copied': 'Link copied.',
   'ui.copyFailed': 'Could not copy. Here is the link:',
   'ui.loading': 'Fetching the pig…',

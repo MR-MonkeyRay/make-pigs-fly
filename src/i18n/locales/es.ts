@@ -15,6 +15,8 @@ const es = {
   'ui.theme.auto': 'Tema: según tu sistema',
   'ui.theme.light': 'Tema: de día',
   'ui.theme.dark': 'Tema: vuelo nocturno',
+  'ui.sound.on': 'Sonido: activado',
+  'ui.sound.off': 'Sonido: silenciado',
   'ui.copied': 'Enlace copiado.',
   'ui.copyFailed': 'No se pudo copiar. Aquí tienes el enlace:',
   'ui.loading': 'Buscando al cerdo…',

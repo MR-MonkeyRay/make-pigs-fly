@@ -15,6 +15,8 @@ const de = {
   'ui.theme.auto': 'Design: folgt dem System',
   'ui.theme.light': 'Design: Tageslicht',
   'ui.theme.dark': 'Design: Nachtflug',
+  'ui.sound.on': 'Soundeffekte: an',
+  'ui.sound.off': 'Soundeffekte: aus',
   'ui.copied': 'Link kopiert.',
   'ui.copyFailed': 'Kopieren fehlgeschlagen. Hier ist der Link:',
   'ui.loading': 'Das Schwein wird geholt…',
