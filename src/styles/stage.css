@@ -1,4 +1,4 @@
-/* The skit stage: a fixed-aspect Aero-Observation Theater that is also a size container (cqw/cqh). */
+/* The skit stage: a luminous Storybook Sky Diorama (size container for cqw/cqh units). */
 .stage-wrap {
   width: 100%;
   display: flex;
@@ -12,21 +12,21 @@
   width: 100%;
   aspect-ratio: 16 / 10;
   overflow: hidden;
-  border: var(--border) solid var(--line);
-  border-radius: 22px;
+  border: 1.5px solid var(--glass-border);
+  border-radius: 24px;
   background:
-    radial-gradient(circle at 82% 20%, rgba(255, 244, 184, 0.45) 0%, transparent 42%),
+    radial-gradient(circle at 82% 20%, var(--stage-orb-glow) 0%, transparent 42%),
     linear-gradient(180deg, var(--stage-sky-top) 0%, var(--stage-sky-mid) 58%, var(--stage-sky-bottom) 100%);
   box-shadow:
-    inset 0 2px 6px rgba(0, 0, 0, 0.08),
-    inset 0 0 0 2px rgba(255, 255, 255, 0.28);
+    inset 0 2px 12px rgba(255, 255, 255, 0.35),
+    0 12px 32px rgba(42, 27, 46, 0.11);
   isolation: isolate;
 }
 
 @media (max-width: 600px) {
   .stage {
     aspect-ratio: 1 / 0.86;
-    border-radius: 18px;
+    border-radius: 20px;
   }
 }
 
@@ -47,91 +47,175 @@
   z-index: 4;
 }
 
-/* Celestial Sun / Moon Orb */
+/* Night-mode subtle starfield inside stage */
+.stage-stars {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background:
+    radial-gradient(1.6px 1.6px at 14% 18%, #fff 99%, transparent),
+    radial-gradient(1.2px 1.2px at 28% 32%, #ffe9c6 99%, transparent),
+    radial-gradient(2px 2px at 46% 14%, #fff 99%, transparent),
+    radial-gradient(1.4px 1.4px at 64% 26%, #c7e3ff 99%, transparent),
+    radial-gradient(1.6px 1.6px at 78% 12%, #fff 99%, transparent),
+    radial-gradient(1.2px 1.2px at 88% 36%, #ffd6ec 99%, transparent),
+    radial-gradient(1.8px 1.8px at 36% 42%, #fff 99%, transparent);
+  transition: opacity 0.4s ease;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .stage-stars {
+    opacity: 0.9;
+  }
+}
+:root[data-theme='dark'] .stage-stars {
+  opacity: 0.9;
+}
+
+/* Radiant Sun / Luminous Moon Orb */
 .stage-orb {
   position: absolute;
   right: 11cqw;
   top: 10cqh;
-  width: 9cqw;
+  width: 9.5cqw;
   aspect-ratio: 1;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #fffbe6 0%, #ffe066 65%, #ffc425 100%);
+  background: radial-gradient(circle at 35% 35%, #fffef2 0%, #ffe680 60%, #ffb830 100%);
   box-shadow:
-    0 0 0 1.2cqw rgba(255, 224, 102, 0.22),
-    0 0 0 2.6cqw rgba(255, 224, 102, 0.1);
+    0 0 0 1.4cqw rgba(255, 232, 130, 0.24),
+    0 0 0 3.2cqw rgba(255, 224, 102, 0.11),
+    0 0 28px rgba(255, 210, 90, 0.42);
+  opacity: 0.95;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .stage-orb {
+    background: radial-gradient(circle at 32% 32%, #fffdf0 0%, #f5e6a8 65%, #d9c37c 100%);
+    box-shadow:
+      0 0 0 1.2cqw rgba(245, 230, 168, 0.16),
+      0 0 32px rgba(245, 230, 168, 0.38);
+  }
+}
+:root[data-theme='dark'] .stage-orb {
+  background: radial-gradient(circle at 32% 32%, #fffdf0 0%, #f5e6a8 65%, #d9c37c 100%);
+  box-shadow:
+    0 0 0 1.2cqw rgba(245, 230, 168, 0.16),
+    0 0 32px rgba(245, 230, 168, 0.38);
+}
+
+/* Storybook Horizon Mountain & Rolling Hills SVG */
+.stage-horizon {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 11cqh;
+  width: 100%;
+  height: 36cqh;
+  display: block;
+}
+
+.horizon-peak {
+  fill: rgba(124, 168, 216, 0.34);
+}
+
+.horizon-hill-far {
+  fill: var(--hill-far);
+  opacity: 0.78;
+}
+
+.horizon-hill-near {
+  fill: var(--hill-near);
   opacity: 0.92;
 }
 
-/* Distant Rolling Hills */
-.stage-hill {
-  position: absolute;
-  bottom: 12cqh;
-  border-radius: 50% 50% 0 0;
-  opacity: 0.85;
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .horizon-peak {
+    fill: rgba(54, 52, 114, 0.58);
+  }
+}
+:root[data-theme='dark'] .horizon-peak {
+  fill: rgba(54, 52, 114, 0.58);
 }
 
-.stage-hill.hill-far {
-  left: -12cqw;
-  width: 72cqw;
-  height: 22cqh;
-  background: var(--hill-far);
-}
-
-.stage-hill.hill-near {
-  right: -14cqw;
-  width: 68cqw;
-  height: 18cqh;
-  background: var(--hill-near);
-}
-
-/* Foreground Meadow Ground */
+/* Foreground Wildflower Meadow */
 .stage-ground {
   position: absolute;
   left: -4%;
   right: -4%;
-  bottom: -1px;
-  height: 18cqh;
+  bottom: -2px;
+  height: 18.5cqh;
   z-index: 1;
-  background: linear-gradient(180deg, var(--grass) 0%, var(--grass) 68%, var(--grass-deep) 68%, var(--grass-deep) 100%);
-  border-top: var(--border) solid var(--art-ink);
-  border-radius: 50% 50% 0 0 / 20px 20px 0 0;
-  box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.28);
+  background: linear-gradient(180deg, var(--grass) 0%, var(--grass) 62%, var(--grass-deep) 100%);
+  border-top: 2.5px solid rgba(58, 33, 51, 0.28);
+  border-radius: 50% 50% 0 0 / 22px 22px 0 0;
+  box-shadow: inset 0 4px 0 rgba(255, 255, 255, 0.24);
+}
+
+.stage-flower {
+  position: absolute;
+  width: 1.15cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #fff9db;
+  box-shadow: 0 0 0 0.35cqw rgba(255, 255, 255, 0.55);
+  opacity: 0.9;
+}
+.stage-flower.f1 {
+  left: 14cqw;
+  top: 4.2cqh;
+  background: #ffe066;
+}
+.stage-flower.f2 {
+  left: 28cqw;
+  top: 7.4cqh;
+  background: #ffd1e0;
+}
+.stage-flower.f3 {
+  left: 69cqw;
+  top: 5.2cqh;
+  background: #fff9db;
+}
+.stage-flower.f4 {
+  left: 85cqw;
+  top: 7.8cqh;
+  background: #ffe066;
 }
 
 .stage-tuft {
   position: absolute;
-  top: 3.2cqh;
-  width: 2.2cqw;
-  height: 1.4cqh;
-  border-left: 2.5px solid var(--art-ink);
-  border-right: 2.5px solid var(--art-ink);
+  top: 3.4cqh;
+  width: 2cqw;
+  height: 1.3cqh;
+  border-left: 2px solid rgba(42, 27, 46, 0.24);
+  border-right: 2px solid rgba(42, 27, 46, 0.24);
   border-radius: 2px;
-  opacity: 0.35;
   transform: skewX(-12deg);
 }
 .stage-tuft.t1 {
-  left: 18cqw;
+  left: 20cqw;
 }
 .stage-tuft.t2 {
-  left: 52cqw;
-  top: 4.5cqh;
+  left: 55cqw;
+  top: 4.8cqh;
   transform: skewX(10deg) scale(0.85);
 }
 .stage-tuft.t3 {
-  left: 78cqw;
-  top: 3.6cqh;
+  left: 77cqw;
+  top: 3.8cqh;
 }
 
-/* Volumetric Drifting Clouds */
+/* Soft Volumetric Drifting Clouds */
 .cloud {
   position: absolute;
-  width: 16cqw;
-  height: 5cqw;
+  width: 17cqw;
+  height: 5.2cqw;
   border-radius: 999px;
   background: var(--cloud);
-  box-shadow: inset 0 -0.6cqw 0 rgba(35, 24, 41, 0.08);
-  opacity: 0.9;
-  animation: drift 38s linear infinite;
+  box-shadow:
+    inset 0 -0.8cqw 1cqw rgba(120, 145, 195, 0.16),
+    0 6px 16px rgba(42, 27, 46, 0.06);
+  opacity: 0.92;
+  animation: drift 42s linear infinite;
 }
 .cloud::before,
 .cloud::after {
@@ -141,84 +225,41 @@
   background: var(--cloud);
 }
 .cloud::before {
-  width: 7.2cqw;
-  height: 7.2cqw;
-  left: 2.4cqw;
-  top: -3.6cqw;
+  width: 7.6cqw;
+  height: 7.6cqw;
+  left: 2.5cqw;
+  top: -3.7cqw;
 }
 .cloud::after {
-  width: 5.2cqw;
-  height: 5.2cqw;
-  left: 8cqw;
-  top: -2.4cqw;
+  width: 5.6cqw;
+  height: 5.6cqw;
+  left: 8.4cqw;
+  top: -2.6cqw;
 }
 .cloud.c1 {
   top: 14cqh;
   left: 8cqw;
 }
 .cloud.c2 {
-  top: 28cqh;
+  top: 29cqh;
   left: 62cqw;
-  transform: scale(0.72);
-  animation-duration: 52s;
-  animation-delay: -20s;
+  transform: scale(0.74);
+  animation-duration: 56s;
+  animation-delay: -22s;
 }
 .cloud.c3 {
-  top: 8cqh;
+  top: 9cqh;
   left: 78cqw;
-  transform: scale(0.55);
-  animation-duration: 64s;
-  animation-delay: -40s;
+  transform: scale(0.56);
+  animation-duration: 68s;
+  animation-delay: -42s;
 }
 @keyframes drift {
   from {
     translate: 0 0;
   }
   to {
-    translate: -110cqw 0;
-  }
-}
-
-/* Viewport Telemetry HUD Badge */
-.stage-hud {
-  position: absolute;
-  left: 2.2cqw;
-  bottom: 2.4cqh;
-  z-index: 5;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 3px 9px;
-  font-family: var(--mono);
-  font-size: max(10px, 1.35cqw);
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  color: #231829;
-  background: rgba(255, 253, 248, 0.82);
-  backdrop-filter: blur(4px);
-  border: 2px solid var(--art-ink);
-  border-radius: 999px;
-  pointer-events: none;
-  opacity: 0.86;
-}
-
-.stage-hud-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--go);
-  box-shadow: 0 0 0 2px rgba(30, 168, 102, 0.25);
-}
-
-.stage.is-playing .stage-hud-dot {
-  background: var(--stop);
-  box-shadow: 0 0 0 2px rgba(229, 67, 72, 0.3);
-  animation: rec-blink 1s steps(2, start) infinite;
-}
-
-@keyframes rec-blink {
-  to {
-    opacity: 0.25;
+    translate: -115cqw 0;
   }
 }
 
@@ -226,7 +267,7 @@
 .pig {
   position: absolute;
   left: 36cqw;
-  bottom: 14cqh;
+  bottom: 13.5cqh;
   width: 28cqw;
   z-index: 3;
   transform-origin: 50% 100%;
@@ -244,12 +285,27 @@
   width: 100%;
   height: auto;
   overflow: visible;
-  filter: drop-shadow(0 4px 0 rgba(35, 24, 41, 0.14));
-  transition: transform 0.2s var(--ease-spring);
+  filter: drop-shadow(0 8px 14px rgba(58, 33, 51, 0.16));
+  transition: transform 0.24s var(--ease-spring);
+}
+
+/* Gentle idle breathing & scarf flutter when resting */
+.stage:not(.is-playing) .pig > svg {
+  animation: pig-breathe 3.6s ease-in-out infinite;
 }
 
 .stage:not(.is-playing) .pig:hover > svg {
-  transform: translateY(-2%) scale(1.03);
+  transform: translateY(-3%) scale(1.04);
+}
+
+@keyframes pig-breathe {
+  0%,
+  100% {
+    transform: translateY(0) scale(1, 1);
+  }
+  50% {
+    transform: translateY(-1.8%) scale(1.015, 0.99);
+  }
 }
 
 .pig .leg {
@@ -262,34 +318,79 @@
   transform-origin: 100% 50%;
 }
 
-/* Subtitle / Teleprinter Caption Plaque */
+.pig .pig-wing-mini {
+  transform-box: fill-box;
+  transform-origin: 90% 60%;
+}
+
+.pig .pig-scarf {
+  transform-box: fill-box;
+  transform-origin: 85% 45%;
+  animation: scarf-wave 2.6s ease-in-out infinite;
+}
+
+@keyframes scarf-wave {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(3.2deg);
+  }
+}
+
+/* Poke Sparkle Popups */
+.poke-spark {
+  position: absolute;
+  left: 56%;
+  top: 8%;
+  z-index: 6;
+  font-size: max(15px, 3cqw);
+  line-height: 1;
+  pointer-events: none;
+  text-shadow: 0 2px 8px rgba(255, 94, 138, 0.35);
+}
+.poke-spark.s-0 {
+  color: #ff5e8a;
+}
+.poke-spark.s-1 {
+  color: #ffb830;
+}
+.poke-spark.s-2 {
+  color: #48b8ff;
+}
+
+/* Floating Glass Subtitle Plaque */
 .caption {
-  min-height: 2.9em;
+  min-height: 2.8em;
   width: 100%;
-  max-width: 680px;
+  max-width: 660px;
   margin: 12px auto 0;
-  padding: 6px 18px;
+  padding: 6px 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: clamp(1.04rem, 2.5vw, 1.3rem);
-  font-weight: 900;
-  line-height: 1.35;
+  font-size: clamp(1rem, 2.3vw, 1.24rem);
+  font-weight: 800;
+  line-height: 1.38;
   text-align: center;
   text-wrap: balance;
   color: var(--ink);
-  border-radius: 14px;
-  transition: background-color 0.2s ease, border-color 0.2s ease;
+  border-radius: 999px;
+  border: 1.5px solid transparent;
+  transition: background-color 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease;
 }
 
 .caption.is-active {
-  background: var(--paper-2);
-  border: 2px solid var(--line-soft);
+  background: var(--surface-soft);
+  border-color: var(--border-subtle);
+  box-shadow: var(--shadow-sm);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .cloud,
-  .stage.is-playing .stage-hud-dot {
+  .stage:not(.is-playing) .pig > svg,
+  .pig .pig-scarf {
     animation: none;
   }
 }
@@ -299,8 +400,5 @@
   .pig {
     left: 31cqw;
     width: 36cqw;
-  }
-  .stage-hud {
-    display: none;
   }
 }

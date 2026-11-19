@@ -1,6 +1,7 @@
 import '../../styles/skits.css';
-import { h } from '../../lib/dom';
+import { fromMarkup, h } from '../../lib/dom';
 import { prefersReducedMotion } from '../../lib/motion';
+import { playLaunch, playOink } from '../../lib/sound';
 import { createPig, type PigHandle } from '../../pig/pig';
 import type { StringKey } from '../../i18n';
 
@@ -48,6 +49,15 @@ export function isAbort(err: unknown): boolean {
 const REST: PigPose = { x: 0, y: 0, r: 0, sx: 1, sy: 1 };
 const poseTransform = (p: PigPose) => `translate(${p.x}cqw, ${p.y}cqh) rotate(${p.r}deg) scale(${p.sx}, ${p.sy})`;
 
+// Layered storybook mountain & rolling hill panorama
+const HORIZON_SVG = `<svg class="stage-horizon" viewBox="0 0 800 220" preserveAspectRatio="none" aria-hidden="true">
+  <path class="horizon-peak" d="M0 190 L95 104 Q120 82 148 102 L245 162 L355 86 Q388 64 420 88 L525 154 L635 94 Q672 74 708 98 L800 156 L800 220 L0 220 Z"/>
+  <path class="horizon-hill-far" d="M0 164 Q130 112 275 152 T580 144 T800 156 L800 220 L0 220 Z"/>
+  <path class="horizon-hill-near" d="M0 180 Q190 132 390 172 T800 162 L800 220 L0 220 Z"/>
+</svg>`;
+
+const POKE_GLYPHS = ['✦', '♥', '♪', '★'];
+
 export interface StageController {
   /** Wrapper element to insert into the page (stage + caption). */
   readonly wrap: HTMLElement;
@@ -62,16 +72,20 @@ export function createStage(outer: AbortSignal): StageController {
   const far = h(
     'div',
     { class: 'stage-far' },
+    h('div', { class: 'stage-stars' }),
     h('div', { class: 'stage-orb' }),
     h('div', { class: 'cloud c1' }),
     h('div', { class: 'cloud c2' }),
     h('div', { class: 'cloud c3' }),
-    h('div', { class: 'stage-hill hill-far' }),
-    h('div', { class: 'stage-hill hill-near' }),
+    fromMarkup(HORIZON_SVG),
   );
   const ground = h(
     'div',
     { class: 'stage-ground' },
+    h('span', { class: 'stage-flower f1' }),
+    h('span', { class: 'stage-flower f2' }),
+    h('span', { class: 'stage-flower f3' }),
+    h('span', { class: 'stage-flower f4' }),
     h('span', { class: 'stage-tuft t1' }),
     h('span', { class: 'stage-tuft t2' }),
     h('span', { class: 'stage-tuft t3' }),
@@ -79,13 +93,7 @@ export function createStage(outer: AbortSignal): StageController {
   const back = h('div', { class: 'stage-layer stage-back' });
   const front = h('div', { class: 'stage-layer stage-front' });
   const pig = createPig('pig');
-  const hudBadge = h(
-    'div',
-    { class: 'stage-hud', 'aria-hidden': 'true' },
-    h('span', { class: 'stage-hud-dot' }),
-    h('span', { class: 'stage-hud-text', text: 'CAM-01 // PASTURE' }),
-  );
-  const el = h('div', { class: 'stage' }, far, ground, back, pig.root, front, hudBadge);
+  const el = h('div', { class: 'stage' }, far, ground, back, pig.root, front);
   const caption = h('p', { class: 'caption', 'aria-live': 'polite' });
   const wrap = h('div', { class: 'stage-wrap' }, el, caption);
 
@@ -95,26 +103,63 @@ export function createStage(outer: AbortSignal): StageController {
   let run: AbortController | null = null;
   let busy = false;
   let paddles: Animation[] = [];
+  let pokeIdx = 0;
 
-  // Interactive idle pig poke: clicking the pig when idle makes it do a cheerful hop
+  function spawnPokeSparkles(): void {
+    const count = 3;
+    for (let i = 0; i < count; i++) {
+      const glyph = POKE_GLYPHS[(pokeIdx + i) % POKE_GLYPHS.length]!;
+      const dx = (i - 1) * 26 + (Math.random() - 0.5) * 14;
+      const spark = h('span', {
+        class: `poke-spark s-${(pokeIdx + i) % 3}`,
+        'aria-hidden': 'true',
+        text: glyph,
+      });
+      pig.root.append(spark);
+      const anim = spark.animate(
+        [
+          { transform: 'translate(-50%, 0) scale(0.4)', opacity: 0 },
+          { transform: `translate(calc(-50% + ${dx * 0.6}px), -26px) scale(1.15)`, opacity: 1, offset: 0.3 },
+          { transform: `translate(calc(-50% + ${dx}px), -62px) scale(0.75)`, opacity: 0 },
+        ],
+        { duration: 720, delay: i * 65, easing: 'cubic-bezier(0.16, 1, 0.3, 1)', fill: 'forwards' },
+      );
+      anim.finished.then(
+        () => spark.remove(),
+        () => spark.remove(),
+      );
+    }
+    pokeIdx++;
+  }
+
+  // Interactive idle pig poke: cheeky oink, juicy bounce, wing flutter, tail wag & floating sparkles!
   pig.root.addEventListener(
     'click',
     () => {
-      if (busy || prefersReducedMotion()) return;
+      if (busy) return;
+      playOink();
+      if (prefersReducedMotion()) return;
+      spawnPokeSparkles();
       pig.svg.animate(
         [
           { transform: 'translateY(0) scale(1, 1)' },
-          { transform: 'translateY(4%) scale(1.12, 0.88)', offset: 0.22 },
-          { transform: 'translateY(-18%) rotate(-6deg) scale(0.95, 1.06)', offset: 0.58 },
-          { transform: 'translateY(2%) scale(1.04, 0.96)', offset: 0.85 },
+          { transform: 'translateY(4%) scale(1.13, 0.87)', offset: 0.2 },
+          { transform: 'translateY(-20%) rotate(-6deg) scale(0.94, 1.07)', offset: 0.56 },
+          { transform: 'translateY(2%) scale(1.04, 0.96)', offset: 0.84 },
           { transform: 'none' },
         ],
-        { duration: 460, easing: 'cubic-bezier(.22, 1.35, .36, 1)' },
+        { duration: 480, easing: 'cubic-bezier(.22, 1.35, .36, 1)' },
       );
+      if (pig.wing) {
+        pig.wing.animate(
+          [{ transform: 'rotate(0deg)' }, { transform: 'rotate(26deg)' }, { transform: 'rotate(-14deg)' }, { transform: 'none' }],
+          { duration: 220, iterations: 2, easing: 'ease-in-out' },
+        );
+      }
       if (pig.tail) {
-        pig.tail.animate([{ transform: 'rotate(-22deg)' }, { transform: 'rotate(22deg)' }, { transform: 'none' }], {
-          duration: 320,
-           iterations: 2,
+        pig.tail.animate([{ transform: 'rotate(-24deg)' }, { transform: 'rotate(24deg)' }, { transform: 'none' }], {
+          duration: 280,
+          iterations: 2,
         });
       }
     },
@@ -251,6 +296,14 @@ export function createStage(outer: AbortSignal): StageController {
         });
         if (a) paddles.push(a);
       });
+      if (pig.wing) {
+        const a = loop(pig.wing, [{ transform: 'rotate(-16deg)' }, { transform: 'rotate(28deg)' }], {
+          duration: 150,
+          direction: 'alternate',
+          easing: 'ease-in-out',
+        });
+        if (a) paddles.push(a);
+      }
       if (pig.tail) {
         const a = loop(pig.tail, [{ transform: 'rotate(-14deg)' }, { transform: 'rotate(14deg)' }], {
           duration: 220,
@@ -268,7 +321,7 @@ export function createStage(outer: AbortSignal): StageController {
             { transform: 'translateY(8px) scale(.96)', opacity: 0.15 },
             { transform: 'none', opacity: 1 },
           ],
-          { duration: 240, easing: 'cubic-bezier(.22, 1.35, .36, 1)' },
+          { duration: 260, easing: 'cubic-bezier(.22, 1.35, .36, 1)' },
         );
       }
     };
@@ -291,8 +344,7 @@ export function createStage(outer: AbortSignal): StageController {
       busy = true;
       el.dataset.skit = skit.id;
       el.classList.add('is-playing');
-      const hudText = hudBadge.querySelector('.stage-hud-text');
-      if (hudText) hudText.textContent = `REC // ${skit.id.toUpperCase()}`;
+      playLaunch();
       try {
         await skit.play(makeStage(ctrl.signal));
         return !ctrl.signal.aborted;
@@ -304,7 +356,6 @@ export function createStage(outer: AbortSignal): StageController {
         if (run === ctrl) {
           busy = false;
           el.classList.remove('is-playing');
-          if (hudText) hudText.textContent = 'CAM-01 // AIRBORNE';
         }
       }
     },
@@ -316,8 +367,6 @@ export function createStage(outer: AbortSignal): StageController {
       setCaption('');
       delete el.dataset.skit;
       el.classList.remove('is-playing');
-      const hudText = hudBadge.querySelector('.stage-hud-text');
-      if (hudText) hudText.textContent = 'CAM-01 // PASTURE';
       if (dropIn && !prefersReducedMotion()) {
         pig.root.animate(
           [
