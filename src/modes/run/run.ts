@@ -4,6 +4,8 @@ import { load, save } from '../../lib/storage';
 import { randomSeed } from '../../lib/rng';
 import { hashUrl, shareLink } from '../../lib/share';
 import { prefersReducedMotion } from '../../lib/motion';
+import { burstConfetti } from '../../lib/confetti';
+import { playBoost, playClick, playCrash, playFanfare, playFlap } from '../../lib/sound';
 import { loadPigImage } from '../../pig/pig';
 import { num, t, type StringKey } from '../../i18n';
 import { FLY_EVENT, type Mode, type ModeContext, type Route } from '../types';
@@ -54,7 +56,6 @@ function mountRun({ root, route, signal }: ModeContext): (n: number | null) => v
     h(
       'div',
       { class: 'run-panel card' },
-      h('span', { class: 'run-badge', 'aria-hidden': 'true', text: 'SORTIE // READY FOR TAKEOFF' }),
       h('h2', { text: t('run.title') }),
       challengeLine,
       startBtn,
@@ -66,13 +67,7 @@ function mountRun({ root, route, signal }: ModeContext): (n: number | null) => v
   const paused = h(
     'div',
     { class: 'run-overlay' },
-    h(
-      'div',
-      { class: 'run-panel card' },
-      h('span', { class: 'run-badge', 'aria-hidden': 'true', text: 'HOLDING PATTERN // PAUSED' }),
-      h('h2', { text: t('run.paused') }),
-      resumeBtn,
-    ),
+    h('div', { class: 'run-panel card' }, h('h2', { text: t('run.paused') }), resumeBtn),
   );
 
   const overCause = h('p', { class: 'run-cause' });
@@ -87,7 +82,6 @@ function mountRun({ root, route, signal }: ModeContext): (n: number | null) => v
     h(
       'div',
       { class: 'run-panel card' },
-      h('span', { class: 'run-badge', 'aria-hidden': 'true', text: 'FLIGHT RECORDER // TELEMETRY' }),
       h('h2', { text: t('run.over.title') }),
       overCause,
       h('div', { class: 'run-score-box' }, overDist, overBest, overPct),
@@ -149,6 +143,8 @@ function mountRun({ root, route, signal }: ModeContext): (n: number | null) => v
       if (newBest) {
         best = m;
         save('run.best', String(best));
+        playFanfare();
+        burstConfetti({ count: 64 });
       }
       overCause.textContent = t(`run.cause.${game.cause ?? 'ground'}` as StringKey);
       overDist.textContent = t('run.over.distance', { d: num(m) });
@@ -177,7 +173,7 @@ function mountRun({ root, route, signal }: ModeContext): (n: number | null) => v
     acc += Math.min(0.1, (now - last) / 1000);
     last = now;
     while (acc >= STEP) {
-      game.update(STEP);
+      if (game.update(STEP)) playCrash();
       acc -= STEP;
     }
     renderer.draw(game, palette);
@@ -196,6 +192,7 @@ function mountRun({ root, route, signal }: ModeContext): (n: number | null) => v
   function restart(): void {
     game.reset(randomSeed());
     game.press();
+    playFlap();
   }
 
   function act(): void {
@@ -205,6 +202,7 @@ function mountRun({ root, route, signal }: ModeContext): (n: number | null) => v
     }
     if (game.state === 'crashing') return;
     game.press();
+    playFlap();
   }
 
   window.addEventListener(
@@ -275,12 +273,29 @@ function mountRun({ root, route, signal }: ModeContext): (n: number | null) => v
   box.addEventListener('pointercancel', lift, { signal });
   box.addEventListener('lostpointercapture', lift, { signal });
 
-  startBtn.addEventListener('click', () => game.press(), { signal });
-  resumeBtn.addEventListener('click', () => game.press(), { signal });
+  startBtn.addEventListener(
+    'click',
+    () => {
+      game.press();
+      playFlap();
+    },
+    { signal },
+  );
+  resumeBtn.addEventListener(
+    'click',
+    () => {
+      game.press();
+      playClick();
+    },
+    { signal },
+  );
   againBtn.addEventListener('click', restart, { signal });
   challengeBtn.addEventListener(
     'click',
-    () => void shareLink(hashUrl(`#/run?s=${game.meters}`), t('run.shareText', { d: num(game.meters) })),
+    () => {
+      playClick();
+      void shareLink(hashUrl(`#/run?s=${game.meters}`), t('run.shareText', { d: num(game.meters) }));
+    },
     { signal },
   );
 
@@ -293,12 +308,13 @@ function mountRun({ root, route, signal }: ModeContext): (n: number | null) => v
     () => {
       if (game.state === 'over' || game.state === 'crashing') restart();
       game.boost();
+      playBoost();
       hudBoost.hidden = false;
       window.clearTimeout(boostTimer);
       boostTimer = window.setTimeout(() => (hudBoost.hidden = true), 1800);
       if (!prefersReducedMotion()) {
         box.animate([{ transform: 'translateY(0)' }, { transform: 'translateY(-4px)' }, { transform: 'none' }], {
-          duration: 200,
+          duration: 220,
         });
       }
     },

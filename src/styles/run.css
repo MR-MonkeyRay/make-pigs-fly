@@ -1,22 +1,19 @@
 .run {
-  max-width: 980px;
+  max-width: 960px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
 }
 
 .run-box {
   position: relative;
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  border: var(--border) solid var(--line);
-  border-radius: 24px;
+  border: 1.5px solid var(--glass-border);
+  border-radius: 30px;
   background: var(--stage-sky-top);
-  box-shadow:
-    inset 0 2px 6px rgba(0, 0, 0, 0.12),
-    var(--lift-lg) var(--lift-lg) 0 var(--shadow),
-    0 18px 38px var(--shadow-ambient);
+  box-shadow: var(--shadow-inner), var(--shadow-lg);
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
@@ -27,7 +24,7 @@
 @media (max-width: 600px) {
   .run-box {
     aspect-ratio: 1 / 0.85;
-    border-radius: 20px;
+    border-radius: 24px;
   }
 }
 
@@ -39,12 +36,12 @@
   display: block;
 }
 
-/* Cockpit Telemetry HUD */
+/* Floating Glass Cockpit HUD */
 .run-hud {
   position: absolute;
-  top: 12px;
-  left: 14px;
-  right: 14px;
+  top: 14px;
+  left: 16px;
+  right: 16px;
   z-index: 4;
   display: flex;
   justify-content: space-between;
@@ -54,72 +51,93 @@
 }
 
 .hud-pill {
-  padding: 4px 13px;
+  padding: 6px 15px;
   font-family: var(--mono);
-  font-weight: 900;
-  font-size: 0.96rem;
-  color: #231829;
-  background: rgba(255, 253, 248, 0.94);
-  backdrop-filter: blur(6px);
-  border: 2.5px solid var(--art-ink);
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  font-size: 0.94rem;
+  color: #2a1b2e;
+  background: rgba(255, 254, 252, 0.86);
+  backdrop-filter: blur(14px) saturate(1.5);
+  -webkit-backdrop-filter: blur(14px) saturate(1.5);
+  border: 1.5px solid rgba(255, 255, 255, 0.9);
   border-radius: 999px;
-  box-shadow:
-    inset 0 1.5px 0 #ffffff,
-    2.5px 2.5px 0 var(--art-ink);
+  box-shadow: 0 8px 20px rgba(42, 27, 46, 0.14);
   white-space: nowrap;
 }
 
 .hud-boost {
   font-family: var(--font);
-  background: linear-gradient(180deg, #ffe066 0%, #ffc425 100%);
-  color: #231829;
+  color: #ffffff;
+  background: var(--accent-grad);
+  border-color: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 8px 22px var(--accent-glow);
+  animation: boost-pulse 0.7s ease-in-out infinite alternate;
 }
 
-/* Arcade Flight-Recorder Overlays */
+@keyframes boost-pulse {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.06);
+  }
+}
+
+/* Luminous Glass Overlays */
 .run-overlay {
   position: absolute;
   inset: 0;
   z-index: 5;
   display: grid;
   place-items: center;
-  padding: 16px;
-  background: rgba(15, 11, 28, 0.24);
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
+  padding: 18px;
+  background: rgba(255, 250, 246, 0.14);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .run-overlay {
+    background: rgba(10, 12, 34, 0.34);
+  }
+}
+:root[data-theme='dark'] .run-overlay {
+  background: rgba(10, 12, 34, 0.34);
 }
 
 .run-panel {
   width: min(440px, 100%);
   max-height: 100%;
   overflow: auto;
-  padding: 18px 22px;
+  padding: 24px 26px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   text-align: center;
   cursor: default;
+  border-radius: 28px;
+  animation: overlay-pop 0.36s var(--ease-spring);
 }
 
-.run-badge {
-  display: inline-block;
-  padding: 2px 10px;
-  font-family: var(--mono);
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  color: var(--ink-soft);
-  background: var(--paper-2);
-  border: 1.5px solid var(--line-soft);
-  border-radius: 999px;
+@keyframes overlay-pop {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .run-panel h2 {
   margin: 0;
-  font-size: clamp(1.4rem, 4vw, 2rem);
+  font-size: clamp(1.5rem, 4vw, 2.08rem);
   font-weight: 900;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
+  line-height: 1.16;
+  letter-spacing: -0.025em;
 }
 
 .run-panel p {
@@ -129,54 +147,55 @@
 .run-hint,
 .run-pct {
   font-size: 0.86rem;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--ink-soft);
 }
 
 .run-cause {
-  font-weight: 800;
-  font-size: 1rem;
-  color: var(--ink);
+  font-weight: 700;
+  font-size: 0.98rem;
+  color: var(--ink-soft);
 }
 
 .run-score-box {
   width: 100%;
-  padding: 10px 14px;
+  padding: 14px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  background: var(--paper-2);
-  border: 2px solid var(--line-soft);
-  border-radius: 16px;
+  gap: 6px;
+  background: var(--surface-soft);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
 }
 
 .run-distance {
-  font-size: 1.6rem;
+  font-size: 1.7rem;
   font-weight: 900;
   font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
   letter-spacing: -0.02em;
+  color: var(--ink);
 }
 
 .run-newbest {
   display: inline-block;
-  padding: 2px 12px;
-  font-size: 0.88rem;
-  font-weight: 900;
-  color: var(--accent-ink);
-  background: var(--accent);
-  border: 2px solid var(--line);
+  padding: 3px 14px;
+  font-size: 0.86rem;
+  font-weight: 800;
+  color: #ffffff;
+  background: var(--accent-grad);
   border-radius: 999px;
-  box-shadow: 2px 2px 0 var(--shadow);
+  box-shadow: 0 6px 16px var(--accent-glow);
 }
 
 .run-challenge {
-  padding: 4px 12px;
-  font-weight: 900;
-  font-size: 0.94rem;
-  color: var(--accent-ink);
-  background: var(--coral-soft);
-  border: 2px solid var(--line);
+  padding: 5px 14px;
+  font-weight: 800;
+  font-size: 0.92rem;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1.5px solid rgba(255, 107, 124, 0.28);
   border-radius: 999px;
 }
 
@@ -190,15 +209,18 @@
 
 .run-controls {
   margin: 0 auto;
-  padding: 6px 16px;
+  padding: 7px 18px;
   display: inline-block;
   text-align: center;
-  font-size: 0.86rem;
-  font-weight: 800;
+  font-size: 0.85rem;
+  font-weight: 700;
   color: var(--ink-soft);
-  background: var(--paper-glass);
-  border: 1.5px solid var(--line-soft);
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1.5px solid var(--glass-border);
   border-radius: 999px;
+  box-shadow: var(--shadow-sm);
 }
 
 @media (max-width: 600px) {
@@ -206,10 +228,17 @@
     display: none;
   }
   .run-panel {
-    padding: 14px 16px;
-    gap: 8px;
+    padding: 18px 18px;
+    gap: 9px;
   }
   .run-score-box {
-    padding: 8px 10px;
+    padding: 10px 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .run-panel,
+  .hud-boost {
+    animation: none;
   }
 }
