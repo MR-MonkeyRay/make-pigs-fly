@@ -193,7 +193,7 @@ export function Doubters() {
   });
 
   return (
-    <Section id="doubters" h={1.5} hm={1.5} label={t.layers[1]}>
+    <Section id="doubters" h={1.9} hm={1.7} label={t.layers[1]}>
       <div className="sec__inner doubters__inner" ref={secRef}>
         <p className="kicker doubters__kicker">{t.doubters.kicker}</p>
         <ol className="doubters__list">

@@ -23,6 +23,7 @@ interface Stop {
 }
 
 let stops: Stop[] = [];
+let started = false;
 let target = -1; // index of the stop we are travelling to / resting at
 let busy = false;
 let queued = 0;
@@ -58,6 +59,114 @@ export function onStop(fn: (i: number, n: number) => void): () => void {
   return () => listeners.delete(fn);
 }
 
+/**
+ * A section can hand the pager its own stops (as page progress, bottom → top)
+ * when they depend on its layout, e.g. one stop per card on a sideways track.
+ * Return null to fall back to the spec's list.
+ */
+export interface StopCtx {
+  narrow: boolean;
+  vw: number;
+  vh: number;
+  /** the spec's list for this layout */
+  list: number[];
+}
+export type StopProvider = (ctx: StopCtx) => number[] | null | undefined;
+const providers = new Map<string, StopProvider>();
+
+export function provideStops(id: string, fn: StopProvider): () => void {
+  providers.set(id, fn);
+  refreshStops();
+  return () => {
+    if (providers.get(id) === fn) providers.delete(id);
+    refreshStops();
+  };
+}
+
+/** The part of the screen the fixed chrome leaves free (top bar + altimeter above, buttons below). */
+function freeBand(vh: number): { top: number; bottom: number } {
+  let top = 64;
+  for (const sel of ['.topbar', frame.narrow ? '.alt__read' : '']) {
+    const el = sel && document.querySelector(sel);
+    if (el) top = Math.max(top, el.getBoundingClientRect().bottom);
+  }
+  return { top: top + 10, bottom: vh - (frame.narrow ? 76 : 64) };
+}
+
+const docRect = (el: Element) => {
+  const r = el.getBoundingClientRect();
+  return { left: r.left, right: r.right, top: r.top + window.scrollY, bottom: r.bottom + window.scrollY };
+};
+
+/** one stop per anchor; neighbours that fit on one screen together share a stop */
+function anchorYs(root: HTMLElement, sel: string, vh: number): number[] {
+  const band = freeBand(vh);
+  const free = band.bottom - band.top;
+  const rs = [...root.querySelectorAll(sel)].map(docRect).filter((r) => r.bottom > r.top);
+  rs.sort((a, b) => b.top - a.top); // bottom first: that is the first one the reader meets
+  const groups: { top: number; bottom: number }[] = [];
+  for (const r of rs) {
+    const g = groups[groups.length - 1];
+    if (g && Math.max(g.bottom, r.bottom) - Math.min(g.top, r.top) <= free) {
+      g.top = Math.min(g.top, r.top);
+      g.bottom = Math.max(g.bottom, r.bottom);
+    } else groups.push({ ...r });
+  }
+  return groups.map((g) => {
+    const h = g.bottom - g.top;
+    return h <= free ? g.top - band.top - (free - h) / 2 : g.top - band.top - 8;
+  });
+}
+
+/** add a framing stop for each element that no stop shows whole (kept bottom → top) */
+function ensureShown(root: HTMLElement, sel: string, ys: number[], vh: number): number[] {
+  const band = freeBand(vh);
+  const out = [...ys];
+  for (const el of root.querySelectorAll(sel)) {
+    const r = docRect(el);
+    if (out.some((y) => r.top >= y + band.top - 1 && r.bottom <= y + band.bottom + 1)) continue;
+    const free = band.bottom - band.top;
+    const h = r.bottom - r.top;
+    out.push(h <= free ? r.top - band.top - (free - h) / 2 : r.top - band.top - 8);
+  }
+  return out.sort((a, b) => b - a);
+}
+
+/** nudge a resting position until the pig no longer sits on any of `sel` */
+function clearOfPig(root: HTMLElement, sel: string, spec: (typeof SECTIONS)[number], y: number, lo: number, hi: number): number {
+  const pose = frame.narrow ? spec.poseM : spec.pose;
+  if (pose.hide) return y;
+  const rs = [...root.querySelectorAll(sel)].map(docRect);
+  const pw = 280 * pose.s * 0.78;
+  const ph = 280 * pose.s * 0.62;
+  const x0 = pose.x * frame.vw - pw / 2;
+  const x1 = x0 + pw;
+  const cost = (yy: number) => {
+    const t = yy + pose.y * frame.vh - ph / 2;
+    const b = t + ph;
+    let c = 0;
+    for (const r of rs) {
+      const ix = Math.min(x1, r.right + 6) - Math.max(x0, r.left - 6);
+      const iy = Math.min(b, r.bottom + 6) - Math.max(t, r.top - 6);
+      if (ix > 0 && iy > 0) c += ix * iy;
+    }
+    return c;
+  };
+  let best = y;
+  let bc = cost(y);
+  for (let d = 6; bc > 0 && d <= frame.vh * 0.35; d += 6) {
+    for (const yy of [y - d, y + d]) {
+      if (yy < lo || yy > hi) continue;
+      const c = cost(yy);
+      if (c < bc) {
+        bc = c;
+        best = yy;
+      }
+    }
+  }
+  return best;
+}
+
 export function computeStops(): void {
   const secs = getSections();
   const vh = frame.vh;
@@ -69,8 +178,21 @@ export function computeStops(): void {
     const list = (frame.narrow ? spec.stopsM : undefined) ?? spec.stops;
     const yA = s.top + s.h - vh; // section bottom on viewport bottom
     const yB = s.top; // section top on viewport top
-    for (const pp of list) {
-      let y = s.h <= vh + 2 ? yB : yA - pp * (yA - yB);
+    const root = document.getElementById(spec.id);
+    const fromPp = (pp: number) => (s.h <= vh + 2 ? yB : yA - pp * (yA - yB));
+    let ys: number[] | null = null;
+    const own = providers.get(spec.id)?.({ narrow: frame.narrow, vw: frame.vw, vh, list });
+    if (own?.length) ys = own.map(fromPp);
+    else if (frame.narrow && spec.anchorsM && root) {
+      // an anchored stop may run past the section edge, as long as the middle of the
+      // screen (which decides the current floor) stays inside this section
+      const a = anchorYs(root, spec.anchorsM, vh).map((y) => Math.max(s.top - vh * 0.5 + 40, Math.min(s.top + s.h - vh * 0.5 - 40, y)));
+      if (a.length) ys = a;
+    }
+    ys ??= list.map(fromPp);
+    if (frame.narrow && spec.ensureM && root) ys = ensureShown(root, spec.ensureM, ys, vh);
+    for (let y of ys) {
+      if (spec.clear && root && i > 0) y = clearOfPig(root, spec.clear, spec, y, Math.min(yA, yB), Math.max(yA, yB));
       if (i === 0) y = max;
       y = Math.round(Math.max(0, Math.min(max, y)));
       const prev = out[out.length - 1];
@@ -79,6 +201,15 @@ export function computeStops(): void {
     }
   });
   stops = out;
+}
+
+/** A section's layout changed (fonts, locale): recompute, keep the reader where they are. */
+export function refreshStops(): void {
+  if (!started) return;
+  computeStops();
+  if (busy || playSec >= 0) return;
+  target = nearest(window.scrollY);
+  emit();
 }
 
 function nearest(y: number): number {
@@ -214,7 +345,8 @@ function playStep() {
       return;
     }
     const last = lastOfSection(i);
-    const linger = last ? Math.min(900, spec.hold) : spec.hold;
+    const hold = frame.narrow && spec.holdM ? spec.holdM : spec.hold;
+    const linger = last ? Math.min(900, hold) : hold;
     if (performance.now() - t0 < linger || held(sec)) {
       playTimer = window.setTimeout(tick, 120);
       return;
@@ -453,18 +585,30 @@ function onScroll() {
   }, 220);
 }
 
+/** the same floor in a recomputed list: same section, same ordinal within it (clamped) */
+function sameFloor(sec: number, k: number): number {
+  const first = stops.findIndex((s) => s.sec === sec);
+  if (first < 0) return -1;
+  let i = first;
+  while (i - first < k && i + 1 < stops.length && stops[i + 1].sec === sec) i++;
+  return i;
+}
+
 export function startPager(): () => void {
+  started = true;
   computeStops();
   target = nearest(window.scrollY);
   setSectionJumper(goToSection);
   const offMeasured = onMeasured(() => {
-    const was = target;
+    const was = stops[target];
+    const k = was ? target - stops.findIndex((s) => s.sec === was.sec) : 0;
     computeStops();
     if (busy || isLocked()) return;
+    const now = was ? sameFloor(was.sec, k) : -1;
     // the stop list may have changed shape (phone ↔ desktop): don't play on from a stale floor
-    if (playSec >= 0 && stops[was]?.sec !== playSec) stopPlay();
+    if (playSec >= 0 && (now < 0 || stops[now].sec !== playSec)) stopPlay();
     // keep the reader on the same floor after a resize / reflow
-    if (was >= 0 && was < stops.length) tweenTo(was, { instant: true });
+    if (now >= 0) tweenTo(now, { instant: true });
     else resync();
   });
   window.addEventListener('wheel', onWheel, { passive: false });
@@ -476,6 +620,7 @@ export function startPager(): () => void {
   emit();
   scheduleCue();
   return () => {
+    started = false;
     offMeasured();
     cancelAnimationFrame(tweenRaf);
     stopPlay();

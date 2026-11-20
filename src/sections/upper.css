@@ -196,7 +196,8 @@
 .karman__earth figcaption {
   position: absolute;
   right: var(--gutter);
-  bottom: 12px;
+  /* clear of the real-view button docked bottom right */
+  bottom: 76px;
   color: var(--paper);
 }
 
@@ -587,6 +588,10 @@
   max-width: 72vw;
 }
 
+.space__footer--low {
+  display: none;
+}
+
 .space__finale {
   flex: 1;
   display: flex;
@@ -801,11 +806,19 @@
     max-width: 100%;
     font-size: 10px;
   }
-  /* leave a clear patch of sky under the footer for the pig + its bubble */
+  .space__footer--top {
+    display: none;
+  }
+  .space__footer--low {
+    display: flex;
+    align-self: start;
+    margin-top: 40px;
+  }
+  /* leave a clear patch of sky at the top for the pig + its bubble */
   .space__finale {
     max-width: 100%;
     justify-content: flex-start;
-    padding-top: 124px;
+    padding-top: 112px;
     padding-bottom: 4vh;
     gap: 14px;
   }

@@ -9,7 +9,7 @@ import { sound } from '../engine/sound';
 import { DelegateArt } from '../art/Delegates';
 import { Hoofprint, MissionPatch } from '../art/Aloft';
 import { Constellation } from '../art/Constellation';
-import { holdPlayback } from '../engine/pager';
+import { holdPlayback, provideStops, refreshStops } from '../engine/pager';
 import { Section, Typewriter, useSectionFrame, useSectionStep } from './Section';
 import './upper.css';
 
@@ -30,15 +30,39 @@ export function Summit() {
       const pad = parseFloat(getComputedStyle(el).paddingLeft) || 0;
       span.current = Math.max(0, el.scrollWidth - window.innerWidth + pad * 0.5);
     };
+    const again = () => {
+      m();
+      refreshStops();
+    };
     m();
-    const tm = window.setTimeout(m, 400);
+    const tm = window.setTimeout(again, 400);
     window.addEventListener('resize', m);
-    document.fonts?.ready.then(m);
+    document.fonts?.ready.then(again);
     return () => {
       window.clearTimeout(tm);
       window.removeEventListener('resize', m);
     };
   }, [t]);
+
+  // On a phone one card fills the screen, so stop on each card, centred,
+  // instead of at fixed fractions that land between two of them.
+  useEffect(
+    () =>
+      provideStops('summit', ({ narrow, vw }) => {
+        const el = track.current;
+        if (!narrow || !el) return null;
+        const pad = parseFloat(getComputedStyle(el).paddingLeft) || 0;
+        const span = Math.max(0, el.scrollWidth - vw + pad * 0.5);
+        if (span < 1) return null;
+        const pps = [...el.children].map((c) => {
+          const li = c as HTMLElement;
+          const u = Math.min(1, Math.max(0, (li.offsetLeft - el.offsetLeft + li.offsetWidth / 2 - vw / 2) / span));
+          return 0.08 + u * 0.84;
+        });
+        return [0, ...pps.slice(1)].filter((v, i, a) => i === 0 || v - a[i - 1] > 0.01);
+      }),
+    [t],
+  );
 
   useSectionFrame('summit', (_q, pp) => {
     const el = track.current;
@@ -264,15 +288,19 @@ export function Space({ personal }: { personal: Personal }) {
 
   const canShare = typeof navigator !== 'undefined' && 'share' in navigator;
 
+  const footer = (className: string) => (
+    <footer className={className}>
+      <span>{fmt(t.footer.made, { year: new Date().getFullYear() })}</span>
+      <span>{t.footer.credits}</span>
+      <span>{t.footer.tld}</span>
+      <span>{t.footer.harm}</span>
+    </footer>
+  );
+
   return (
     <Section id="space" h={2} hm={2.3} className="dark" label={t.layers[12]}>
       <div className="space__top sec__inner">
-        <footer className="space__footer">
-          <span>{fmt(t.footer.made, { year: new Date().getFullYear() })}</span>
-          <span>{t.footer.credits}</span>
-          <span>{t.footer.tld}</span>
-          <span>{t.footer.harm}</span>
-        </footer>
+        {footer('space__footer space__footer--top')}
 
         <div className="space__finale">
           <h2 className="display space__title">
@@ -326,6 +354,8 @@ export function Space({ personal }: { personal: Personal }) {
       </div>
 
       <div className="space__bottom">
+        {/* on a phone the top of the screen belongs to the pig and its bubble, so the small print lives down here */}
+        {footer('space__footer space__footer--low')}
         <div className="space__constel">
           <Constellation labels={s.stars} />
           <p className="space__cname">
