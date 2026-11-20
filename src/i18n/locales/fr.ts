@@ -205,6 +205,7 @@ export const fr: Messages = {
   },
   cruise: {
     kicker: 'Fig. 4 — Siège 23A, hublot',
+    shade: 'Baisser le volet du hublot',
     captainLabel: 'Annonce à bord',
     captain:
       'Mesdames et messieurs, ici votre commandant de bord. Si vous regardez par le côté gauche de l’appareil… en fait, donnez-moi une minute.',

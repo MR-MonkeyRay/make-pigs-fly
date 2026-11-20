@@ -197,6 +197,24 @@ export function Cruise({ personal }: { personal: Personal }) {
     }
   }, [v]);
 
+  // Seat 23A's shade: pull it down and the pig knocks twice, then shoves it
+  // back up and presses his snout to the glass.
+  const [shade, setShade] = useState<'up' | 'down' | 'knock' | 'peek'>('up');
+  const shadeTimers = useRef<number[]>([]);
+  useEffect(() => () => shadeTimers.current.forEach((x) => window.clearTimeout(x)), []);
+  const pullShade = () => {
+    if (shade !== 'up') return;
+    setShade('down');
+    const at = (ms: number, fn: () => void) => shadeTimers.current.push(window.setTimeout(fn, ms));
+    at(900, () => {
+      setShade('knock');
+      sound.thump();
+    });
+    at(1150, () => sound.thump());
+    at(1700, () => setShade('peek'));
+    at(3500, () => setShade('up'));
+  };
+
   let rows: FlapRow[] = c.board.rows;
   if (personal.said) {
     const said = /[a-z]/i.test(personal.said) ? personal.said.toUpperCase() : personal.said;
@@ -209,7 +227,7 @@ export function Cruise({ personal }: { personal: Personal }) {
         <div className="cruise__left">
           <p className="kicker">{c.kicker}</p>
           <div className="cabin">
-            <div className="window">
+            <div className={`window is-${shade}`}>
               <div className="window__sky">
                 <Cloud className="window__cloud window__cloud--1" />
                 <Cloud className="window__cloud window__cloud--2" />
@@ -217,7 +235,9 @@ export function Cruise({ personal }: { personal: Personal }) {
                   <PigArt auto wave mood="smug" costume={{ wings: 'feather', goggles: true, scarf: true, pillow: true }} />
                 </div>
               </div>
-              <div className="window__shade" />
+              <button type="button" className="window__shade" aria-label={c.shade} title={c.shade} onClick={pullShade}>
+                <i aria-hidden="true" />
+              </button>
             </div>
           </div>
           <div className="captain">

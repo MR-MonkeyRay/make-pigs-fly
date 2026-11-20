@@ -205,6 +205,7 @@ export const es: Messages = {
   },
   cruise: {
     kicker: 'Fig. 4 — Asiento 23A, ventanilla',
+    shade: 'Bajar la persiana de la ventanilla',
     captainLabel: 'Anuncio de cabina',
     captain:
       'Señoras y señores, les habla su capitán. Si miran por el lado izquierdo del avión… bueno, déjenme un minuto.',

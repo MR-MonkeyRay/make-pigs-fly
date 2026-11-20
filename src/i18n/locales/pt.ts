@@ -205,6 +205,7 @@ export const pt: Messages = {
   },
   cruise: {
     kicker: 'Fig. 4 — Poltrona 23A, janela',
+    shade: 'Baixar a persiana da janela',
     captainLabel: 'Anúncio de bordo',
     captain:
       'Senhoras e senhores, aqui fala o seu comandante. Se olharem para a esquerda da aeronave… na verdade, me dêem um minuto.',

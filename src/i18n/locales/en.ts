@@ -215,6 +215,7 @@ export const en = {
   },
   cruise: {
     kicker: 'Fig. 4 — Seat 23A, window',
+    shade: 'Pull down the window shade',
     captainLabel: 'Cabin announcement',
     captain:
       'Ladies and gentlemen, this is your captain speaking. If you look out of the left side of the aircraft… actually, give me a minute.',

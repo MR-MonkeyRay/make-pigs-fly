@@ -193,6 +193,7 @@ export const zhTW: Messages = {
   },
   cruise: {
     kicker: '圖 4 —— 23A 靠窗座位',
+    shade: '拉下遮光板',
     captainLabel: '機長廣播',
     captain: '各位旅客您好，我是本班機機長。請往飛機左側窗外看……等等，給我一分鐘。',
     board: {

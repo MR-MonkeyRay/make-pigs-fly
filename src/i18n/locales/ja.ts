@@ -205,6 +205,7 @@ export const ja: Messages = {
   },
   cruise: {
     kicker: '図 4 —— 23A 窓側席',
+    shade: '日よけを下ろす',
     captainLabel: '機長アナウンス',
     captain:
       'お客様にご案内いたします。こちらは機長です。左手の窓の外をご覧いただくと……あ、すみません、少々お待ちいただけますか。',

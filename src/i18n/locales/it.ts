@@ -206,6 +206,7 @@ export const it: Messages = {
   },
   cruise: {
     kicker: 'Fig. 4 — Posto 23A, finestrino',
+    shade: 'Abbassa la tendina del finestrino',
     captainLabel: 'Annuncio di bordo',
     captain:
       'Signore e signori, vi parla il comandante. Se guardate dalla parte sinistra dell’aereo… anzi, datemi un minuto.',

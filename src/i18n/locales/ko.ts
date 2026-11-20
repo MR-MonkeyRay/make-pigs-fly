@@ -206,6 +206,7 @@ export const ko: Messages = {
   },
   cruise: {
     kicker: '그림 4 — 23A 창가 좌석',
+    shade: '창문 가리개 내리기',
     captainLabel: '기내 방송',
     captain:
       '승객 여러분, 기장입니다. 기체 왼쪽 창밖을 보시면… 아, 잠깐만요. 1분만 주세요.',

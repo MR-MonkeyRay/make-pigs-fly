@@ -206,6 +206,7 @@ export const de: Messages = {
   },
   cruise: {
     kicker: 'Abb. 4 — Sitz 23A, Fensterplatz',
+    shade: 'Fensterblende herunterziehen',
     captainLabel: 'Bordansage',
     captain:
       'Meine Damen und Herren, hier spricht Ihr Kapitän. Wenn Sie auf der linken Seite aus dem Flugzeug schauen … ähm, geben Sie mir bitte einen Moment.',
