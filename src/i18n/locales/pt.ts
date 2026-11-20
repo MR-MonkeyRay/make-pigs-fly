@@ -319,6 +319,7 @@ export const pt: Messages = {
   },
   karman: {
     line: 'LINHA DE KÁRMÁN · 100 km · o espaço oficialmente começa aqui (mais ou menos)',
+    hush: 'O céu está ficando sem azul.',
     title: 'Parabéns.',
     body: 'Tecnicamente, este porco agora é astronauta.',
     patchNote: 'Lema da missão: SUS VOLAT — latim para “o porco voa”.',

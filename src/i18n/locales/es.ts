@@ -319,6 +319,7 @@ export const es: Messages = {
   },
   karman: {
     line: 'LÍNEA DE KÁRMÁN · 100 km · el espacio empieza oficialmente aquí (más o menos)',
+    hush: 'Al cielo se le está acabando el azul.',
     title: 'Felicidades.',
     body: 'Técnicamente, este cerdo ahora es astronauta.',
     patchNote: 'Lema de la misión: SUS VOLAT — latín para «el cerdo vuela».',

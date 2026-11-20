@@ -136,6 +136,8 @@ export function Karman() {
         <img src={img('earth-limb.webp')} alt={k.photo} loading="lazy" decoding="async" width={1500} height={955} />
         <figcaption className="fig">{k.photo}</figcaption>
       </figure>
+      {/* the approach, before the line: one quiet sentence and a lot of dark */}
+      <p className="karman__hush">{k.hush}</p>
       <div className="karman__line" style={{ bottom: `${(line * 100).toFixed(2)}%` }}>
         <span>{k.line}</span>
       </div>

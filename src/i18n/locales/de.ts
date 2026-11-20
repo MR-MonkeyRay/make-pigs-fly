@@ -320,6 +320,7 @@ export const de: Messages = {
   },
   karman: {
     line: 'KÁRMÁN-LINIE · 100 km · der Weltraum beginnt hier offiziell (ungefähr)',
+    hush: 'Dem Himmel geht das Blau aus.',
     title: 'Herzlichen Glückwunsch.',
     body: 'Technisch gesehen ist dieses Schwein jetzt Astronaut.',
     patchNote: 'Missionsmotto: SUS VOLAT — Latein für „das Schwein fliegt“.',

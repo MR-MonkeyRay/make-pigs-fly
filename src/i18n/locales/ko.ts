@@ -320,6 +320,7 @@ export const ko: Messages = {
   },
   karman: {
     line: '카르만 라인 · 100km · 우주가 공식적으로 시작되는 곳 (대충)',
+    hush: '하늘의 파란색이 바닥나고 있다.',
     title: '축하합니다.',
     body: '기술적으로 이 돼지는 이제 우주비행사입니다.',
     patchNote: '임무 모토: SUS VOLAT — 라틴어로 “돼지가 난다”.',

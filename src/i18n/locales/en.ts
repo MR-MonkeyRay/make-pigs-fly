@@ -337,6 +337,7 @@ export const en = {
   },
   karman: {
     line: 'KÁRMÁN LINE · 100 km · space officially starts here (ish)',
+    hush: 'The sky is running out of blue.',
     title: 'Congratulations.',
     body: 'Technically, this pig is now an astronaut.',
     patchNote: 'Mission motto: SUS VOLAT — Latin for “the pig flies.”',

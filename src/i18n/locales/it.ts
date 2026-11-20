@@ -320,6 +320,7 @@ export const it: Messages = {
   },
   karman: {
     line: 'LINEA DI KÁRMÁN · 100 km · lo spazio inizia ufficialmente qui (più o meno)',
+    hush: 'Il cielo sta finendo l’azzurro.',
     title: 'Congratulazioni.',
     body: 'Tecnicamente, questo maiale ora è un astronauta.',
     patchNote: 'Motto della missione: SUS VOLAT — latino per «il maiale vola».',

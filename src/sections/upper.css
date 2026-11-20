@@ -238,6 +238,31 @@
 }
 
 
+.karman__hush {
+  position: absolute;
+  z-index: 1;
+  /* in the dark above the Earth's limb at the first stop, which shows the
+     bottom screen of the floor: top right on wide screens */
+  bottom: calc(100svh - 170px);
+  right: calc(var(--gutter) + 24px);
+  max-width: 44ch;
+  text-align: right;
+  margin: 0;
+  font-family: var(--f-mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: rgba(244, 238, 223, 0.72);
+}
+
+@media (max-width: 759px) {
+  .karman__hush {
+    right: auto;
+    left: 20px;
+    bottom: 62svh;
+    text-align: left;
+  }
+}
+
 .karman__line {
   position: absolute;
   left: 0;

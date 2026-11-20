@@ -319,6 +319,7 @@ export const fr: Messages = {
   },
   karman: {
     line: 'LIGNE DE KÁRMÁN · 100 km · l’espace commence officiellement ici (à peu près)',
+    hush: 'Le ciel est à court de bleu.',
     title: 'Félicitations.',
     body: 'Techniquement, ce cochon est désormais astronaute.',
     patchNote: 'Devise de la mission : SUS VOLAT — latin pour « le cochon vole ».',

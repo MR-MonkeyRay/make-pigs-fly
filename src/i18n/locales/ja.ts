@@ -319,6 +319,7 @@ export const ja: Messages = {
   },
   karman: {
     line: 'カルマン線 · 100km · ここから宇宙（だいたい）',
+    hush: '空の青が、そろそろ尽きる。',
     title: 'おめでとうございます。',
     body: '技術的には、この豚はもう宇宙飛行士です。',
     patchNote: 'ミッションの標語：SUS VOLAT ―― ラテン語で「豚が飛ぶ」。',

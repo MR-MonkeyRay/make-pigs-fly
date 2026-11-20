@@ -306,6 +306,7 @@ export const zhTW: Messages = {
   },
   karman: {
     line: '卡門線 · 100 公里 · 太空的官方起點（大概）',
+    hush: '天空的藍色快用完了。',
     title: '恭喜。',
     body: '從技術上來說，這頭豬現在是太空人了。',
     patchNote: '任務格言：SUS VOLAT —— 拉丁文「豬在飛」。',
