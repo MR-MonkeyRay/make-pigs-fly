@@ -90,6 +90,7 @@ export const it: Messages = {
     lift: 'PORTANZA',
     liftBody: 'Lusinghe.',
     liftNote: 'Proverbio giapponese: «Lusinga un maiale e si arrampicherà su un albero.» Noi abbiamo semplicemente continuato.',
+    flatter: 'Lusingalo',
     thrust: 'SPINTA',
     thrustBody: 'Coda a ricciolo, 3.000 giri/min. In pratica è una molla.',
     drag: 'RESISTENZA',
@@ -204,7 +205,8 @@ export const it: Messages = {
     ],
   },
   cruise: {
-    kicker: 'Fig. 7 — Posto 23A, finestrino',
+    kicker: 'Fig. 4 — Posto 23A, finestrino',
+    shade: 'Abbassa la tendina del finestrino',
     captainLabel: 'Annuncio di bordo',
     captain:
       'Signore e signori, vi parla il comandante. Se guardate dalla parte sinistra dell’aereo… anzi, datemi un minuto.',
@@ -224,7 +226,7 @@ export const it: Messages = {
     },
   },
   summit: {
-    kicker: 'Stratosfera · 31 km',
+    kicker: 'Stratosfera · Sessione straordinaria',
     title: 'Vertice d’emergenza dell’Unione Internazionale degli Animali Impossibili',
     agenda: 'Ordine del giorno, punto 1: il maiale ce l’ha fatta davvero. E adesso?',
     delegate: 'Delegato',
@@ -318,14 +320,15 @@ export const it: Messages = {
   },
   karman: {
     line: 'LINEA DI KÁRMÁN · 100 km · lo spazio inizia ufficialmente qui (più o meno)',
+    hush: 'Il cielo sta finendo l’azzurro.',
     title: 'Congratulazioni.',
     body: 'Tecnicamente, questo maiale ora è un astronauta.',
     patchNote: 'Motto della missione: SUS VOLAT — latino per «il maiale vola».',
-    helmet: 'Ali: in pensione. Zaino razzo: in prestito. Casco: una (1) boccia per pesci.',
+    helmet: 'Ali: in pensione. Stivali a razzo: in prestito. Casco: una (1) boccia per pesci.',
     photo: 'La Terra vista dall’orbita. Foto della NASA.',
   },
   iss: {
-    kicker: 'Fig. 10 — Anello aria-terra, 408 km',
+    kicker: 'Fig. 5 — Anello aria-terra, 408 km',
     photoCap: 'Stazione Spaziale Internazionale (NASA). Il maiale è appena fuori inquadratura. Saluta.',
     title: 'Trascrizione',
     log: [
@@ -334,12 +337,12 @@ export const it: Messages = {
       { t: 'T+00:42:22', who: 'STAZIONE', text: 'Un maiale. Rosa. Occhialoni. Mi ha appena salutato.' },
       { t: 'T+00:42:31', who: 'HOUSTON', text: '…' },
       { t: 'T+00:42:40', who: 'HOUSTON', text: 'Ricevuto. Lo registro come «fenomeno meteorologico».' },
-      { t: 'T+00:42:51', who: 'STAZIONE', text: 'Ha una boccia per pesci in testa. E uno zaino razzo.' },
+      { t: 'T+00:42:51', who: 'STAZIONE', text: 'Ha una boccia per pesci in testa. E degli stivali a razzo.' },
       { t: 'T+00:42:52', who: 'HOUSTON', text: 'Anche lei, Stazione.' },
     ],
   },
   moon: {
-    kicker: 'Fig. 11 — Superficie lunare',
+    kicker: 'Fig. 6 — Superficie lunare',
     left: '1969 — un piccolo passo.',
     right: 'Oggi — un piccolo trotto.',
     note: 'Notare il battistrada superiore.',
@@ -363,6 +366,7 @@ export const it: Messages = {
     saidPh: 'es. ridarmi i soldi',
     copy: 'Copia link',
     share: 'Condividi',
+    print: 'Stampa il certificato',
     copied: 'Copiato. Le scuse per fare finta di niente: evaporate.',
     copyFail: 'Impossibile copiare — ecco il link:',
     wait: '…aspetta.',

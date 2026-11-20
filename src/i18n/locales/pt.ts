@@ -90,6 +90,7 @@ export const pt: Messages = {
     lift: 'SUSTENTAÇÃO',
     liftBody: 'Elogios.',
     liftNote: 'Provérbio japonês: “Elogie um porco e ele sobe numa árvore.” Nós apenas continuamos.',
+    flatter: 'Elogie-o',
     thrust: 'IMPULSO',
     thrustBody: 'Rabo enrolado, 3.000 rpm. Basicamente é uma mola.',
     drag: 'ARRASTO',
@@ -203,7 +204,8 @@ export const pt: Messages = {
     ],
   },
   cruise: {
-    kicker: 'Fig. 7 — Poltrona 23A, janela',
+    kicker: 'Fig. 4 — Poltrona 23A, janela',
+    shade: 'Baixar a persiana da janela',
     captainLabel: 'Anúncio de bordo',
     captain:
       'Senhoras e senhores, aqui fala o seu comandante. Se olharem para a esquerda da aeronave… na verdade, me dêem um minuto.',
@@ -223,7 +225,7 @@ export const pt: Messages = {
     },
   },
   summit: {
-    kicker: 'Estratosfera · 31 km',
+    kicker: 'Estratosfera · Sessão de emergência',
     title: 'Cúpula de emergência da União Internacional de Animais Impossíveis',
     agenda: 'Pauta, item 1: O porco realmente conseguiu. E agora?',
     delegate: 'Delegado',
@@ -317,14 +319,15 @@ export const pt: Messages = {
   },
   karman: {
     line: 'LINHA DE KÁRMÁN · 100 km · o espaço oficialmente começa aqui (mais ou menos)',
+    hush: 'O céu está ficando sem azul.',
     title: 'Parabéns.',
     body: 'Tecnicamente, este porco agora é astronauta.',
     patchNote: 'Lema da missão: SUS VOLAT — latim para “o porco voa”.',
-    helmet: 'Asas: aposentadas. Mochila-foguete: emprestada. Capacete: um (1) aquário.',
+    helmet: 'Asas: aposentadas. Botas-foguete: emprestadas. Capacete: um (1) aquário.',
     photo: 'A Terra vista da órbita. Foto da NASA.',
   },
   iss: {
-    kicker: 'Fig. 10 — Circuito ar-solo, 408 km',
+    kicker: 'Fig. 5 — Circuito ar-solo, 408 km',
     photoCap: 'Estação Espacial Internacional (NASA). O porco está logo fora do quadro. Acenando.',
     title: 'Transcrição',
     log: [
@@ -333,12 +336,12 @@ export const pt: Messages = {
       { t: 'T+00:42:22', who: 'ESTAÇÃO', text: 'Um porco. Rosa. De óculos. Acabou de acenar pra mim.' },
       { t: 'T+00:42:31', who: 'HOUSTON', text: '…' },
       { t: 'T+00:42:40', who: 'HOUSTON', text: 'Recebido. Registrando como “fenômeno atmosférico”.' },
-      { t: 'T+00:42:51', who: 'ESTAÇÃO', text: 'Está usando um aquário na cabeça. E uma mochila-foguete.' },
+      { t: 'T+00:42:51', who: 'ESTAÇÃO', text: 'Está usando um aquário na cabeça. E botas-foguete.' },
       { t: 'T+00:42:52', who: 'HOUSTON', text: 'Igual a você, Estação.' },
     ],
   },
   moon: {
-    kicker: 'Fig. 11 — Superfície lunar',
+    kicker: 'Fig. 6 — Superfície lunar',
     left: '1969 — um pequeno passo.',
     right: 'Hoje — um pequeno trote.',
     note: 'Repare no solado superior.',
@@ -362,6 +365,7 @@ export const pt: Messages = {
     saidPh: 'ex.: me devolver o Pix',
     copy: 'Copiar link',
     share: 'Compartilhar',
+    print: 'Imprimir certificado',
     copied: 'Copiado. A desculpa de “não lembro” foi para o espaço.',
     copyFail: 'Não foi possível copiar — aqui está o link:',
     wait: '…calma.',

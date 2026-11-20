@@ -90,6 +90,7 @@ export const es: Messages = {
     lift: 'SUSTENTACIÓN',
     liftBody: 'Halagos.',
     liftNote: 'Proverbio japonés: «Halaga a un cerdo y trepará a un árbol». Nosotros nos limitamos a seguir.',
+    flatter: 'Halágalo',
     thrust: 'EMPUJE',
     thrustBody: 'Cola rizada, 3000 rpm. Es prácticamente un muelle.',
     drag: 'RESISTENCIA',
@@ -203,7 +204,8 @@ export const es: Messages = {
     ],
   },
   cruise: {
-    kicker: 'Fig. 7 — Asiento 23A, ventanilla',
+    kicker: 'Fig. 4 — Asiento 23A, ventanilla',
+    shade: 'Bajar la persiana de la ventanilla',
     captainLabel: 'Anuncio de cabina',
     captain:
       'Señoras y señores, les habla su capitán. Si miran por el lado izquierdo del avión… bueno, déjenme un minuto.',
@@ -223,7 +225,7 @@ export const es: Messages = {
     },
   },
   summit: {
-    kicker: 'Estratosfera · 31 km',
+    kicker: 'Estratosfera · Sesión de emergencia',
     title: 'Cumbre de emergencia de la Unión Internacional de Animales Imposibles',
     agenda: 'Orden del día, punto 1: El cerdo lo ha conseguido de verdad. ¿Y ahora qué?',
     delegate: 'Delegado',
@@ -317,14 +319,15 @@ export const es: Messages = {
   },
   karman: {
     line: 'LÍNEA DE KÁRMÁN · 100 km · el espacio empieza oficialmente aquí (más o menos)',
+    hush: 'Al cielo se le está acabando el azul.',
     title: 'Felicidades.',
     body: 'Técnicamente, este cerdo ahora es astronauta.',
     patchNote: 'Lema de la misión: SUS VOLAT — latín para «el cerdo vuela».',
-    helmet: 'Alas: jubiladas. Mochila cohete: prestada. Casco: una (1) pecera.',
+    helmet: 'Alas: jubiladas. Botas cohete: prestadas. Casco: una (1) pecera.',
     photo: 'La Tierra vista desde la órbita. Foto de la NASA.',
   },
   iss: {
-    kicker: 'Fig. 10 — Bucle aire-tierra, 408 km',
+    kicker: 'Fig. 5 — Bucle aire-tierra, 408 km',
     photoCap: 'Estación Espacial Internacional (NASA). El cerdo está justo fuera de cuadro. Saludando.',
     title: 'Transcripción',
     log: [
@@ -333,12 +336,12 @@ export const es: Messages = {
       { t: 'T+00:42:22', who: 'ESTACIÓN', text: 'Un cerdo. Rosa. Con gafas. Me acaba de saludar.' },
       { t: 'T+00:42:31', who: 'HOUSTON', text: '…' },
       { t: 'T+00:42:40', who: 'HOUSTON', text: 'Recibido. Lo anoto como «fenómeno atmosférico».' },
-      { t: 'T+00:42:51', who: 'ESTACIÓN', text: 'Lleva una pecera en la cabeza. Y una mochila cohete.' },
+      { t: 'T+00:42:51', who: 'ESTACIÓN', text: 'Lleva una pecera en la cabeza. Y botas cohete.' },
       { t: 'T+00:42:52', who: 'HOUSTON', text: 'Igual que usted, Estación.' },
     ],
   },
   moon: {
-    kicker: 'Fig. 11 — Superficie lunar',
+    kicker: 'Fig. 6 — Superficie lunar',
     left: '1969 — un pequeño paso.',
     right: 'Hoy — un pequeño trote.',
     note: 'Nótese la suela superior.',
@@ -362,6 +365,7 @@ export const es: Messages = {
     saidPh: 'p. ej. devolver el dinero',
     copy: 'Copiar enlace',
     share: 'Compartir',
+    print: 'Imprimir certificado',
     copied: 'Copiado. Su margen para hacerse el despistado: cero.',
     copyFail: 'No se pudo copiar. Aquí tienes el enlace:',
     wait: '…espera.',

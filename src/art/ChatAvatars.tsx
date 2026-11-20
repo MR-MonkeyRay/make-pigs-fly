@@ -14,8 +14,10 @@ const O = '#3a2438';
 const BADGE: Record<Chatter, { hi: string; mid: string; lo: string; halo: string; rim: string }> = {
   gary: { hi: '#e8f7ff', mid: '#a9d4ee', lo: '#6bb4e3', halo: '#ffffff', rim: '#ffffff' },
   steve: { hi: '#fff570', mid: '#ffe800', lo: '#e8b000', halo: '#fffab8', rim: '#fffef0' },
-  linda: { hi: '#64549c', mid: '#342a59', lo: '#19142e', halo: '#a594e3', rim: '#cfc4fa' },
-  goose: { hi: '#fffdf7', mid: '#fffaf0', lo: '#decba8', halo: '#ffffff', rim: '#ffffff' },
+  // a lighter indigo, so her dark plumage separates without a heavy glow
+  linda: { hi: '#7a6cbc', mid: '#52458a', lo: '#2a2350', halo: '#a594e3', rim: '#cfc4fa' },
+  // mint, like her green rooftop podium: white on cream lost her silhouette
+  goose: { hi: '#f1fbf3', mid: '#d9f0de', lo: '#a9dbb7', halo: '#ffffff', rim: '#ffffff' },
   pig: { hi: '#ffc6e4', mid: '#ff9fd0', lo: '#f074b4', halo: '#ffe6f3', rim: '#ffffff' },
 };
 
@@ -157,9 +159,10 @@ function SteveSeagull({ uid }: { uid: string }) {
       <ellipse cx="25" cy="17.5" rx="6" ry="2.6" fill="#ffffff" opacity="0.95" transform="rotate(-14 25 17.5)" />
 
       {/* Crispy golden french fry clamped proudly in beak (with ketchup dip!) */}
-      <g transform="rotate(-18 46 35)">
-        <rect x="40" y="30.6" width="18.5" height="7.2" rx="1.8" fill="#d98018" stroke={O} strokeWidth="2.3" />
-        <path d="M 42,32.8 H 52.5" stroke="#ffd87a" strokeWidth="1.7" strokeLinecap="round" />
+      {/* pale gold and angled down and out, so it does not merge with the orange bill at 32 px */}
+      <g transform="translate(0 4) rotate(12 46 35)">
+        <rect x="40" y="30.6" width="18.5" height="7.2" rx="1.8" fill="#ffe97a" stroke={O} strokeWidth="2.6" />
+        <path d="M 42,32.8 H 52.5" stroke="#fff6c4" strokeWidth="1.7" strokeLinecap="round" />
         {/* Ketchup dip on tip */}
         <path
           d="M 52,30.6 H 57.5 C 58.6,30.6 59,31.5 59,34.2 C 59,36.8 58.4,37.8 57.2,37.8 H 52.4 C 51.8,36.1 53.2,34.8 51.8,33.2 Z"

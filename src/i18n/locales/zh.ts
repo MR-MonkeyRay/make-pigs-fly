@@ -89,6 +89,7 @@ export const zh: Messages = {
     lift: '升力',
     liftBody: '彩虹屁。',
     liftNote: '日本俗语：「豚もおだてりゃ木に登る」—— 夸一夸，猪都能上树。我们只是夸得更狠一点。',
+    flatter: '夸夸它',
     thrust: '推力',
     thrustBody: '卷尾巴，3000 转/分。本质是根弹簧。',
     drag: '阻力',
@@ -191,7 +192,8 @@ export const zh: Messages = {
     ],
   },
   cruise: {
-    kicker: '图 7 —— 23A 靠窗座位',
+    kicker: '图 4 —— 23A 靠窗座位',
+    shade: '拉下遮光板',
     captainLabel: '机长广播',
     captain: '女士们先生们，我是本次航班的机长。请看飞机左侧窗外……算了，给我一分钟，让我冷静一下。',
     board: {
@@ -210,7 +212,7 @@ export const zh: Messages = {
     },
   },
   summit: {
-    kicker: '平流层 · 31 公里',
+    kicker: '平流层 · 紧急会议',
     title: '国际不可能动物联合会紧急峰会',
     agenda: '议程第一项：猪真的飞了，我们怎么办？',
     delegate: '代表',
@@ -304,14 +306,15 @@ export const zh: Messages = {
   },
   karman: {
     line: '卡门线 · 100 公里 · 太空官方起点（大概）',
+    hush: '天空的蓝色快用完了。',
     title: '恭喜。',
     body: '从技术上讲，这头猪现在是宇航员了。',
     patchNote: '任务格言：SUS VOLAT —— 拉丁语「猪在飞」。',
-    helmet: '翅膀：光荣退休。火箭背包：借的。头盔：鱼缸一 (1) 个。',
+    helmet: '翅膀：光荣退休。火箭靴：借的。头盔：鱼缸一 (1) 个。',
     photo: '从轨道上看到的地球。NASA 摄。',
   },
   iss: {
-    kicker: '图 10 —— 天地通话记录，408 公里',
+    kicker: '图 5 —— 天地通话记录，408 公里',
     photoCap: '国际空间站（NASA 摄）。猪就在画面外，正在招手。',
     title: '通话记录',
     log: [
@@ -320,12 +323,12 @@ export const zh: Messages = {
       { t: 'T+00:42:22', who: '空间站', text: '一头猪。粉的。戴护目镜。它刚冲我招手。' },
       { t: 'T+00:42:31', who: '休斯顿', text: '……' },
       { t: 'T+00:42:40', who: '休斯顿', text: '收到。记为「天气现象」。' },
-      { t: 'T+00:42:51', who: '空间站', text: '它头上扣着一个鱼缸。还背着火箭背包。' },
+      { t: 'T+00:42:51', who: '空间站', text: '它头上扣着一个鱼缸。脚上还蹬着火箭靴。' },
       { t: 'T+00:42:52', who: '休斯顿', text: '空间站，你也是。' },
     ],
   },
   moon: {
-    kicker: '图 11 —— 月球表面',
+    kicker: '图 6 —— 月球表面',
     left: '1969 —— 一小步。',
     right: '今天 —— 一小蹄。',
     note: '请注意更优秀的胎纹。',
@@ -349,6 +352,7 @@ export const zh: Messages = {
     saidPh: '比如：还钱',
     copy: '复制链接',
     share: '分享',
+    print: '打印证书',
     copied: '已复制。对方的退路：已封死。',
     copyFail: '复制失败，链接在这里：',
     wait: '……等等。',

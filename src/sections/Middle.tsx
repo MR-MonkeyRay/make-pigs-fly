@@ -15,7 +15,7 @@ export function Updraft() {
   const { t } = useI18n();
   const u = t.updraft;
   return (
-    <Section id="updraft" h={1.6} hm={1.7} label={t.layers[4]}>
+    <Section id="updraft" vars=".cloud" h={1.6} hm={1} label={t.layers[4]}>
       <Cloud className="cloud cloud--a" />
       <Cloud className="cloud cloud--b" tone="pink" />
       <div className="updraft__tunnel" aria-hidden="true">
@@ -67,7 +67,7 @@ export function Precedents() {
     </div>,
   ];
   return (
-    <Section id="precedents" h={1.7} hm={2.9} label={t.layers[5]}>
+    <Section id="precedents" vars=".cloud" h={1.7} hm={2.9} label={t.layers[5]}>
       <Cloud className="cloud cloud--c" />
       <div className="sec__inner precedents__inner">
         <header className="precedents__head">
@@ -138,7 +138,7 @@ export function News() {
 
   const ticker = [...n.ticker, ...n.ticker];
   return (
-    <Section id="news" h={1.5} hm={1.6} label={t.layers[6]}>
+    <Section id="news" vars=".cloud" h={1.5} hm={1.6} label={t.layers[6]}>
       <Cloud className="cloud cloud--d" />
       <Cloud className="cloud cloud--e" />
       <div className="sec__inner news__inner">
@@ -197,6 +197,24 @@ export function Cruise({ personal }: { personal: Personal }) {
     }
   }, [v]);
 
+  // Seat 23A's shade: pull it down and the pig knocks twice, then shoves it
+  // back up and presses his snout to the glass.
+  const [shade, setShade] = useState<'up' | 'down' | 'knock' | 'peek'>('up');
+  const shadeTimers = useRef<number[]>([]);
+  useEffect(() => () => shadeTimers.current.forEach((x) => window.clearTimeout(x)), []);
+  const pullShade = () => {
+    if (shade !== 'up') return;
+    setShade('down');
+    const at = (ms: number, fn: () => void) => shadeTimers.current.push(window.setTimeout(fn, ms));
+    at(900, () => {
+      setShade('knock');
+      sound.thump();
+    });
+    at(1150, () => sound.thump());
+    at(1700, () => setShade('peek'));
+    at(3500, () => setShade('up'));
+  };
+
   let rows: FlapRow[] = c.board.rows;
   if (personal.said) {
     const said = /[a-z]/i.test(personal.said) ? personal.said.toUpperCase() : personal.said;
@@ -209,7 +227,7 @@ export function Cruise({ personal }: { personal: Personal }) {
         <div className="cruise__left">
           <p className="kicker">{c.kicker}</p>
           <div className="cabin">
-            <div className="window">
+            <div className={`window is-${shade}`}>
               <div className="window__sky">
                 <Cloud className="window__cloud window__cloud--1" />
                 <Cloud className="window__cloud window__cloud--2" />
@@ -217,7 +235,12 @@ export function Cruise({ personal }: { personal: Personal }) {
                   <PigArt auto wave mood="smug" costume={{ wings: 'feather', goggles: true, scarf: true, pillow: true }} />
                 </div>
               </div>
-              <div className="window__shade" />
+              <button type="button" className="window__shade" aria-label={c.shade} title={c.shade} onClick={pullShade}>
+                <i aria-hidden="true" />
+                <svg className="window__knock" viewBox="0 0 64 24" aria-hidden="true">
+                  <path d="M20 6 Q14 12 20 18 M13 2 Q4 12 13 22 M44 6 Q50 12 44 18 M51 2 Q60 12 51 22" />
+                </svg>
+              </button>
             </div>
           </div>
           <div className="captain">

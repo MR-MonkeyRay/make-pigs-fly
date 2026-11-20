@@ -69,7 +69,6 @@ interface Ids {
   lens: string;
   glass: string;
   jetWhite: string;
-  jetRed: string;
   pillow: string;
   hoof: string;
 }
@@ -77,11 +76,13 @@ interface Ids {
 function Leg({ far, ids }: { far?: boolean; ids: Ids }) {
   return (
     <>
-      {/* Astro-Boy rocket boot flame */}
+      {/* Astro-Boy rocket boot flame (PigActor stretches it with climb speed) */}
       <g className="c c-jet boot-flame">
-        <path d="M -8,26 C -11,40 -5,52 0,62 C 5,52 11,40 8,26 Z" fill={`url(#${ids.flame})`} />
-        <path d="M -4.5,27 C -6,36 -2.5,44 0,51 C 2.5,44 6,36 4.5,27 Z" fill="#ffe84d" opacity="0.92" />
-        <path d="M -2.4,27 C -3,33 -1.2,38 0,43 C 1.2,38 3,33 2.4,27 Z" fill="#ffffff" opacity="0.95" />
+        <g data-part="flame" className="jet-flame">
+          <path d="M -8,26 C -11,40 -5,52 0,62 C 5,52 11,40 8,26 Z" fill={`url(#${ids.flame})`} />
+          <path d="M -4.5,27 C -6,36 -2.5,44 0,51 C 2.5,44 6,36 4.5,27 Z" fill="#ffe84d" opacity="0.92" />
+          <path d="M -2.4,27 C -3,33 -1.2,38 0,43 C 1.2,38 3,33 2.4,27 Z" fill="#ffffff" opacity="0.95" />
+        </g>
       </g>
 
       {/* Chubby, softly tapered stubby leg — rounded top tucks seamlessly under the belly */}
@@ -475,7 +476,6 @@ export function PigArt({ mood = 'calm', costume = {}, auto, wave, wingLabel = 'T
     lens: `ln-${uid}`,
     glass: `gl-${uid}`,
     jetWhite: `jw-${uid}`,
-    jetRed: `jr-${uid}`,
     pillow: `pl-${uid}`,
     hoof: `hf-${uid}`,
   };
@@ -582,7 +582,7 @@ export function PigArt({ mood = 'calm', costume = {}, auto, wave, wingLabel = 'T
           <stop offset="1" stopColor="#ff48b0" stopOpacity="0" />
         </linearGradient>
 
-        {/* Goggles, helmet, jetpack, pillow */}
+        {/* Goggles, helmet, rocket boots, pillow */}
         <linearGradient id={ids.brass} x1="0" y1="0" x2="1" y2="1">
           <stop offset="0" stopColor="#fff2a6" />
           <stop offset="0.48" stopColor="#f2ba32" />
@@ -603,11 +603,6 @@ export function PigArt({ mood = 'calm', costume = {}, auto, wave, wingLabel = 'T
           <stop offset="0" stopColor="#ffffff" />
           <stop offset="0.55" stopColor="#e8effa" />
           <stop offset="1" stopColor="#b6c4dc" />
-        </linearGradient>
-        <linearGradient id={ids.jetRed} x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor="#ff7a86" />
-          <stop offset="0.45" stopColor="#e83a50" />
-          <stop offset="1" stopColor="#ae1d36" />
         </linearGradient>
         <linearGradient id={ids.pillow} x1="0.2" y1="0" x2="0.8" y2="1">
           <stop offset="0" stopColor="#3ca6e6" />
@@ -766,48 +761,6 @@ export function PigArt({ mood = 'calm', costume = {}, auto, wave, wingLabel = 'T
         </g>
       </g>
 
-      {/* ── 5. Retro-futurist rocket backpack (tanks, fins, nozzles, flame) ── */}
-      <g className="c c-jet">
-        <g transform="translate(-74 -4) rotate(-14)">
-          <g data-part="flame" className="jet-flame">
-            <path d="M -27,34 C -36,60 -25,86 -17,104 C -9,86 2,60 -7,34 Z" fill={`url(#${ids.flame})`} />
-            <path d="M 1,36 C -8,64 3,92 11,110 C 19,92 30,64 21,36 Z" fill={`url(#${ids.flame})`} />
-            <path d="M -22,36 C -26,52 -21,66 -17,76 C -13,66 -8,52 -12,36 Z" fill="#fff699" opacity="0.95" />
-            <path d="M 6,38 C 2,54 7,70 11,80 C 15,70 20,54 16,38 Z" fill="#fff699" opacity="0.95" />
-            <path d="M -19.5,36 C -21.5,46 -19,54 -17,60 C -15,54 -12.5,46 -14.5,36 Z" fill="#ffffff" />
-            <path d="M 8.5,38 C 6.5,48 9,56 11,64 C 13,56 15.5,48 13.5,38 Z" fill="#ffffff" />
-          </g>
-
-          <path d="M -29,6 L -44,27 L -29,22 Z" fill={RISO_YELLOW} stroke={O} strokeWidth="2.8" strokeLinejoin="round" />
-          <path d="M -31,14 L -40,25 L -30,21 Z" fill="#f2a218" opacity="0.7" />
-          <path d="M 25,8 L 40,29 L 25,24 Z" fill={RISO_YELLOW} stroke={O} strokeWidth="2.8" strokeLinejoin="round" />
-          <path d="M 27,16 L 36,27 L 26,23 Z" fill="#f2a218" opacity="0.7" />
-
-          <path d="M -25,26 L -9,26 L -5,38 L -29,38 Z" fill="#4f566e" stroke={O} strokeWidth="2.8" strokeLinejoin="round" />
-          <path d="M -22,28 L -18,36" stroke="#8d97b5" strokeWidth="2.2" strokeLinecap="round" />
-          <path d="M -26,37 H -8" stroke="#ff9d3b" strokeWidth="2" strokeLinecap="round" opacity="0.85" />
-
-          <path d="M 3,28 L 19,28 L 23,40 L -1,40 Z" fill="#4f566e" stroke={O} strokeWidth="2.8" strokeLinejoin="round" />
-          <path d="M 6,30 L 10,38" stroke="#8d97b5" strokeWidth="2.2" strokeLinecap="round" />
-          <path d="M 2,39 H 20" stroke="#ff9d3b" strokeWidth="2" strokeLinecap="round" opacity="0.85" />
-
-          <rect x="-30" y="-52" width="26" height="80" rx="13" fill={`url(#${ids.jetWhite})`} stroke={O} strokeWidth="3.4" />
-          <path d="M -23,-40 L -23,14" stroke="#ffffff" strokeWidth="4" strokeLinecap="round" opacity="0.92" />
-
-          <rect x="-4" y="-56" width="29" height="86" rx="14.5" fill={`url(#${ids.jetRed})`} stroke={O} strokeWidth="3.4" />
-          <path d="M 3,-44 L 3,16" stroke="#ffadb5" strokeWidth="4" strokeLinecap="round" opacity="0.85" />
-
-          <rect x="-31" y="-17" width="57" height="7" rx="2.5" fill="#5e6680" stroke={O} strokeWidth="2.2" />
-          <rect x="-31" y="10" width="57" height="6" rx="2" fill="#5e6680" stroke={O} strokeWidth="2.2" />
-          {[-24, -12, 4, 18].map((rx, i) => (
-            <circle key={i} cx={rx} cy="-13.5" r="1.4" fill="#d9e2f2" />
-          ))}
-
-          <circle cx="11" cy="-32" r="7.5" fill={RISO_YELLOW} stroke={O} strokeWidth="2.4" />
-          <path d="M 11,-37 L 12.4,-33.6 L 16,-33.2 L 13.2,-30.8 L 14,-27.4 L 11,-29.2 L 8,-27.4 L 8.8,-30.8 L 6,-33.2 L 9.6,-33.6 Z" fill="#e83a50" />
-        </g>
-      </g>
-
       {/* ── 6. Springy corkscrew propeller tail (pivot local -10, 8) ── */}
       <g transform="translate(-86 10)">
         <g data-part="tail" className="part part--tail">
@@ -863,15 +816,6 @@ export function PigArt({ mood = 'calm', costume = {}, auto, wave, wingLabel = 'T
           </g>
         </g>
         <path d={BODY_PATH} fill="none" stroke={O} strokeWidth="4.3" strokeLinejoin="round" />
-      </g>
-
-      {/* ── 8. Jetpack shoulder straps over body ── */}
-      <g className="c c-jet">
-        <path d="M -66,-12 C -50,8 -44,32 -48,60" stroke={O} strokeWidth="10.5" fill="none" strokeLinecap="round" />
-        <path d="M -66,-12 C -50,8 -44,32 -48,60" stroke="#454b63" strokeWidth="5.8" fill="none" strokeLinecap="round" />
-        <path d="M -65,-10 C -50,9 -45,32 -49,57" stroke="#7882a3" strokeWidth="1.5" strokeDasharray="3 4" fill="none" opacity="0.75" />
-        <rect x="-56" y="20" width="13" height="10.5" rx="2.5" fill={RISO_YELLOW} stroke={O} strokeWidth="2.2" />
-        <rect x="-52.5" y="23" width="6" height="4.5" rx="1" fill="#454b63" />
       </g>
 
       {/* ── 9. Knitted scarf neck wrap (tucked naturally under the cheeks) ── */}

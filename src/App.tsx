@@ -4,7 +4,7 @@ import { readPersonal, fmt, type Personal } from './engine/params';
 import { startEngine, subscribe } from './engine/scroll';
 import { startPager } from './engine/pager';
 import { SECTIONS } from './engine/specs';
-import { store } from './engine/store';
+import { store, useStore } from './engine/store';
 import { Sky, SkyCaption } from './components/Sky';
 import { PigActor } from './components/PigActor';
 import { Altimeter } from './components/Altimeter';
@@ -43,6 +43,8 @@ function Director() {
 
 function PrintCert({ personal }: { personal: Personal }) {
   const { t, tag } = useI18n();
+  // the finale form edits the name live, so a print right after typing shows it
+  const to = useStore((s) => s.certTo) ?? personal.to;
   const date = new Intl.DateTimeFormat(tag, { dateStyle: 'long' }).format(new Date());
   return (
     <div className="print-cert" aria-hidden="true">
@@ -56,7 +58,7 @@ function PrintCert({ personal }: { personal: Personal }) {
         <p>
           <strong>{t.print.due}</strong>
         </p>
-        {personal.to && <p>{fmt(t.print.to, { to: personal.to })}</p>}
+        {to && <p>{fmt(t.print.to, { to })}</p>}
         <p className="print-cert__sign">— {t.print.sign} 🐾</p>
       </div>
     </div>

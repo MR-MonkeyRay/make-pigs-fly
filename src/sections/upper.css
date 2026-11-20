@@ -22,6 +22,8 @@
   font-family: var(--f-mono);
   font-size: 14px;
   color: var(--yellow);
+  /* yellow on the mid-blue stratosphere needs a little ink under it */
+  text-shadow: 0 1px 2px rgba(14, 18, 56, 0.75);
 }
 
 .summit__track {
@@ -32,6 +34,17 @@
   gap: 22px;
   width: max-content;
   will-change: transform;
+}
+
+/* desktop: cards fade out before they reach the altitude ruler on the left */
+@media (min-width: 900px) {
+  .summit__window {
+    /* room for the cards' tilt and offset shadows, which the mask would clip */
+    padding-block: 14px;
+    margin-block: -14px;
+    -webkit-mask-image: linear-gradient(to right, transparent calc(var(--hud-w) + 6px), #000 calc(var(--hud-w) + 46px));
+    mask-image: linear-gradient(to right, transparent calc(var(--hud-w) + 6px), #000 calc(var(--hud-w) + 46px));
+  }
 }
 
 .delegate {
@@ -113,6 +126,10 @@
   color: var(--pink-deep);
 }
 
+.delegate__idiom.is-upright {
+  font-style: normal;
+}
+
 .delegate__roman {
   margin: 0;
   font-family: var(--f-mono);
@@ -159,7 +176,9 @@
 }
 
 .summit__gavel {
-  font-size: 44px;
+  width: 92px;
+  height: auto;
+  filter: drop-shadow(3px 3px 0 var(--pink-deep));
 }
 
 @media (max-width: 759px), (max-aspect-ratio: 4/5) {
@@ -195,10 +214,21 @@
 
 .karman__earth figcaption {
   position: absolute;
-  right: var(--gutter);
-  /* clear of the real-view button docked bottom right */
+  /* bottom left, under the text column: the real-view button owns bottom right */
+  left: calc(var(--gutter) + var(--hud-w));
   bottom: 76px;
   color: var(--paper);
+}
+
+@media (max-width: 759px) {
+  .karman__earth figcaption {
+    /* just above the bottom pills, small, so the hush line up in the dark stands alone */
+    left: 16px;
+    bottom: 88px;
+    font-size: 10px;
+    opacity: 0.8;
+    text-shadow: 0 1px 2px rgba(10, 12, 40, 0.8);
+  }
 }
 
 @media (max-width: 759px) {
@@ -209,6 +239,31 @@
   }
 }
 
+
+.karman__hush {
+  position: absolute;
+  z-index: 1;
+  /* in the dark above the Earth's limb at the first stop, which shows the
+     bottom screen of the floor: top right on wide screens */
+  bottom: calc(100svh - 170px);
+  right: calc(var(--gutter) + 24px);
+  max-width: 44ch;
+  text-align: right;
+  margin: 0;
+  font-family: var(--f-mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: rgba(244, 238, 223, 0.72);
+}
+
+@media (max-width: 759px) {
+  .karman__hush {
+    right: auto;
+    left: 20px;
+    bottom: 72svh;
+    text-align: left;
+  }
+}
 
 .karman__line {
   position: absolute;
@@ -353,23 +408,46 @@
   text-transform: uppercase;
 }
 
-.radio__bar i {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--red);
+.radio__rec {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #ff6b7a;
+  font-weight: 700;
 }
 
-.radio__bar i:nth-child(2) {
-  background: var(--yellow);
+.radio__rec::before {
+  content: '';
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+  animation: rec-blink 1.6s steps(1, end) infinite;
 }
-.radio__bar i:nth-child(3) {
-  background: #2fbf71;
+
+@keyframes rec-blink {
+  50% {
+    opacity: 0.25;
+  }
 }
 
 .radio__bar span {
   margin-left: 8px;
   opacity: 0.7;
+}
+
+.radio__band {
+  margin-left: auto;
+  font-style: normal;
+  opacity: 0.45;
+  white-space: nowrap;
+}
+
+@media (max-width: 479px) {
+  .radio__band {
+    display: none;
+  }
 }
 
 .radio__log {
@@ -546,24 +624,38 @@
   font-size: clamp(32px, 4.4vw, 70px);
 }
 
+/* the pink line sits on the pink-and-blue halftone Moon: a night halo keeps it off the craters */
+.moon__quote .riso {
+  text-shadow:
+    0.045em 0.04em 0 rgba(0, 120, 191, 0.85),
+    0 4px 24px rgba(8, 10, 30, 0.92);
+}
+
+/* phones: the Polaroid, the Moon and the line land together in one stop */
 @media (max-width: 899px), (max-aspect-ratio: 4/5) {
   .moon__inner {
     grid-template-columns: 1fr;
+    grid-template-rows: none;
     align-content: start;
-    gap: 24px;
+    align-items: start;
+    gap: 14px;
     padding-top: 112px;
   }
   .moon__print {
-    max-width: 340px;
+    max-width: min(248px, 64vw);
+    padding: 10px 10px 12px;
+  }
+  .moon__print figcaption span {
+    font-size: 17px;
   }
   .moon__disc {
-    width: 110vw;
-    right: -40vw;
-    top: 30%;
+    width: 96vw;
+    right: -34vw;
+    top: 34%;
     opacity: 0.6;
   }
   .moon__quote {
-    font-size: clamp(28px, 8vw, 40px);
+    font-size: clamp(24px, 7vw, 32px);
   }
 }
 
@@ -683,7 +775,9 @@
   width: 100%;
   padding: 9px 12px;
   border-radius: 10px;
-  border: 2px solid var(--paper);
+  /* inked like every other card, with a blue plate */
+  border: 2.5px solid var(--ink);
+  box-shadow: 3px 3px 0 var(--blue);
   background: #fffef8;
   color: var(--ink);
   font-family: var(--f-body);
@@ -692,6 +786,7 @@
 
 .share__actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   margin-top: 12px;
 }
@@ -728,12 +823,14 @@
 .space__bottom {
   height: calc(100% - 100svh);
   display: grid;
-  place-items: center;
+  /* left, under the title column: the pig floats on the right */
+  place-items: center start;
   padding: 0 var(--gutter) 0 calc(var(--gutter) + var(--hud-w));
 }
 
 .space__constel {
-  width: min(640px, 92vw);
+  /* never taller than the screen can show with its name under it */
+  width: min(640px, 92vw, calc((100svh - 300px) * 520 / 420));
   text-align: center;
 }
 
@@ -747,8 +844,14 @@
   stroke: var(--paper);
   stroke-width: 1.6;
   stroke-dasharray: 1 1;
-  stroke-dashoffset: clamp(0, calc(1 - (var(--q, 0) - 0.1 - var(--i) / var(--n) * 0.18) * 9), 1);
+  stroke-dashoffset: 1;
   opacity: 0.85;
+}
+
+.is-drawn .constel line {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 0.3s ease-out;
+  transition-delay: calc(var(--i) / var(--n) * 1.2s);
 }
 
 .constel circle {
@@ -759,11 +862,43 @@
 }
 
 .constel text {
-  fill: var(--pink);
+  fill: #ff8ad1;
+  /* an outline in the night colour keeps the small labels off the star field */
+  paint-order: stroke;
+  stroke: var(--night);
+  stroke-width: 4px;
+  stroke-linejoin: round;
   font-family: var(--f-mono);
   font-size: 13px;
   font-weight: 700;
-  opacity: clamp(0, calc((var(--q, 0) - 0.3) * 8), 1);
+  opacity: 0;
+}
+
+.is-drawn .constel text {
+  opacity: 1;
+  transition: opacity 0.5s 1.3s;
+}
+
+.space__cname {
+  opacity: 0;
+  transform: scale(0.92);
+}
+
+/* the name is stamped on once the lines are in */
+.is-drawn .space__cname {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.25s 1.45s,
+    transform 0.45s 1.45s var(--ease-spring);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .is-drawn .constel line,
+  .is-drawn .constel text,
+  .is-drawn .space__cname {
+    transition-delay: 0s !important;
+  }
 }
 
 @keyframes twinkle {
@@ -794,6 +929,7 @@
 .space__cname span {
   font-family: var(--f-mono);
   font-size: 12px;
+  color: rgba(244, 238, 223, 0.85);
 }
 
 @media (max-width: 759px), (max-aspect-ratio: 4/5) {
@@ -813,6 +949,9 @@
     display: flex;
     align-self: start;
     margin-top: 40px;
+    /* a column left of the pig, who rests at 70% of the width up here */
+    justify-self: start;
+    max-width: calc(70vw - 72px);
   }
   /* leave a clear patch of sky at the top for the pig + its bubble */
   .space__finale {
@@ -824,6 +963,7 @@
   }
   .space__bottom {
     height: auto;
+    place-items: center;
     padding-block: 10vh;
   }
   .space__title {

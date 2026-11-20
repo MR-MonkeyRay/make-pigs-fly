@@ -1,19 +1,22 @@
 import { useEffect, useRef, useState } from 'react';
 import { useI18n } from '../i18n';
-import { useStore } from '../engine/store';
+import { store, useStore } from '../engine/store';
 import { frame } from '../engine/scroll';
 import { fractionOf, SECTION_INDEX } from '../engine/specs';
 import { bringHome } from '../engine/fall';
 import { buildShareUrl, fmt, type Personal } from '../engine/params';
 import { sound } from '../engine/sound';
-import { DelegateArt } from '../art/Delegates';
+import { DelegateArt, Gavel } from '../art/Delegates';
 import { Hoofprint, MissionPatch } from '../art/Aloft';
 import { Constellation } from '../art/Constellation';
-import { holdPlayback, provideStops, refreshStops } from '../engine/pager';
+import { freeBand, holdPlayback, provideStops, refreshStops } from '../engine/pager';
 import { Section, Typewriter, useSectionFrame, useSectionStep } from './Section';
 import './upper.css';
 
 const img = (name: string) => `${import.meta.env.BASE_URL}img/${name}`;
+
+/** scripts with no italic of their own: a synthetic slant only distorts them */
+const UPRIGHT = /[\u0600-\u06ff\u0750-\u077f\u3040-\u30ff\u3400-\u9fff\uac00-\ud7af]/;
 
 /* ─────────────────────────── 8 · SUMMIT ─────────────────────────── */
 
@@ -79,36 +82,36 @@ export function Summit() {
           <h2 className="display summit__title riso--paper">{s.title}</h2>
           <p className="summit__agenda">{s.agenda}</p>
         </header>
-        <ol className="summit__track" ref={track}>
-          {s.delegates.map((d) => (
-            <li key={d.id} className={`delegate${d.id === 'sun' ? ' is-observer' : ''}`}>
-              <div className="delegate__top">
-                <DelegateArt id={d.id} />
-                <div className="delegate__plate">
-                  <small>{d.id === 'sun' ? s.observer : s.delegate}</small>
-                  <strong>{d.name}</strong>
-                  <span>{d.lang}</span>
+        <div className="summit__window">
+          <ol className="summit__track" ref={track}>
+            {s.delegates.map((d) => (
+              <li key={d.id} className={`delegate${d.id === 'sun' ? ' is-observer' : ''}`}>
+                <div className="delegate__top">
+                  <DelegateArt id={d.id} />
+                  <div className="delegate__plate">
+                    <small>{d.id === 'sun' ? s.observer : s.delegate}</small>
+                    <strong>{d.name}</strong>
+                    <span>{d.lang}</span>
+                  </div>
                 </div>
-              </div>
-              <p className="delegate__idiom" dir="auto">
-                {d.idiom}
-              </p>
-              {d.roman && <p className="delegate__roman">{d.roman}</p>}
-              <p className="delegate__lit">
-                <b>{s.literally}:</b> {d.literal}
-              </p>
-              <p className="delegate__said">
-                <b>{s.statement}:</b> “{d.statement}”
-              </p>
+                <p className={`delegate__idiom${UPRIGHT.test(d.idiom) ? ' is-upright' : ''}`} dir="auto">
+                  {d.idiom}
+                </p>
+                {d.roman && <p className="delegate__roman">{d.roman}</p>}
+                <p className="delegate__lit">
+                  <b>{s.literally}:</b> {d.literal}
+                </p>
+                <p className="delegate__said">
+                  <b>{s.statement}:</b> “{d.statement}”
+                </p>
+              </li>
+            ))}
+            <li className="summit__close">
+              <Gavel className="summit__gavel" />
+              <p className="display">{s.closing}</p>
             </li>
-          ))}
-          <li className="summit__close">
-            <span className="summit__gavel" aria-hidden="true">
-              🔨
-            </span>
-            <p className="display">{s.closing}</p>
-          </li>
-        </ol>
+          </ol>
+        </div>
       </div>
     </Section>
   );
@@ -128,11 +131,13 @@ export function Karman() {
   }, [stamped]);
 
   return (
-    <Section id="karman" h={1.7} hm={1.8} className="dark" label={t.layers[9]}>
+    <Section id="karman" h={1.85} hm={1.8} className="dark" label={t.layers[9]}>
       <figure className="karman__earth">
         <img src={img('earth-limb.webp')} alt={k.photo} loading="lazy" decoding="async" width={1500} height={955} />
         <figcaption className="fig">{k.photo}</figcaption>
       </figure>
+      {/* the approach, before the line: one quiet sentence and a lot of dark */}
+      <p className="karman__hush">{k.hush}</p>
       <div className="karman__line" style={{ bottom: `${(line * 100).toFixed(2)}%` }}>
         <span>{k.line}</span>
       </div>
@@ -186,11 +191,11 @@ export function Station() {
         <div className="radio">
           <p className="kicker">{s.kicker}</p>
           <div className="radio__term">
+            {/* a mission-control strip, not a desktop window's traffic lights */}
             <div className="radio__bar">
-              <i />
-              <i />
-              <i />
+              <b className="radio__rec">REC</b>
               <span>{s.title}</span>
+              <em className="radio__band">S-band · 2287.5 MHz</em>
             </div>
             <ol className="radio__log">
               {s.log.map((l, i) => (
@@ -219,7 +224,7 @@ export function Moon() {
   }, [stamped]);
 
   return (
-    <Section id="moon" h={1.7} hm={1.9} className="dark" label={t.layers[11]}>
+    <Section id="moon" vars=".moon__disc" h={1.7} hm={1} className="dark" label={t.layers[11]}>
       <img className="moon__disc" src={img('moon.webp')} alt="" loading="lazy" decoding="async" width={820} height={820} />
       <div className="sec__inner moon__inner">
         <p className="kicker">{m.kicker}</p>
@@ -254,6 +259,58 @@ export function Space({ personal }: { personal: Personal }) {
   const [said, setSaid] = useState(personal.said);
   const [status, setStatus] = useState<'' | 'copied' | 'fail'>('');
   const [failUrl, setFailUrl] = useState('');
+  const constel = useRef<HTMLDivElement>(null);
+  const [drawn, setDrawn] = useState(false);
+
+  // The constellation draws itself once most of it (name included) is on
+  // screen, and resets when it has left, so a return visit draws it again.
+  useEffect(() => {
+    const el = constel.current;
+    if (!el || typeof IntersectionObserver === 'undefined') return setDrawn(true);
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.intersectionRatio >= 0.7) setDrawn(true);
+        else if (!e.isIntersecting) setDrawn(false);
+      },
+      { threshold: [0, 0.7] },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  // autoplay waits for the drawing (and the name) before gliding on to the finale
+  useEffect(() => {
+    if (!drawn) return;
+    const release = holdPlayback('space');
+    const tm = window.setTimeout(release, 3200); // name in at ~1.5s, then a beat to read it
+    return () => {
+      window.clearTimeout(tm);
+      release();
+    };
+  }, [drawn]);
+
+  // First stop: the whole constellation and its name framed in the free band
+  // (a fixed fraction left PORCUS VOLANS under the bottom edge); then the finale.
+  useEffect(
+    () =>
+      provideStops('space', ({ vh, list }) => {
+        const el = constel.current;
+        const sec = document.getElementById('space');
+        if (!el || !sec) return null;
+        const s = sec.getBoundingClientRect();
+        const c = el.getBoundingClientRect();
+        if (s.height <= vh + 2 || c.height < 1) return null;
+        // phones stack the small print right above the constellation: frame both
+        const low = sec.querySelector('.space__footer--low')?.getBoundingClientRect();
+        const r = low && low.height > 0 ? { top: Math.min(low.top, c.top), height: c.bottom - Math.min(low.top, c.top) } : c;
+        const band = freeBand(vh);
+        const free = band.bottom - band.top;
+        // scroll offset from the section top that puts the block mid-band (or its top at the band top)
+        const at = r.top - s.top - band.top - (r.height <= free ? (free - r.height) / 2 : 8);
+        const pp = Math.min(1, Math.max(0, (s.height - vh - at) / (s.height - vh)));
+        return [pp, ...list.slice(1)];
+      }),
+    [t],
+  );
 
   const t1 = personal.to ? fmt(s.titleTo1, { to: personal.to }) : s.title1;
   const t2 = personal.to ? (personal.said ? fmt(s.titleTo2, { said: personal.said }) : s.titleTo2Plain) : s.title2;
@@ -324,7 +381,15 @@ export function Space({ personal }: { personal: Personal }) {
             <div className="share__fields">
               <label>
                 <span>{s.nameLabel}</span>
-                <input value={to} maxLength={24} placeholder={s.namePh} onChange={(e) => setTo(e.target.value)} />
+                <input
+                  value={to}
+                  maxLength={24}
+                  placeholder={s.namePh}
+                  onChange={(e) => {
+                    setTo(e.target.value);
+                    store.set({ certTo: e.target.value.trim() });
+                  }}
+                />
               </label>
               <label>
                 <span>{s.saidLabel}</span>
@@ -340,6 +405,10 @@ export function Space({ personal }: { personal: Personal }) {
                   {s.share}
                 </button>
               )}
+              {/* the certificate the print stylesheet has always made, now findable */}
+              <button type="button" className="btn" onClick={() => window.print()}>
+                {s.print}
+              </button>
             </div>
             <p className="share__status" aria-live="polite">
               {status === 'copied' && s.copied}
@@ -356,7 +425,7 @@ export function Space({ personal }: { personal: Personal }) {
       <div className="space__bottom">
         {/* on a phone the top of the screen belongs to the pig and its bubble, so the small print lives down here */}
         {footer('space__footer space__footer--low')}
-        <div className="space__constel">
+        <div className={`space__constel${drawn ? ' is-drawn' : ''}`} ref={constel}>
           <Constellation labels={s.stars} />
           <p className="space__cname">
             <strong>{s.constellation}</strong>

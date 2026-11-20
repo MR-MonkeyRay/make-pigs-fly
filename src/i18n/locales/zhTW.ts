@@ -89,6 +89,7 @@ export const zhTW: Messages = {
     lift: '升力',
     liftBody: '拍馬屁。',
     liftNote: '日本諺語：「豚もおだてりゃ木に登る」——捧一捧，豬都能爬上樹。我們只是捧得更用力一點。',
+    flatter: '誇誇它',
     thrust: '推力',
     thrustBody: '捲尾巴，3000 轉/分。本質上就是一根彈簧。',
     drag: '阻力',
@@ -191,7 +192,8 @@ export const zhTW: Messages = {
     ],
   },
   cruise: {
-    kicker: '圖 7 —— 23A 靠窗座位',
+    kicker: '圖 4 —— 23A 靠窗座位',
+    shade: '拉下遮光板',
     captainLabel: '機長廣播',
     captain: '各位旅客您好，我是本班機機長。請往飛機左側窗外看……等等，給我一分鐘。',
     board: {
@@ -210,7 +212,7 @@ export const zhTW: Messages = {
     },
   },
   summit: {
-    kicker: '平流層 · 31 公里',
+    kicker: '平流層 · 緊急會議',
     title: '國際不可能動物聯合會緊急高峰會',
     agenda: '議程第一項：豬真的飛了，我們怎麼辦？',
     delegate: '代表',
@@ -304,14 +306,15 @@ export const zhTW: Messages = {
   },
   karman: {
     line: '卡門線 · 100 公里 · 太空的官方起點（大概）',
+    hush: '天空的藍色快用完了。',
     title: '恭喜。',
     body: '從技術上來說，這頭豬現在是太空人了。',
     patchNote: '任務格言：SUS VOLAT —— 拉丁文「豬在飛」。',
-    helmet: '翅膀：光榮退休。火箭背包：借的。頭盔：魚缸一 (1) 個。',
+    helmet: '翅膀：光榮退休。火箭靴：借的。頭盔：魚缸一 (1) 個。',
     photo: '從軌道上看到的地球。NASA 攝。',
   },
   iss: {
-    kicker: '圖 10 —— 天地通話紀錄，408 公里',
+    kicker: '圖 5 —— 天地通話紀錄，408 公里',
     photoCap: '國際太空站（NASA 攝）。豬就在畫面外，正在揮手。',
     title: '通話紀錄',
     log: [
@@ -320,12 +323,12 @@ export const zhTW: Messages = {
       { t: 'T+00:42:22', who: '太空站', text: '一頭豬。粉紅色的。戴護目鏡。它剛剛跟我揮手。' },
       { t: 'T+00:42:31', who: '休士頓', text: '……' },
       { t: 'T+00:42:40', who: '休士頓', text: '收到。記為「天氣現象」。' },
-      { t: 'T+00:42:51', who: '太空站', text: '它頭上套著魚缸，還背著火箭背包。' },
+      { t: 'T+00:42:51', who: '太空站', text: '它頭上套著魚缸，腳上還蹬著火箭靴。' },
       { t: 'T+00:42:52', who: '休士頓', text: '太空站，你也是。' },
     ],
   },
   moon: {
-    kicker: '圖 11 —— 月球表面',
+    kicker: '圖 6 —— 月球表面',
     left: '1969 —— 一小步。',
     right: '今天 —— 一小蹄。',
     note: '請注意更優秀的胎紋。',
@@ -349,6 +352,7 @@ export const zhTW: Messages = {
     saidPh: '例如：還錢',
     copy: '複製連結',
     share: '分享',
+    print: '列印證書',
     copied: '已複製。對方的推託空間：已歸零。',
     copyFail: '複製失敗，連結在這裡：',
     wait: '……等等。',

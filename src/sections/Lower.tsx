@@ -3,9 +3,12 @@ import { useI18n } from '../i18n';
 import { store, useStore } from '../engine/store';
 import { fmt, type Personal } from '../engine/params';
 import { frame } from '../engine/scroll';
+import { sound } from '../engine/sound';
 import { PigArt } from '../art/PigArt';
 import { Chicken, Fence, GrassEdge, Hills, MudField, RunwaySign, TreeWithPig } from '../art/Scenery';
 import { Rooftops } from '../art/Aloft';
+import { BirdCast } from '../art/Birds';
+import { PigMark } from '../art/PigMark';
 import { ChatAvatar, type Chatter } from '../art/ChatAvatars';
 import { Section, useSectionFrame, useSectionStep } from './Section';
 import './lower.css';
@@ -193,14 +196,19 @@ export function Doubters() {
   });
 
   return (
-    <Section id="doubters" h={1.9} hm={1.7} label={t.layers[1]}>
+    // Two bands, each exactly one screen: the first stop shows the lower one
+    // (kicker, Kevin, Management, the teenager), the second the upper one (the
+    // PM, then Newton, who hands over to the physics floor). Each band leaves
+    // a hole in its middle where the pig rests, so no quote sits under him or
+    // under the top bar and the bottom buttons when the page stops.
+    <Section id="doubters" h={2} hm={2} label={t.layers[1]}>
       <div className="sec__inner doubters__inner" ref={secRef}>
         <p className="kicker doubters__kicker">{t.doubters.kicker}</p>
         <ol className="doubters__list">
           {t.doubters.quotes.map((q, i) => (
             <li
               key={`${q.q}-${i}`}
-              className={`doubt doubt--${i % 2 ? 'r' : 'l'}`}
+              className={`doubt doubt--${i % 2 ? 'r' : 'l'} doubt--at${i}`}
               ref={(el) => {
                 if (el) items.current[i] = el;
               }}
@@ -230,6 +238,19 @@ export function Science() {
     return () => window.removeEventListener('resize', r);
   }, []);
 
+  // Flattery is the lift: each compliment the reader sends rises into the pig,
+  // makes him hop and adds 10% to the diagram's LIFT.
+  const [flattered, setFlattered] = useState(0);
+  const [bursts, setBursts] = useState<{ id: number; text: string; x: number }[]>([]);
+  const flatter = () => {
+    const n = flattered + 1;
+    setFlattered(n);
+    const text = s.compliments[(n * 3) % s.compliments.length];
+    setBursts((b) => [...b.slice(-4), { id: n, text, x: ((n * 37) % 5) - 2 }]);
+    store.set({ hop: Date.now() });
+    sound.oink(1.1 + Math.min(n, 10) * 0.04);
+  };
+
   const narrow = vp.w < 760 || vp.w / vp.h < 0.8;
   const cx = vp.w * 0.5;
   const cy = vp.h * (narrow ? 0.5 : 0.53);
@@ -253,7 +274,8 @@ export function Science() {
     if (narrow) {
       const half = cx - 30;
       if (key === 'lift') return { left: cx + 14, top: y2 - 6, maxWidth: half };
-      if (key === 'thrust') return { left: cx + 10, top: cy + 92, maxWidth: half };
+      // right under its own arrowhead, right-aligned, so it does not read as GRAVITY's label
+      if (key === 'thrust') return { right: 14, top: cy + 44, maxWidth: Math.min(half, 160), textAlign: 'right' };
       if (key === 'drag') return { left: 20, top: cy + 92, maxWidth: half };
       return { left: cx + 14, top: y2 - 12, maxWidth: half };
     }
@@ -269,7 +291,7 @@ export function Science() {
   };
 
   return (
-    <Section id="science" h={2.1} hm={2.1} label={t.layers[2]}>
+    <Section id="science" vars h={2.1} hm={2.1} label={t.layers[2]}>
       <div className="sticky science__stage">
         <div className="science__grid" />
         <header className="science__head">
@@ -305,7 +327,10 @@ export function Science() {
           const L = labels[a.key];
           return (
             <div key={a.key} className={`science__label science__label--${a.key}`} style={{ ...slot(a.key, a.x2, a.y2), '--a': a.a } as React.CSSProperties}>
-              <strong>{L.title}</strong>
+              <strong>
+                {L.title}
+                {a.key === 'lift' && flattered > 0 && <em className="science__gain"> +{flattered * 10}%</em>}
+              </strong>
               <span>{L.body}</span>
               {L.note && <small>{L.note}</small>}
             </div>
@@ -314,17 +339,40 @@ export function Science() {
 
         <div
           className="science__wings"
-          style={narrow ? { left: 20, top: cy - 230, maxWidth: cx - 36 } : { left: cx - 260, top: cy - 190 }}
+          // phones: narrow enough to keep clear of the LIFT arrowhead at cx
+          style={narrow ? { left: 20, top: cy - 230, maxWidth: cx - 60 } : { left: cx - 260, top: cy - 190 }}
         >
           <strong>{s.wingsNew}</strong>
           <s>{s.wingsOld}</s>
           <span>{s.wingsNote}</span>
         </div>
 
-        <div className="science__fuel" style={{ left: cx, top: cy + 60 * k }} aria-hidden="true">
+        {/* compliments rise from below and are used up at his hooves, never behind him */}
+        <div className="science__fuel" style={{ left: cx, top: cy + 110 * k }} aria-hidden="true">
           {s.compliments.map((c, i) => (
             <span key={c} style={{ '--i': i, '--n': s.compliments.length } as React.CSSProperties}>
               {c}
+            </span>
+          ))}
+        </div>
+
+        {/* below him, where the compliments set off from; it turns up with the
+            upgraded wings, once the diagram's own compliments have landed */}
+        <div className="science__label science__label--flatter" style={{ left: narrow ? 20 : cx - 220, top: narrow ? cy + 180 : cy + 150, '--a': 0.3 } as React.CSSProperties}>
+          <button type="button" className="science__flatter" onClick={flatter}>
+            + {s.flatter}
+          </button>
+        </div>
+
+        {/* the reader's own compliments, on their way up to him */}
+        <div className="science__boost" style={{ left: cx, top: cy + 124 * k }} aria-hidden="true">
+          {bursts.map((b) => (
+            <span
+              key={b.id}
+              style={{ '--x': b.x } as React.CSSProperties}
+              onAnimationEnd={() => setBursts((all) => all.filter((x) => x.id !== b.id))}
+            >
+              {b.text}
             </span>
           ))}
         </div>
@@ -336,6 +384,31 @@ export function Science() {
 }
 
 /* ─────────────────────────── 3 · BIRDS ─────────────────────────── */
+
+/** the group's mark, drawn instead of the OS dove emoji */
+function Feather() {
+  return (
+    <svg className="phone__mark" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M 19,3 C 10,4 5,10 5,19 C 12,18 18,12 19,3 Z" fill="#a9d4ee" stroke="#3a2438" strokeWidth="2" strokeLinejoin="round" />
+      <path d="M 4,21 L 15,8 M 9,14 H 13 M 7,17 H 10" stroke="#3a2438" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+/** chat text with the pig emoji swapped for the site's own pig mark */
+function Emojiless({ text }: { text: string }) {
+  const parts = text.split('🐷');
+  return (
+    <>
+      {parts.map((p, i) => (
+        <span key={i}>
+          {p}
+          {i < parts.length - 1 && <PigMark className="msg__pig" />}
+        </span>
+      ))}
+    </>
+  );
+}
 
 export function Birds() {
   const { t } = useI18n();
@@ -353,9 +426,11 @@ export function Birds() {
   const nextName = next && next.who !== 'sys' ? b.names[next.who].split(' · ')[0] : '';
 
   return (
-    <Section id="birds" h={2.5} hm={2.6} label={t.layers[3]}>
+    <Section id="birds" vars h={2.5} hm={2.6} label={t.layers[3]}>
       <div className="sticky birds__stage">
-        <Rooftops className="birds__roofs" />
+        <Rooftops className="birds__roofs">
+          <BirdCast shown={shown} messages={b.messages} />
+        </Rooftops>
         <div className="birds__col">
           <p className="kicker birds__kicker">{b.kicker}</p>
           <div className="phone">
@@ -363,7 +438,9 @@ export function Birds() {
             <header className="phone__head">
               <span className="phone__back">‹</span>
               <div>
-                <strong>{b.group} 🕊️</strong>
+                <strong>
+                  {b.group} <Feather />
+                </strong>
                 <small>{b.members}</small>
               </div>
               <span className="phone__dots">···</span>
@@ -384,7 +461,9 @@ export function Birds() {
                           <PigArt mood="calm" costume={{ wings: 'feather', goggles: true }} />
                         </span>
                       ) : (
-                        <span className="msg__bubble">{m.text}</span>
+                        <span className="msg__bubble">
+                          <Emojiless text={m.text} />
+                        </span>
                       )}
                     </div>
                   </li>

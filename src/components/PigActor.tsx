@@ -46,7 +46,7 @@ function stepEye(e: Eye, ax: number, ay: number, dt: number, R: number) {
 function costumeFor(idx: number, p: number, alt: number): Costume {
   const s = store.get();
   const helmet = alt >= 100_000;
-  // past the Kármán line the wings retire and the (borrowed) rocket pack takes over
+  // past the Kármán line the wings retire and the (borrowed) rocket boots take over
   const jet = helmet && !s.chute;
   return {
     wings: jet ? 'none' : idx > 2 || (idx === 2 && p > 0.42) ? 'feather' : 'cardboard',
@@ -55,7 +55,8 @@ function costumeFor(idx: number, p: number, alt: number): Costume {
     scarf: idx >= 4,
     pillow: idx >= 7 && !helmet,
     helmet,
-    flag: idx > 11 || (idx === 11 && p > 0.3),
+    // brought for the Moon and left there: past it, a flag beside a flying pig just hovers
+    flag: idx === 11 && p > 0.3,
     chute: s.chute,
     undies: s.landed && idx === 0,
     mud: s.muddy,
@@ -72,6 +73,19 @@ export function PigActor() {
   const bubble = useStore((s) => s.bubble ?? s.say);
   const hopRef = useRef(0);
   const quipRef = useRef(0);
+  /** bubble size and the bottom edge of the fixed chrome, measured when a line is shown */
+  const bubbleBox = useRef({ h: 0, w: 0, chrome: 64 });
+
+  useEffect(() => {
+    if (!bubble) return;
+    const span = bubbleRef.current?.firstElementChild as HTMLElement | null;
+    let chrome = 64;
+    for (const sel of ['header.top', window.innerWidth < 900 ? '.alt__read' : '']) {
+      const el = sel && document.querySelector(sel);
+      if (el) chrome = Math.max(chrome, el.getBoundingClientRect().bottom);
+    }
+    bubbleBox.current = { h: span?.offsetHeight ?? 0, w: span?.offsetWidth ?? 0, chrome };
+  }, [bubble]);
 
   useEffect(() => {
     const svg = svgRef.current!;
@@ -89,14 +103,14 @@ export function PigActor() {
       earFar: part('earFar'),
       pupilA: part('pupilA'),
       pupilB: part('pupilB'),
-      flame: svg.querySelector<SVGGElement>('[data-part="flame"]'),
+      flames: Array.from(svg.querySelectorAll<SVGGElement>('[data-part="flame"]')),
     };
 
     const eyes: [Eye, Eye] = [
       { x: 0, y: 0, vx: 0, vy: 0 },
       { x: 0, y: 0, vx: 0, vy: 0 },
     ];
-    let flameLen = 0.6;
+    let flameLen = 0.85;
     let px = -1;
     let py = -1;
     let ps = 1;
@@ -199,10 +213,28 @@ export function PigActor() {
 
       wrap.style.transform = `translate3d(${(px - size / 2).toFixed(1)}px, ${(py - size / 2 + bob).toFixed(1)}px, 0) scale(${(ps * breathe).toFixed(3)}) rotate(${rot.toFixed(2)}deg)`;
 
-      if (bubbleRef.current) {
-        const bx = clamp(px + size * ps * 0.18, 12, f.vw - 230);
-        const by = Math.max(70, py - size * ps * 0.62 + bob);
-        bubbleRef.current.style.transform = `translate3d(${bx.toFixed(1)}px, ${by.toFixed(1)}px, 0)`;
+      const bub = bubbleRef.current;
+      if (bub) {
+        // The bubble hangs above his head. When that would push it into the fixed
+        // chrome (top bar, the phone altimeter chip), it moves to his left, tail
+        // pointing at him; only if that does not fit either does it go underneath.
+        const { h, w, chrome } = bubbleBox.current;
+        const above = py - size * ps * 0.62 + bob;
+        const sideRight = px - size * ps * 0.38;
+        const sideW = Math.min(w, 200, f.vw * 0.52);
+        const at = above - h >= chrome + 8 ? 'above' : sideRight - sideW >= 12 ? 'side' : 'below';
+        let bx: number;
+        let by: number;
+        if (at === 'side') {
+          bx = sideRight;
+          by = Math.max(py - size * ps * 0.15 + bob, chrome + 52);
+        } else {
+          bx = clamp(px + size * ps * 0.18, 12, f.vw - 230);
+          by = at === 'above' ? above : py + size * ps * 0.36 + bob;
+        }
+        // a data attribute, not a class: React rewrites className whenever the line changes
+        if (bub.dataset.at !== at) bub.dataset.at = at;
+        bub.style.transform = `translate3d(${bx.toFixed(1)}px, ${by.toFixed(1)}px, 0)`;
       }
 
       if (reduced) {
@@ -231,11 +263,12 @@ export function PigActor() {
       P.wingNear.setAttribute('transform', `rotate(${(w + 2).toFixed(2)})`);
       P.wingFar.setAttribute('transform', `rotate(${(Math.sin(flap - 0.5) * amp * 0.85 - 4).toFixed(2)})`);
 
-      // ── rocket flame: longer the harder we climb ──
-      if (P.flame) {
-        const want = st.falling ? 0.15 : grounded ? 0 : 0.55 + clamp(climb * 0.5, -0.3, 0.9);
+      // ── rocket boot flames: longer the harder we climb ──
+      if (P.flames.length) {
+        const want = st.falling ? 0.15 : grounded ? 0 : 0.85 + clamp(climb * 0.5, -0.3, 0.75);
         flameLen = lerp(flameLen, want, 1 - Math.exp(-dt * 8));
-        P.flame.style.transform = `scaleY(${flameLen.toFixed(3)})`;
+        const tf = `scaleY(${flameLen.toFixed(3)})`;
+        for (const fl of P.flames) fl.style.transform = tf;
       }
 
       // ── tail propeller ──
@@ -273,6 +306,12 @@ export function PigActor() {
     });
     return unsub;
   }, []);
+
+  // a hop asked for elsewhere (the science floor's flattery button)
+  const hopAt = useStore((s) => s.hop);
+  useEffect(() => {
+    if (hopAt) hopRef.current = 1;
+  }, [hopAt]);
 
   const poke = () => {
     if (store.get().falling) return;

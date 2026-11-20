@@ -100,6 +100,7 @@ export const en = {
     lift: 'LIFT',
     liftBody: 'Flattery.',
     liftNote: 'Japanese proverb: “Flatter a pig and it will climb a tree.” We simply kept going.',
+    flatter: 'Flatter him',
     thrust: 'THRUST',
     thrustBody: 'Curly tail, 3,000 rpm. It’s basically a spring.',
     drag: 'DRAG',
@@ -213,7 +214,8 @@ export const en = {
     ],
   },
   cruise: {
-    kicker: 'Fig. 7 — Seat 23A, window',
+    kicker: 'Fig. 4 — Seat 23A, window',
+    shade: 'Pull down the window shade',
     captainLabel: 'Cabin announcement',
     captain:
       'Ladies and gentlemen, this is your captain speaking. If you look out of the left side of the aircraft… actually, give me a minute.',
@@ -233,7 +235,7 @@ export const en = {
     },
   },
   summit: {
-    kicker: 'Stratosphere · 31 km',
+    kicker: 'Stratosphere · Emergency session',
     title: 'Emergency Summit of the International Union of Impossible Animals',
     agenda: 'Agenda, item 1: The pig actually did it. Now what?',
     delegate: 'Delegate',
@@ -335,14 +337,15 @@ export const en = {
   },
   karman: {
     line: 'KÁRMÁN LINE · 100 km · space officially starts here (ish)',
+    hush: 'The sky is running out of blue.',
     title: 'Congratulations.',
     body: 'Technically, this pig is now an astronaut.',
     patchNote: 'Mission motto: SUS VOLAT — Latin for “the pig flies.”',
-    helmet: 'Wings: retired. Rocket pack: borrowed. Helmet: one (1) fishbowl.',
+    helmet: 'Wings: retired. Rocket boots: borrowed. Helmet: one (1) fishbowl.',
     photo: 'Earth, seen from orbit. NASA photo.',
   },
   iss: {
-    kicker: 'Fig. 10 — Air-to-ground loop, 408 km',
+    kicker: 'Fig. 5 — Air-to-ground loop, 408 km',
     photoCap: 'International Space Station (NASA). The pig is just out of frame. Waving.',
     title: 'Transcript',
     log: [
@@ -351,12 +354,12 @@ export const en = {
       { t: 'T+00:42:22', who: 'STATION', text: 'A pig. Pink. Goggles. It just waved at me.' },
       { t: 'T+00:42:31', who: 'HOUSTON', text: '…' },
       { t: 'T+00:42:40', who: 'HOUSTON', text: 'Copy. Logging it as “weather”.' },
-      { t: 'T+00:42:51', who: 'STATION', text: 'It’s wearing a fishbowl. And a rocket pack.' },
+      { t: 'T+00:42:51', who: 'STATION', text: 'It’s wearing a fishbowl. And rocket boots.' },
       { t: 'T+00:42:52', who: 'HOUSTON', text: 'So are you, Station.' },
     ],
   },
   moon: {
-    kicker: 'Fig. 11 — Lunar surface',
+    kicker: 'Fig. 6 — Lunar surface',
     left: '1969 — one small step.',
     right: 'Today — one small trot.',
     note: 'Note the superior tread.',
@@ -380,6 +383,7 @@ export const en = {
     saidPh: 'e.g. pay me back',
     copy: 'Copy link',
     share: 'Share',
+    print: 'Print certificate',
     copied: 'Copied. Their plausible deniability: gone.',
     copyFail: 'Couldn’t copy — here’s the link:',
     wait: '…wait.',

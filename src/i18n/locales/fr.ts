@@ -90,6 +90,7 @@ export const fr: Messages = {
     lift: 'PORTANCE',
     liftBody: 'Flatterie.',
     liftNote: 'Proverbe japonais : « Flatte un cochon et il grimpera à un arbre. » Nous avons simplement continué.',
+    flatter: 'Flatte-le',
     thrust: 'POUSSÉE',
     thrustBody: 'Queue en tire-bouchon, 3 000 tr/min. C’est en gros un ressort.',
     drag: 'TRAÎNÉE',
@@ -203,7 +204,8 @@ export const fr: Messages = {
     ],
   },
   cruise: {
-    kicker: 'Fig. 7 — Siège 23A, hublot',
+    kicker: 'Fig. 4 — Siège 23A, hublot',
+    shade: 'Baisser le volet du hublot',
     captainLabel: 'Annonce à bord',
     captain:
       'Mesdames et messieurs, ici votre commandant de bord. Si vous regardez par le côté gauche de l’appareil… en fait, donnez-moi une minute.',
@@ -223,7 +225,7 @@ export const fr: Messages = {
     },
   },
   summit: {
-    kicker: 'Stratosphère · 31 km',
+    kicker: 'Stratosphère · Session extraordinaire',
     title: 'Sommet d’urgence de l’Union internationale des animaux impossibles',
     agenda: 'Ordre du jour, point 1 : Le cochon l’a vraiment fait. Et maintenant ?',
     delegate: 'Délégué',
@@ -317,14 +319,15 @@ export const fr: Messages = {
   },
   karman: {
     line: 'LIGNE DE KÁRMÁN · 100 km · l’espace commence officiellement ici (à peu près)',
+    hush: 'Le ciel est à court de bleu.',
     title: 'Félicitations.',
     body: 'Techniquement, ce cochon est désormais astronaute.',
     patchNote: 'Devise de la mission : SUS VOLAT — latin pour « le cochon vole ».',
-    helmet: 'Ailes : à la retraite. Propulseur : emprunté. Casque : un (1) bocal à poissons.',
+    helmet: 'Ailes : à la retraite. Bottes-fusées : empruntées. Casque : un (1) bocal à poissons.',
     photo: 'La Terre vue depuis l’orbite. Photo NASA.',
   },
   iss: {
-    kicker: 'Fig. 10 — Boucle air-sol, 408 km',
+    kicker: 'Fig. 5 — Boucle air-sol, 408 km',
     photoCap: 'Station spatiale internationale (NASA). Le cochon est juste hors cadre. Il salue.',
     title: 'Transcription',
     log: [
@@ -333,12 +336,12 @@ export const fr: Messages = {
       { t: 'T+00:42:22', who: 'STATION', text: 'Un cochon. Rose. Avec des lunettes de ski. Il vient de me faire coucou.' },
       { t: 'T+00:42:31', who: 'HOUSTON', text: '…' },
       { t: 'T+00:42:40', who: 'HOUSTON', text: 'Reçu. Je le consigne comme « météo ».' },
-      { t: 'T+00:42:51', who: 'STATION', text: 'Il porte un bocal à poissons. Et un propulseur dorsal.' },
+      { t: 'T+00:42:51', who: 'STATION', text: 'Il porte un bocal à poissons. Et des bottes-fusées.' },
       { t: 'T+00:42:52', who: 'HOUSTON', text: 'Vous aussi, Station.' },
     ],
   },
   moon: {
-    kicker: 'Fig. 11 — Surface lunaire',
+    kicker: 'Fig. 6 — Surface lunaire',
     left: '1969 — un petit pas.',
     right: 'Aujourd’hui — un petit trot.',
     note: 'Notez la semelle nettement supérieure.',
@@ -362,6 +365,7 @@ export const fr: Messages = {
     saidPh: 'ex. rembourser',
     copy: 'Copier le lien',
     share: 'Partager',
+    print: 'Imprimer le certificat',
     copied: 'Copié. Sa dénégation plausible : envolée.',
     copyFail: 'Impossible de copier. Voici le lien :',
     wait: '…attends.',

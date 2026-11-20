@@ -65,7 +65,8 @@
   margin: 0;
   padding: 12px 14px;
   border: 2px solid var(--ink);
-  background: rgba(255, 254, 248, 0.85);
+  /* opaque: buzzwords stream up behind it */
+  background: #fffef8;
   font-size: 13px;
   line-height: 1.45;
   box-shadow: 4px 4px 0 var(--yellow);
@@ -74,6 +75,9 @@
 .updraft__tunnel {
   position: absolute;
   z-index: 1;
+  /* the buzzwords fade in from below instead of sliding out from under the bottom pill */
+  -webkit-mask-image: linear-gradient(to bottom, #000 0 80%, transparent 92%);
+  mask-image: linear-gradient(to bottom, #000 0 80%, transparent 92%);
   top: 0;
   bottom: 0;
   left: 50%;
@@ -175,15 +179,29 @@
   }
 }
 
+/* phones: one screen, one stop: the law on top, the pig riding the updraft below it */
 @media (max-width: 759px), (max-aspect-ratio: 4/5) {
   .updraft__inner {
     max-width: 100%;
     justify-content: flex-start;
-    padding-top: 22vh;
+    padding-top: 124px;
+  }
+  .updraft__quote {
+    font-size: clamp(28px, 8.4vw, 36px);
+  }
+  .updraft__by {
+    margin: 10px 0 18px;
+    font-size: 12px;
+  }
+  .updraft__warn {
+    font-size: 12px;
   }
   .updraft__tunnel {
     left: 0;
     opacity: 0.75;
+    /* the buzzwords rise around the pig, not through the quote */
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0 50%, #000 64% 82%, transparent 92%);
+    mask-image: linear-gradient(to bottom, transparent 0 50%, #000 64% 82%, transparent 92%);
   }
   .gust {
     font-size: 14px;
@@ -351,13 +369,28 @@
   .exhibits {
     grid-template-columns: 1fr;
     max-width: 520px;
+    /* room between cards so a stop can frame one without slicing the next under the top bar */
+    gap: 44px;
   }
   .exhibit__case {
     height: 150px;
   }
   .precedents__inner {
-    justify-content: flex-start;
     padding-top: 120px;
+    /* A phone floor is read bottom-up while climbing: open on the sign and
+       1909, end on Today right under the pig. DOM order stays chronological.
+       Packed to the top, so no empty sky is left above Today. */
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+  }
+  .exhibit--0 {
+    order: 3;
+  }
+  .exhibit--1 {
+    order: 2;
+  }
+  .exhibit--2 {
+    order: 1;
   }
 }
 
@@ -658,7 +691,8 @@
 /* ═════════════════ CRUISE ═════════════════ */
 .cruise__inner {
   display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.2fr);
+  /* the board needs ~17.5 cells for its longest destination in any language */
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.3fr);
   align-items: center;
   gap: clamp(20px, 4vw, 64px);
 }
@@ -749,8 +783,97 @@
   right: 0;
   top: 0;
   height: 16%;
+  padding: 0;
+  border: 0;
   background: linear-gradient(#f4eedf, #e2d5b6);
   border-bottom: 3px solid var(--ink);
+  cursor: pointer;
+  transition: height 0.4s cubic-bezier(0.6, 0, 0.4, 1);
+}
+
+/* the pull tab */
+.window__shade i {
+  position: absolute;
+  left: 50%;
+  bottom: 6px;
+  width: 28px;
+  height: 8px;
+  translate: -50% 0;
+  border: 2.5px solid var(--ink);
+  border-radius: 6px;
+  background: #fffef8;
+}
+
+.window.is-up .window__shade:hover {
+  height: 20%;
+}
+
+.window__shade:focus-visible {
+  outline: 3px solid var(--pink);
+  outline-offset: -6px;
+}
+
+.window.is-down .window__shade,
+.window.is-knock .window__shade {
+  height: 100%;
+}
+
+.window.is-knock .window__shade {
+  animation: shade-knock 0.25s ease-out 2;
+}
+
+@keyframes shade-knock {
+  30% {
+    translate: 0 -3px;
+  }
+}
+
+/* knock marks, so the knocks show with the sound off */
+.window__knock {
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  width: 72px;
+  height: 27px;
+  translate: -50% -50%;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  opacity: 0;
+}
+
+.window.is-knock .window__knock {
+  animation: shade-knock-marks 0.25s ease-out 2;
+}
+
+@keyframes shade-knock-marks {
+  0% {
+    opacity: 1;
+    scale: 0.7;
+  }
+  65% {
+    opacity: 1;
+    scale: 1.05;
+  }
+  100% {
+    opacity: 0;
+    scale: 1.15;
+  }
+}
+
+/* shoved back up, with a bounce */
+.window.is-peek .window__shade {
+  transition: height 0.35s cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+
+/* ...and there he is, snout to the glass */
+.window__pig {
+  transition: scale 0.3s cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+
+.window.is-peek .window__pig {
+  scale: 1.3;
 }
 
 .captain {
@@ -770,7 +893,9 @@
   width: 34px;
   height: 34px;
   border-radius: 50%;
+  border: 2.5px solid var(--ink);
   background: var(--blue);
+  box-shadow: 2px 2px 0 var(--pink);
   color: #fffef8;
 }
 
@@ -894,31 +1019,51 @@
 }
 
 .flap__c {
-  display: inline-grid;
-  place-items: center;
+  /* fixed-size, fully contained cells: a glyph flipping inside one never
+     re-lays out the row, the board or the page around it */
+  display: inline-block;
+  flex: none;
+  width: 1.02em;
   min-width: 1.02em;
   height: 1.62em;
   padding: 0;
   border-radius: 3px;
   background: linear-gradient(#2c2933 0 49%, #000 49% 51%, #24212b 51%);
   color: #fffef8;
-  line-height: 1;
+  line-height: 1.62em;
+  text-align: center;
+  overflow: hidden;
+  contain: strict;
 }
 
 .flap__c.is-wide {
+  width: 1.6em;
   min-width: 1.6em;
 }
 
 .flap__c.is-space {
+  width: 0.45em;
   min-width: 0.45em;
   background: transparent;
 }
 
-.flap__c.is-flip {
-  animation: flap-flip 0.06s linear;
+/* two identical keyframes: alternating between them restarts the flip
+   without forcing a layout to reset the animation */
+.flap__c[data-f='a'] {
+  animation: flap-flip-a 0.06s linear;
 }
 
-@keyframes flap-flip {
+.flap__c[data-f='b'] {
+  animation: flap-flip-b 0.06s linear;
+}
+
+@keyframes flap-flip-a {
+  from {
+    transform: scaleY(0.2);
+  }
+}
+
+@keyframes flap-flip-b {
   from {
     transform: scaleY(0.2);
   }
@@ -955,11 +1100,13 @@
   .window {
     width: min(200px, 50vw);
   }
-  .flap__col-0 {
+  /* time and flight number go: the destination is the joke and must fit whole */
+  .flap__col-0,
+  .flap__col-1 {
     display: none !important;
   }
   .flap {
-    font-size: 11px;
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    font-size: 10px;
+    grid-template-columns: minmax(0, 1fr) auto;
   }
 }

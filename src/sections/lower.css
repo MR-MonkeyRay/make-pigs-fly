@@ -230,7 +230,8 @@
   flex-direction: column;
   gap: 0.12em;
   max-width: min(62vw, calc(15ch / var(--fit, 1)));
-  font-size: calc(clamp(42px, min(6.8vw, 11vh), 108px) * var(--fit, 1));
+  /* a size that ends "runway." short of the pig's ears */
+  font-size: calc(clamp(42px, min(6.2vw, 10vh), 100px) * var(--fit, 1));
 }
 
 :lang(zh) .ground__title,
@@ -408,26 +409,68 @@
 
 /* ═════════════════ DOUBTERS ═════════════════ */
 .doubters__inner {
-  display: flex;
-  flex-direction: column;
+  /* both bands are laid out on this box: 0-50% is the upper band, 50-100% the lower */
+  --pad-t: 104px;
+  --pad-b: 96px;
+  --hole: 190px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.doubters__kicker {
+  position: absolute;
+  top: calc(50% + var(--pad-t));
+  margin: 0;
 }
 
 .doubters__list {
   list-style: none;
   margin: 0;
   padding: 0;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
+  height: 100%;
+  display: grid;
+  /* per band: top chrome, above the pig, the pig, below the pig, bottom chrome.
+     The rows around the hole are sized so the hole sits at each band's centre,
+     where the pig rests (pose y 0.5). */
+  grid-template-rows:
+    var(--pad-t) calc(25% - var(--hole) / 2 - var(--pad-t)) var(--hole) calc(25% - var(--hole) / 2 - var(--pad-b)) var(--pad-b)
+    var(--pad-t) calc(25% - var(--hole) / 2 - var(--pad-t)) var(--hole) calc((25% - var(--hole) / 2 - var(--pad-b)) / 2) calc((25% - var(--hole) / 2 - var(--pad-b)) / 2) var(--pad-b);
+}
+
+.doubt {
+  align-self: center;
+  min-height: 0;
+}
+
+/* lower band (seen first): Kevin above the pig, under the kicker; Management and the teenager below */
+.doubt--at0 {
+  grid-row: 7;
+  padding-top: 1.6em;
+}
+.doubt--at1 {
+  grid-row: 9;
+}
+.doubt--at2 {
+  grid-row: 10;
+}
+/* upper band: the PM above the pig, Newton below, right before the physics floor */
+.doubt--at3 {
+  grid-row: 2;
+}
+.doubt--at4 {
+  grid-row: 4;
 }
 
 .doubt {
   max-width: min(980px, 88%);
 }
 
+.doubt--l {
+  justify-self: start;
+}
+
 .doubt--r {
-  align-self: flex-end;
+  justify-self: end;
   text-align: right;
 }
 
@@ -435,7 +478,8 @@
   margin: 0;
   font-style: italic;
   font-weight: 700;
-  font-size: clamp(30px, 4.4vw, 68px);
+  /* one line per quote on a laptop, so two fit in the space below the pig */
+  font-size: clamp(28px, 3.6vw, 56px);
   color: var(--ink);
 }
 
@@ -451,16 +495,21 @@
 :lang(ja) .doubt__q,
 :lang(ko) .doubt__q {
   font-style: normal;
-  font-size: clamp(26px, 3.9vw, 60px);
+  font-size: clamp(26px, 3.4vw, 52px);
 }
 
-/* phones: smaller quotes with real gaps between them, so the pig has somewhere to hover when the page rests */
+/* phones: smaller quotes; the top chrome is taller (altimeter chip under the bar) */
 @media (max-width: 759px) {
+  .doubters__inner {
+    --pad-t: 124px;
+    --pad-b: 84px;
+    --hole: 150px;
+  }
   .doubt__q,
   :lang(zh) .doubt__q,
   :lang(ja) .doubt__q,
   :lang(ko) .doubt__q {
-    font-size: clamp(22px, 6.2vw, 30px);
+    font-size: clamp(20px, 5.8vw, 26px);
   }
 }
 
@@ -471,6 +520,13 @@
   font-style: normal;
   font-size: 13px;
   opacity: 0.75;
+}
+
+@media (max-width: 759px) {
+  .doubt__by {
+    margin-top: 4px;
+    font-size: 12px;
+  }
 }
 
 .scatter__word {
@@ -583,6 +639,81 @@
 }
 
 
+/* the flattery button: a pink rubber stamp on the diagram */
+.science__flatter {
+  align-self: flex-start;
+  padding: 5px 12px 6px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--pink);
+  color: #fffef8;
+  font-family: var(--f-mono);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  box-shadow: 3px 3px 0 var(--ink);
+  cursor: pointer;
+  transition:
+    transform 0.12s,
+    box-shadow 0.12s;
+}
+
+.science__flatter:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.science__flatter:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--ink);
+}
+
+.science__gain {
+  font-style: normal;
+  color: var(--pink-deep);
+}
+
+.science__boost {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.science__boost span {
+  position: absolute;
+  left: 0;
+  top: 0;
+  white-space: nowrap;
+  padding: 3px 10px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--yellow);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 13px;
+  translate: calc(var(--x) * 18px - 50%) 0;
+  animation: boost-rise 1.1s cubic-bezier(0.2, 0.7, 0.4, 1) forwards;
+}
+
+@keyframes boost-rise {
+  0% {
+    transform: translateY(40px) scale(0.6);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  75% {
+    transform: translateY(-30px) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-46px) scale(0.5);
+    opacity: 0;
+  }
+}
+
 .science__wings {
   position: absolute;
   display: flex;
@@ -625,7 +756,7 @@
   color: #fffef8;
   font-weight: 700;
   font-size: 13px;
-  translate: calc((var(--i) - var(--n) / 2) * 34px - 50%) 0;
+  translate: calc((var(--i) - var(--n) / 2) * 42px - 50%) 0;
   animation: fuel-rise 3.6s linear infinite;
   animation-delay: calc(var(--i) * -0.45s);
   animation-play-state: paused;
@@ -647,7 +778,7 @@
     opacity: 1;
   }
   100% {
-    transform: translateY(-60px) scale(1);
+    transform: translateY(-24px) scale(1);
     opacity: 0;
   }
 }
@@ -679,8 +810,13 @@
   .science__label span {
     font-size: 18px;
   }
+  /* the proverb explains the pig up the tree: keep it, small */
   .science__label small {
-    display: none;
+    font-size: 10.5px;
+  }
+  /* a narrower stream, so the outer compliments stay on the paper */
+  .science__fuel span {
+    translate: calc((var(--i) - var(--n) / 2) * 16px - 50%) 0;
   }
   .science__tree {
     left: 14px;
@@ -697,7 +833,11 @@
   bottom: 0;
   width: 100%;
   height: 24vh;
-  transform: translateY(calc(var(--pp, 0) * 34vh));
+  /* the cast perches above the strip's top edge and Gary leaves through the sky */
+  overflow: visible;
+  /* the roofs stay in view while the chat (and the birds acting it out) plays,
+     and only drop away past the last stop */
+  transform: translateY(calc(var(--pp, 0) * 4vh + max(0px, (var(--pp, 0) - 0.92) * 300vh)));
 }
 
 .birds__col {
@@ -759,6 +899,21 @@
 
 .phone__head strong {
   font-size: 15px;
+}
+
+.phone__mark {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  vertical-align: -2px;
+}
+
+.msg__pig {
+  display: inline-block;
+  width: 1.3em;
+  height: 1.3em;
+  margin-left: 2px;
+  vertical-align: -0.32em;
 }
 
 .phone__head small {
@@ -943,13 +1098,15 @@
   .birds__col {
     left: 50%;
     transform: translateX(-50%);
-    padding-top: 110px;
+    /* clear of the altimeter chip */
+    padding-top: 122px;
     justify-content: flex-start;
   }
   .birds__kicker {
     font-size: 10px;
   }
+  /* shorter, so the roofs and the birds on them show underneath */
   .phone {
-    height: min(560px, 66svh);
+    height: min(460px, 54svh);
   }
 }

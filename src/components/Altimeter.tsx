@@ -8,6 +8,7 @@ import './altimeter.css';
 
 export function Altimeter() {
   const { t, tag } = useI18n();
+  const numRef = useRef<HTMLSpanElement>(null);
   const valueRef = useRef<HTMLSpanElement>(null);
   const unitRef = useRef<HTMLSpanElement>(null);
   const pigsRef = useRef<HTMLSpanElement>(null);
@@ -77,6 +78,8 @@ export function Altimeter() {
       if (key !== last) {
         last = key;
         if (valueRef.current) valueRef.current.textContent = a.value;
+        // long readings ("26,5 Mio.") shrink to stay inside the box
+        numRef.current?.style.setProperty('--len', String(Math.max(7, a.value.length)));
         if (unitRef.current) unitRef.current.textContent = tt.ui.units[a.unit];
         if (pigsRef.current)
           pigsRef.current.textContent =
@@ -115,7 +118,7 @@ export function Altimeter() {
         }}
       >
         <span className="alt__label">{t.ui.altitude}</span>
-        <span className="alt__num">
+        <span className="alt__num" ref={numRef}>
           <span ref={valueRef}>0</span>
           <span className="alt__unit" ref={unitRef}>
             {t.ui.units.m}

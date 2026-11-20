@@ -90,6 +90,7 @@ export const de: Messages = {
     lift: 'AUFTRIEB',
     liftBody: 'Schmeicheleien.',
     liftNote: 'Japanisches Sprichwort: „Lob ein Schwein, und es klettert auf einen Baum.“ Wir haben einfach weitergemacht.',
+    flatter: 'Schmeichle ihm',
     thrust: 'SCHUB',
     thrustBody: 'Ringelschwanz, 3.000 U/min. Im Grunde eine Feder.',
     drag: 'WIDERSTAND',
@@ -204,7 +205,8 @@ export const de: Messages = {
     ],
   },
   cruise: {
-    kicker: 'Abb. 7 — Sitz 23A, Fensterplatz',
+    kicker: 'Abb. 4 — Sitz 23A, Fensterplatz',
+    shade: 'Fensterblende herunterziehen',
     captainLabel: 'Bordansage',
     captain:
       'Meine Damen und Herren, hier spricht Ihr Kapitän. Wenn Sie auf der linken Seite aus dem Flugzeug schauen … ähm, geben Sie mir bitte einen Moment.',
@@ -224,7 +226,7 @@ export const de: Messages = {
     },
   },
   summit: {
-    kicker: 'Stratosphäre · 31 km',
+    kicker: 'Stratosphäre · Dringlichkeitssitzung',
     title: 'Notgipfel der Internationalen Union unmöglicher Tiere',
     agenda: 'Tagesordnung, Punkt 1: Das Schwein hat es tatsächlich geschafft. Und jetzt?',
     delegate: 'Delegierter',
@@ -318,14 +320,15 @@ export const de: Messages = {
   },
   karman: {
     line: 'KÁRMÁN-LINIE · 100 km · der Weltraum beginnt hier offiziell (ungefähr)',
+    hush: 'Dem Himmel geht das Blau aus.',
     title: 'Herzlichen Glückwunsch.',
     body: 'Technisch gesehen ist dieses Schwein jetzt Astronaut.',
     patchNote: 'Missionsmotto: SUS VOLAT — Latein für „das Schwein fliegt“.',
-    helmet: 'Flügel: ausgemustert. Raketenrucksack: geliehen. Helm: ein (1) Goldfischglas.',
+    helmet: 'Flügel: ausgemustert. Raketenstiefel: geliehen. Helm: ein (1) Goldfischglas.',
     photo: 'Die Erde, von der Umlaufbahn aus gesehen. NASA-Foto.',
   },
   iss: {
-    kicker: 'Abb. 10 — Luft-Boden-Schleife, 408 km',
+    kicker: 'Abb. 5 — Luft-Boden-Schleife, 408 km',
     photoCap: 'Internationale Raumstation (NASA). Das Schwein ist gerade außerhalb des Bildes. Winkt.',
     title: 'Transkript',
     log: [
@@ -334,12 +337,12 @@ export const de: Messages = {
       { t: 'T+00:42:22', who: 'STATION', text: 'Ein Schwein. Rosa. Mit Skibrille. Es hat mir gerade zugewinkt.' },
       { t: 'T+00:42:31', who: 'HOUSTON', text: '…' },
       { t: 'T+00:42:40', who: 'HOUSTON', text: 'Verstanden. Ich trage es als „Wetterphänomen“ ein.' },
-      { t: 'T+00:42:51', who: 'STATION', text: 'Es trägt ein Goldfischglas. Und einen Raketenrucksack.' },
+      { t: 'T+00:42:51', who: 'STATION', text: 'Es trägt ein Goldfischglas. Und Raketenstiefel.' },
       { t: 'T+00:42:52', who: 'HOUSTON', text: 'Sie auch, Station.' },
     ],
   },
   moon: {
-    kicker: 'Abb. 11 — Mondoberfläche',
+    kicker: 'Abb. 6 — Mondoberfläche',
     left: '1969 — ein kleiner Schritt.',
     right: 'Heute — ein kleiner Trab.',
     note: 'Beachte das überlegene Profil.',
@@ -363,6 +366,7 @@ export const de: Messages = {
     saidPh: 'z. B. Geld zurückzahlen',
     copy: 'Link kopieren',
     share: 'Teilen',
+    print: 'Urkunde drucken',
     copied: 'Kopiert. Glaubhafte Abstreitbarkeit: dahin.',
     copyFail: 'Kopieren fehlgeschlagen — hier ist der Link:',
     wait: '…warte.',

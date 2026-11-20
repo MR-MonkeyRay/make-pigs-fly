@@ -84,9 +84,9 @@ export function provideStops(id: string, fn: StopProvider): () => void {
 }
 
 /** The part of the screen the fixed chrome leaves free (top bar + altimeter above, buttons below). */
-function freeBand(vh: number): { top: number; bottom: number } {
+export function freeBand(vh: number): { top: number; bottom: number } {
   let top = 64;
-  for (const sel of ['.topbar', frame.narrow ? '.alt__read' : '']) {
+  for (const sel of ['header.top', frame.narrow ? '.alt__read' : '']) {
     const el = sel && document.querySelector(sel);
     if (el) top = Math.max(top, el.getBoundingClientRect().bottom);
   }
@@ -401,7 +401,8 @@ function playStep() {
       return;
     }
     const dist = Math.abs(stops[i + 1].y - window.scrollY);
-    tweenTo(i + 1, { auto: true, dur: Math.min(4200, Math.max(800, dist / spec.speed)) });
+    const speed = frame.narrow && spec.speedM ? spec.speedM : spec.speed;
+    tweenTo(i + 1, { auto: true, dur: Math.min(4200, Math.max(800, dist / speed)) });
   };
   playTimer = window.setTimeout(tick, 120);
 }

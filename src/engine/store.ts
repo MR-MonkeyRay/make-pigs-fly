@@ -24,6 +24,10 @@ export interface AppState {
   playing: boolean;
   /** the scene has finished: cue the reader to keep climbing */
   cue: boolean;
+  /** a hop for the pig, requested from outside (time of the request) */
+  hop: number;
+  /** name typed into the finale form, for the printed certificate (null = use the link's) */
+  certTo: string | null;
 }
 
 type Listener = () => void;
@@ -66,6 +70,8 @@ let state: AppState = {
   flock: 0,
   playing: false,
   cue: false,
+  hop: 0,
+  certTo: null,
 };
 
 const listeners = new Set<Listener>();

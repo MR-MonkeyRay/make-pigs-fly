@@ -16,6 +16,13 @@ const WIDE = /[ᄀ-ᇿ⺀-鿿가-힯豈-﫿＀-￯]/;
 const LATIN_POOL = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 const CJK_POOL = '猪飞天空云月星风雨雪日山海航班登机延误取消准点到达出发';
 
+/** swap a cell's glyph in place (no new text node, no layout read) */
+function put(c: HTMLElement, ch: string) {
+  const n = c.firstChild;
+  if (n && n.nodeType === 3) (n as Text).nodeValue = ch;
+  else c.textContent = ch;
+}
+
 function Cells({ text, className }: { text: string; className?: string }) {
   return (
     <span className={`flap__f ${className ?? ''}`} aria-hidden="true">
@@ -59,16 +66,19 @@ export function SplitFlap({ rows, cols, active, hold }: { rows: FlapRow[]; cols:
         return;
       }
       tick++;
+      // Restart each cell's flip by swapping between two identical keyframes
+      // instead of remove-class / read offsetWidth / add-class: that read forced
+      // a full layout per cell (hundreds per tick) and made the 10 km floor stutter.
+      const flip = tick & 1 ? 'a' : 'b';
       let busy = 0;
       for (const p of plan) {
         if (tick < p.stop) {
           busy++;
-          p.c.textContent = p.pool[(Math.random() * p.pool.length) | 0];
-          p.c.classList.remove('is-flip');
-          void p.c.offsetWidth;
-          p.c.classList.add('is-flip');
-        } else if (p.c.textContent !== p.t) {
-          p.c.textContent = p.t;
+          put(p.c, p.pool[(Math.random() * p.pool.length) | 0]);
+          p.c.dataset.f = flip;
+        } else if (p.c.dataset.f) {
+          put(p.c, p.t);
+          delete p.c.dataset.f;
         }
       }
       if (busy) sound.clack();
@@ -80,7 +90,10 @@ export function SplitFlap({ rows, cols, active, hold }: { rows: FlapRow[]; cols:
     return () => {
       window.clearInterval(timer);
       release();
-      plan.forEach((p) => (p.c.textContent = p.t));
+      plan.forEach((p) => {
+        put(p.c, p.t);
+        delete p.c.dataset.f;
+      });
     };
   }, [active, rows, hold]);
 
