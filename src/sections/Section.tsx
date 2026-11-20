@@ -12,14 +12,21 @@ interface Props {
   hm?: number;
   className?: string;
   label?: string;
+  /**
+   * Who reads the scroll progress (--q, --pp) in CSS: `true` for the whole
+   * section, or a selector for just those elements. Sections without it get no
+   * per-frame custom properties (setting one restyles the whole subtree).
+   */
+  vars?: true | string;
   children: React.ReactNode;
 }
 
-export function Section({ id, h, hm, className, label, children }: Props) {
+export function Section({ id, h, hm, className, label, vars, children }: Props) {
   return (
     <section
       id={id}
       data-sec={SECTION_INDEX[id]}
+      data-vars={vars === true ? '' : vars}
       className={`sec sec--${id}${className ? ` ${className}` : ''}`}
       style={{ '--h': h, '--hm': hm ?? h } as React.CSSProperties}
       aria-label={label}

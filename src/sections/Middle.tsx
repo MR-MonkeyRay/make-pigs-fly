@@ -15,7 +15,7 @@ export function Updraft() {
   const { t } = useI18n();
   const u = t.updraft;
   return (
-    <Section id="updraft" h={1.6} hm={1.7} label={t.layers[4]}>
+    <Section id="updraft" vars=".cloud" h={1.6} hm={1.7} label={t.layers[4]}>
       <Cloud className="cloud cloud--a" />
       <Cloud className="cloud cloud--b" tone="pink" />
       <div className="updraft__tunnel" aria-hidden="true">
@@ -67,7 +67,7 @@ export function Precedents() {
     </div>,
   ];
   return (
-    <Section id="precedents" h={1.7} hm={2.9} label={t.layers[5]}>
+    <Section id="precedents" vars=".cloud" h={1.7} hm={2.9} label={t.layers[5]}>
       <Cloud className="cloud cloud--c" />
       <div className="sec__inner precedents__inner">
         <header className="precedents__head">
@@ -138,7 +138,7 @@ export function News() {
 
   const ticker = [...n.ticker, ...n.ticker];
   return (
-    <Section id="news" h={1.5} hm={1.6} label={t.layers[6]}>
+    <Section id="news" vars=".cloud" h={1.5} hm={1.6} label={t.layers[6]}>
       <Cloud className="cloud cloud--d" />
       <Cloud className="cloud cloud--e" />
       <div className="sec__inner news__inner">

@@ -269,7 +269,7 @@ export function Science() {
   };
 
   return (
-    <Section id="science" h={2.1} hm={2.1} label={t.layers[2]}>
+    <Section id="science" vars h={2.1} hm={2.1} label={t.layers[2]}>
       <div className="sticky science__stage">
         <div className="science__grid" />
         <header className="science__head">
@@ -353,7 +353,7 @@ export function Birds() {
   const nextName = next && next.who !== 'sys' ? b.names[next.who].split(' · ')[0] : '';
 
   return (
-    <Section id="birds" h={2.5} hm={2.6} label={t.layers[3]}>
+    <Section id="birds" vars h={2.5} hm={2.6} label={t.layers[3]}>
       <div className="sticky birds__stage">
         <Rooftops className="birds__roofs" />
         <div className="birds__col">

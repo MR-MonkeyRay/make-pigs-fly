@@ -30,6 +30,8 @@ export interface Frame {
 
 interface Sec {
   el: HTMLElement;
+  /** elements that read --q / --pp in CSS (see Section's `vars`) */
+  vars: HTMLElement[];
   top: number;
   h: number;
   q: number;
@@ -117,7 +119,9 @@ export function measure(): void {
   secs = els.map((el) => {
     const r = el.getBoundingClientRect();
     const old = secs.find((s) => s.el === el);
-    return { el, top: r.top + sy, h: r.height, q: old?.q ?? -1, pp: old?.pp ?? -1, inview: old?.inview ?? false };
+    const sel = el.dataset.vars;
+    const vars = sel === undefined ? [] : sel === '' ? [el] : Array.from(el.querySelectorAll<HTMLElement>(sel));
+    return { el, vars, top: r.top + sy, h: r.height, q: old?.q ?? -1, pp: old?.pp ?? -1, inview: old?.inview ?? false };
   });
   frame.max = Math.max(0, document.documentElement.scrollHeight - frame.vh);
 }
@@ -225,8 +229,13 @@ function tick(t: number) {
     if (Math.abs(q - s.q) > 0.0004 || Math.abs(pp - s.pp) > 0.0004) {
       s.q = q;
       s.pp = pp;
-      s.el.style.setProperty('--q', q.toFixed(4));
-      s.el.style.setProperty('--pp', pp.toFixed(4));
+      // Only where CSS reads them: a custom property set on an element restyles
+      // everything under it, every frame, so a section that does not use them
+      // (the cruise board, the summit track…) must not pay for it.
+      for (const v of s.vars) {
+        v.style.setProperty('--q', q.toFixed(4));
+        v.style.setProperty('--pp', pp.toFixed(4));
+      }
     }
     const set = secSubs.get(i);
     if (set) set.forEach((fn) => fn(q, pp, inview));
