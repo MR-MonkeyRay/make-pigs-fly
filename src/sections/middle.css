@@ -658,7 +658,8 @@
 /* ═════════════════ CRUISE ═════════════════ */
 .cruise__inner {
   display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.2fr);
+  /* the board needs ~17.5 cells for its longest destination in any language */
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.3fr);
   align-items: center;
   gap: clamp(20px, 4vw, 64px);
 }
@@ -975,11 +976,13 @@
   .window {
     width: min(200px, 50vw);
   }
-  .flap__col-0 {
+  /* time and flight number go: the destination is the joke and must fit whole */
+  .flap__col-0,
+  .flap__col-1 {
     display: none !important;
   }
   .flap {
-    font-size: 11px;
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    font-size: 10px;
+    grid-template-columns: minmax(0, 1fr) auto;
   }
 }
