@@ -546,7 +546,10 @@ function onWheel(e: WheelEvent) {
   if (busy) {
     if (autoTween) {
       // a clear flick cuts into an autoplay glide right away, but a grazed
-      // trackpad must not throw the page a floor: same 14px as at rest
+      // trackpad (or the inertia tail of the flick that got us here) must not
+      // throw the page a floor: same rules as at rest
+      if (cooling && !fresh) return;
+      cooling = false;
       if (fresh || gap > 260) acc = 0;
       acc += d;
       if (Math.abs(acc) >= 14) {
