@@ -349,6 +349,7 @@ export const zhTW: Messages = {
     saidPh: '例如：還錢',
     copy: '複製連結',
     share: '分享',
+    print: '列印證書',
     copied: '已複製。對方的推託空間：已歸零。',
     copyFail: '複製失敗，連結在這裡：',
     wait: '……等等。',

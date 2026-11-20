@@ -362,6 +362,7 @@ export const fr: Messages = {
     saidPh: 'ex. rembourser',
     copy: 'Copier le lien',
     share: 'Partager',
+    print: 'Imprimer le certificat',
     copied: 'Copié. Sa dénégation plausible : envolée.',
     copyFail: 'Impossible de copier. Voici le lien :',
     wait: '…attends.',

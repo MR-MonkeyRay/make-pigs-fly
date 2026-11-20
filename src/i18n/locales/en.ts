@@ -380,6 +380,7 @@ export const en = {
     saidPh: 'e.g. pay me back',
     copy: 'Copy link',
     share: 'Share',
+    print: 'Print certificate',
     copied: 'Copied. Their plausible deniability: gone.',
     copyFail: 'Couldn’t copy — here’s the link:',
     wait: '…wait.',

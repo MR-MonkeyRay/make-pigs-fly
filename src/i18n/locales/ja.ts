@@ -362,6 +362,7 @@ export const ja: Messages = {
     saidPh: '例：お金を返す',
     copy: 'リンクをコピー',
     share: '共有',
+    print: '証明書を印刷',
     copied: 'コピーしました。相手の言い逃れの余地：ゼロ。',
     copyFail: 'コピーできませんでした。リンクはこちら：',
     wait: '……ちょっと待って。',

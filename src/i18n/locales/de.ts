@@ -363,6 +363,7 @@ export const de: Messages = {
     saidPh: 'z. B. Geld zurückzahlen',
     copy: 'Link kopieren',
     share: 'Teilen',
+    print: 'Urkunde drucken',
     copied: 'Kopiert. Glaubhafte Abstreitbarkeit: dahin.',
     copyFail: 'Kopieren fehlgeschlagen — hier ist der Link:',
     wait: '…warte.',

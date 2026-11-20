@@ -362,6 +362,7 @@ export const es: Messages = {
     saidPh: 'p. ej. devolver el dinero',
     copy: 'Copiar enlace',
     share: 'Compartir',
+    print: 'Imprimir certificado',
     copied: 'Copiado. Su margen para hacerse el despistado: cero.',
     copyFail: 'No se pudo copiar. Aquí tienes el enlace:',
     wait: '…espera.',

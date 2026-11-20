@@ -24,6 +24,8 @@ export interface AppState {
   playing: boolean;
   /** the scene has finished: cue the reader to keep climbing */
   cue: boolean;
+  /** name typed into the finale form, for the printed certificate (null = use the link's) */
+  certTo: string | null;
 }
 
 type Listener = () => void;
@@ -66,6 +68,7 @@ let state: AppState = {
   flock: 0,
   playing: false,
   cue: false,
+  certTo: null,
 };
 
 const listeners = new Set<Listener>();

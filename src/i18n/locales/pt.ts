@@ -362,6 +362,7 @@ export const pt: Messages = {
     saidPh: 'ex.: me devolver o Pix',
     copy: 'Copiar link',
     share: 'Compartilhar',
+    print: 'Imprimir certificado',
     copied: 'Copiado. A desculpa de “não lembro” foi para o espaço.',
     copyFail: 'Não foi possível copiar — aqui está o link:',
     wait: '…calma.',

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useI18n } from '../i18n';
-import { useStore } from '../engine/store';
+import { store, useStore } from '../engine/store';
 import { frame } from '../engine/scroll';
 import { fractionOf, SECTION_INDEX } from '../engine/specs';
 import { bringHome } from '../engine/fall';
@@ -379,7 +379,15 @@ export function Space({ personal }: { personal: Personal }) {
             <div className="share__fields">
               <label>
                 <span>{s.nameLabel}</span>
-                <input value={to} maxLength={24} placeholder={s.namePh} onChange={(e) => setTo(e.target.value)} />
+                <input
+                  value={to}
+                  maxLength={24}
+                  placeholder={s.namePh}
+                  onChange={(e) => {
+                    setTo(e.target.value);
+                    store.set({ certTo: e.target.value.trim() });
+                  }}
+                />
               </label>
               <label>
                 <span>{s.saidLabel}</span>
@@ -395,6 +403,10 @@ export function Space({ personal }: { personal: Personal }) {
                   {s.share}
                 </button>
               )}
+              {/* the certificate the print stylesheet has always made, now findable */}
+              <button type="button" className="btn" onClick={() => window.print()}>
+                {s.print}
+              </button>
             </div>
             <p className="share__status" aria-live="polite">
               {status === 'copied' && s.copied}

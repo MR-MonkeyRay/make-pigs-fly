@@ -363,6 +363,7 @@ export const it: Messages = {
     saidPh: 'es. ridarmi i soldi',
     copy: 'Copia link',
     share: 'Condividi',
+    print: 'Stampa il certificato',
     copied: 'Copiato. Le scuse per fare finta di niente: evaporate.',
     copyFail: 'Impossibile copiare — ecco il link:',
     wait: '…aspetta.',

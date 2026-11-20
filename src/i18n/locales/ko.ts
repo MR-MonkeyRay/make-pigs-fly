@@ -363,6 +363,7 @@ export const ko: Messages = {
     saidPh: '예: 돈 갚기',
     copy: '링크 복사',
     share: '공유',
+    print: '증명서 인쇄',
     copied: '복사했습니다. 그 사람의 “그런 말 한 적 없는데요” 방어막, 소멸.',
     copyFail: '복사하지 못했습니다. 링크는 여기 있습니다:',
     wait: '…잠깐만요.',

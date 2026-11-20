@@ -349,6 +349,7 @@ export const zh: Messages = {
     saidPh: '比如：还钱',
     copy: '复制链接',
     share: '分享',
+    print: '打印证书',
     copied: '已复制。对方的退路：已封死。',
     copyFail: '复制失败，链接在这里：',
     wait: '……等等。',
