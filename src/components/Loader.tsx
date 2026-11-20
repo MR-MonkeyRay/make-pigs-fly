@@ -8,6 +8,8 @@ import './loader.css';
 
 type Phase = 'run' | 'stuck' | 'push' | 'done' | 'lift' | 'gone';
 
+// The "stuck at 99%" gag plays once per browser, not once per tab: returning
+// readers get the quick version. Personal links (?to=…) always get the show.
 const SEEN_KEY = 'makepigs.loader';
 
 export function Loader({ personal }: { personal: Personal }) {
@@ -16,12 +18,18 @@ export function Loader({ personal }: { personal: Personal }) {
   const [pct, setPct] = useState(0);
   const timers = useRef<number[]>([]);
   const finished = useRef(false);
+  // read before anything is written, so a re-run effect still sees a first visit
+  const [quick] = useState(() => {
+    try {
+      return localStorage.getItem(SEEN_KEY) === '1' && !personal.to;
+    } catch {
+      return false;
+    }
+  });
 
   useEffect(() => {
-    let quick = false;
     try {
-      quick = sessionStorage.getItem(SEEN_KEY) === '1' && !personal.to;
-      sessionStorage.setItem(SEEN_KEY, '1');
+      localStorage.setItem(SEEN_KEY, '1');
     } catch {
       /* ignore */
     }
