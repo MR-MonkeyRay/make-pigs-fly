@@ -15,7 +15,7 @@ export function Updraft() {
   const { t } = useI18n();
   const u = t.updraft;
   return (
-    <Section id="updraft" vars=".cloud" h={1.6} hm={1.7} label={t.layers[4]}>
+    <Section id="updraft" vars=".cloud" h={1.6} hm={1} label={t.layers[4]}>
       <Cloud className="cloud cloud--a" />
       <Cloud className="cloud cloud--b" tone="pink" />
       <div className="updraft__tunnel" aria-hidden="true">

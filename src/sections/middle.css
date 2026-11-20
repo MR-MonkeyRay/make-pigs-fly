@@ -65,7 +65,8 @@
   margin: 0;
   padding: 12px 14px;
   border: 2px solid var(--ink);
-  background: rgba(255, 254, 248, 0.85);
+  /* opaque: buzzwords stream up behind it */
+  background: #fffef8;
   font-size: 13px;
   line-height: 1.45;
   box-shadow: 4px 4px 0 var(--yellow);
@@ -175,15 +176,29 @@
   }
 }
 
+/* phones: one screen, one stop: the law on top, the pig riding the updraft below it */
 @media (max-width: 759px), (max-aspect-ratio: 4/5) {
   .updraft__inner {
     max-width: 100%;
     justify-content: flex-start;
-    padding-top: 22vh;
+    padding-top: 124px;
+  }
+  .updraft__quote {
+    font-size: clamp(28px, 8.4vw, 36px);
+  }
+  .updraft__by {
+    margin: 10px 0 18px;
+    font-size: 12px;
+  }
+  .updraft__warn {
+    font-size: 12px;
   }
   .updraft__tunnel {
     left: 0;
     opacity: 0.75;
+    /* the buzzwords rise around the pig, not through the quote */
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0 50%, #000 64%);
+    mask-image: linear-gradient(to bottom, transparent 0 50%, #000 64%);
   }
   .gust {
     font-size: 14px;

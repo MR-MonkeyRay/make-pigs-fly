@@ -604,24 +604,31 @@
     0 4px 24px rgba(8, 10, 30, 0.92);
 }
 
+/* phones: the Polaroid, the Moon and the line land together in one stop */
 @media (max-width: 899px), (max-aspect-ratio: 4/5) {
   .moon__inner {
     grid-template-columns: 1fr;
+    grid-template-rows: none;
     align-content: start;
-    gap: 24px;
+    align-items: start;
+    gap: 14px;
     padding-top: 112px;
   }
   .moon__print {
-    max-width: 340px;
+    max-width: min(248px, 64vw);
+    padding: 10px 10px 12px;
+  }
+  .moon__print figcaption span {
+    font-size: 17px;
   }
   .moon__disc {
-    width: 110vw;
-    right: -40vw;
-    top: 30%;
+    width: 96vw;
+    right: -34vw;
+    top: 34%;
     opacity: 0.6;
   }
   .moon__quote {
-    font-size: clamp(28px, 8vw, 40px);
+    font-size: clamp(24px, 7vw, 32px);
   }
 }
 

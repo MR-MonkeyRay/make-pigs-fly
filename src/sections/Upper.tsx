@@ -222,7 +222,7 @@ export function Moon() {
   }, [stamped]);
 
   return (
-    <Section id="moon" vars=".moon__disc" h={1.7} hm={1.9} className="dark" label={t.layers[11]}>
+    <Section id="moon" vars=".moon__disc" h={1.7} hm={1} className="dark" label={t.layers[11]}>
       <img className="moon__disc" src={img('moon.webp')} alt="" loading="lazy" decoding="async" width={820} height={820} />
       <div className="sec__inner moon__inner">
         <p className="kicker">{m.kicker}</p>
