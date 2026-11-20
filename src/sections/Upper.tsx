@@ -9,7 +9,7 @@ import { sound } from '../engine/sound';
 import { DelegateArt, Gavel } from '../art/Delegates';
 import { Hoofprint, MissionPatch } from '../art/Aloft';
 import { Constellation } from '../art/Constellation';
-import { holdPlayback, provideStops, refreshStops } from '../engine/pager';
+import { freeBand, holdPlayback, provideStops, refreshStops } from '../engine/pager';
 import { Section, Typewriter, useSectionFrame, useSectionStep } from './Section';
 import './upper.css';
 
@@ -257,6 +257,58 @@ export function Space({ personal }: { personal: Personal }) {
   const [said, setSaid] = useState(personal.said);
   const [status, setStatus] = useState<'' | 'copied' | 'fail'>('');
   const [failUrl, setFailUrl] = useState('');
+  const constel = useRef<HTMLDivElement>(null);
+  const [drawn, setDrawn] = useState(false);
+
+  // The constellation draws itself once most of it (name included) is on
+  // screen, and resets when it has left, so a return visit draws it again.
+  useEffect(() => {
+    const el = constel.current;
+    if (!el || typeof IntersectionObserver === 'undefined') return setDrawn(true);
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.intersectionRatio >= 0.7) setDrawn(true);
+        else if (!e.isIntersecting) setDrawn(false);
+      },
+      { threshold: [0, 0.7] },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  // autoplay waits for the drawing (and the name) before gliding on to the finale
+  useEffect(() => {
+    if (!drawn) return;
+    const release = holdPlayback('space');
+    const tm = window.setTimeout(release, 3200); // name in at ~1.5s, then a beat to read it
+    return () => {
+      window.clearTimeout(tm);
+      release();
+    };
+  }, [drawn]);
+
+  // First stop: the whole constellation and its name framed in the free band
+  // (a fixed fraction left PORCUS VOLANS under the bottom edge); then the finale.
+  useEffect(
+    () =>
+      provideStops('space', ({ vh, list }) => {
+        const el = constel.current;
+        const sec = document.getElementById('space');
+        if (!el || !sec) return null;
+        const s = sec.getBoundingClientRect();
+        const c = el.getBoundingClientRect();
+        if (s.height <= vh + 2 || c.height < 1) return null;
+        // phones stack the small print right above the constellation: frame both
+        const low = sec.querySelector('.space__footer--low')?.getBoundingClientRect();
+        const r = low && low.height > 0 ? { top: Math.min(low.top, c.top), height: c.bottom - Math.min(low.top, c.top) } : c;
+        const band = freeBand(vh);
+        const free = band.bottom - band.top;
+        // scroll offset from the section top that puts the block mid-band (or its top at the band top)
+        const at = r.top - s.top - band.top - (r.height <= free ? (free - r.height) / 2 : 8);
+        const pp = Math.min(1, Math.max(0, (s.height - vh - at) / (s.height - vh)));
+        return [pp, ...list.slice(1)];
+      }),
+    [t],
+  );
 
   const t1 = personal.to ? fmt(s.titleTo1, { to: personal.to }) : s.title1;
   const t2 = personal.to ? (personal.said ? fmt(s.titleTo2, { said: personal.said }) : s.titleTo2Plain) : s.title2;
@@ -359,7 +411,7 @@ export function Space({ personal }: { personal: Personal }) {
       <div className="space__bottom">
         {/* on a phone the top of the screen belongs to the pig and its bubble, so the small print lives down here */}
         {footer('space__footer space__footer--low')}
-        <div className="space__constel">
+        <div className={`space__constel${drawn ? ' is-drawn' : ''}`} ref={constel}>
           <Constellation labels={s.stars} />
           <p className="space__cname">
             <strong>{s.constellation}</strong>

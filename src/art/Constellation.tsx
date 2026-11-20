@@ -1,7 +1,8 @@
 /*
  * PORCUS VOLANS, the newly registered constellation in the finale.
- * CSS (upper.css) draws each <line> in with --q via pathLength=1 + dasharray,
- * staggered by --i / --n, twinkles the <circle> stars, and fades the <text> labels in.
+ * CSS (upper.css) draws each <line> in via pathLength=1 + dasharray once the
+ * wrapper gets .is-drawn (staggered by --i / --n), twinkles the <circle> stars,
+ * and fades the <text> labels in after the lines.
  *
  * IMPORTANT: Ghost atlas art uses only <path> and <ellipse> so it never triggers
  * `.constel line` or `.constel circle` selectors in upper.css.
@@ -161,7 +162,7 @@ export function Constellation({ labels }: { labels: string[] }) {
         ))}
       </g>
 
-      {/* Constellation connect-the-dots lines (animated by upper.css via --i / --n) */}
+      {/* Constellation connect-the-dots lines (drawn in by upper.css, staggered via --i / --n) */}
       {LINES.map(([a, b], i) => (
         <line
           key={i}
