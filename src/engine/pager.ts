@@ -401,7 +401,8 @@ function playStep() {
       return;
     }
     const dist = Math.abs(stops[i + 1].y - window.scrollY);
-    tweenTo(i + 1, { auto: true, dur: Math.min(4200, Math.max(800, dist / spec.speed)) });
+    const speed = frame.narrow && spec.speedM ? spec.speedM : spec.speed;
+    tweenTo(i + 1, { auto: true, dur: Math.min(4200, Math.max(800, dist / speed)) });
   };
   playTimer = window.setTimeout(tick, 120);
 }

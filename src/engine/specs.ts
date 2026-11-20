@@ -51,10 +51,11 @@ export interface SectionSpec {
    * Autoplay. When the reader climbs into a section that has a scene to watch,
    * the page plays it by itself: it lingers `hold` ms on each stop (longer if a
    * typewriter or flap board there is still running), then glides on to the
-   * next stop at `speed` px/ms. When the last stop has played, the reader is
-   * cued to keep climbing. Sections without `play` just wait for the reader.
+   * next stop at `speed` px/ms (`holdM`, `speedM`: the same on phones). When
+   * the last stop has played, the reader is cued to keep climbing. Sections
+   * without `play` just wait for the reader.
    */
-  play?: { hold: number; speed: number; holdM?: number };
+  play?: { hold: number; speed: number; holdM?: number; speedM?: number };
 }
 
 export const SECTIONS: SectionSpec[] = [
@@ -67,7 +68,7 @@ export const SECTIONS: SectionSpec[] = [
   // he is live on PNN here: a second pig beside the broadcast reads as a mistake
   { id: 'news', alt: [2500, 8000], pose: { x: 0.87, y: 0.2, s: 0.52, hide: true }, poseM: { x: 0.84, y: 0.15, s: 0.38, hide: true }, mood: 'smug', stops: [0.5] },
   { id: 'cruise', alt: [8000, 12500], pose: { x: 0.5, y: 0.5, s: 0.7, hide: true }, poseM: { x: 0.5, y: 0.5, s: 0.5, hide: true }, mood: 'calm', stops: [0.5], stopsM: [0.25, 0.8], play: { hold: 1200, speed: 0.3 }, anchorsM: '.cabin, .captain, .board' },
-  { id: 'summit', alt: [12500, 50000], pose: { x: 0.86, y: 0.2, s: 0.52 }, poseM: { x: 0.84, y: 0.15, s: 0.38 }, mood: 'smug', stops: [0, 0.26, 0.52, 0.78, 1], stopsM: [0, 0.2, 0.4, 0.6, 0.8, 1], play: { hold: 2200, speed: 0.35, holdM: 1500 } },
+  { id: 'summit', alt: [12500, 50000], pose: { x: 0.86, y: 0.2, s: 0.52 }, poseM: { x: 0.84, y: 0.15, s: 0.38 }, mood: 'smug', stops: [0, 0.26, 0.52, 0.78, 1], stopsM: [0, 0.2, 0.4, 0.6, 0.8, 1], play: { hold: 2200, speed: 0.35, holdM: 1050, speedM: 0.45 } },
   { id: 'karman', alt: [50000, 160000], pose: { x: 0.88, y: 0.66, s: 0.72 }, poseM: { x: 0.7, y: 0.6, s: 0.58 }, mood: 'thrilled', stops: [0, 1], play: { hold: 900, speed: 0.25 } },
   { id: 'iss', alt: [160000, 1_000_000], pose: { x: 0.88, y: 0.21, s: 0.62 }, poseM: { x: 0.8, y: 0.115, s: 0.4 }, mood: 'calm', stops: [0.5], stopsM: [0.2, 0.85], play: { hold: 1000, speed: 0.3 }, anchorsM: '.iss__photo, .radio' },
   { id: 'moon', alt: [1_000_000, 384_400_000], pose: { x: 0.8, y: 0.3, s: 0.66 }, poseM: { x: 0.78, y: 0.16, s: 0.42 }, mood: 'smug', stops: [0.5], play: { hold: 1000, speed: 0.3 } },
