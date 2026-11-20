@@ -29,26 +29,6 @@
   }
 }
 
-.aloft-coo {
-  animation: aloft-coo-bob 2.8s ease-in-out infinite;
-  transform-box: fill-box;
-  transform-origin: 50% 85%;
-}
-
-@keyframes aloft-coo-bob {
-  0%,
-  55%,
-  100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  68% {
-    transform: translateY(-1.5px) rotate(-4deg);
-  }
-  80% {
-    transform: translateY(0.5px) rotate(2deg);
-  }
-}
-
 .aloft-prop {
   animation: aloft-prop-spin 0.32s linear infinite;
   transform-box: fill-box;
@@ -69,7 +49,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .aloft-smoke,
-  .aloft-coo,
   .aloft-prop {
     animation: none;
   }

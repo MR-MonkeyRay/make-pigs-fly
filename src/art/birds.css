@@ -1,0 +1,262 @@
+/* The rooftop cast (Birds.tsx). Transforms here are in the strip's viewBox units. */
+
+.cast .bird__beak-open,
+.cast .bird__flight,
+.cast .bird__flash {
+  opacity: 0;
+}
+
+/* phones: the pig flies to their left, so the ones watching him turn round */
+@media (max-width: 759px), (max-aspect-ratio: 4/5) {
+  .cast .bird-face {
+    transform: scaleX(-1);
+  }
+}
+
+/* ── posting: a hop with the beak open; two identical animations so each post restarts it ── */
+.bird.is-post-a {
+  animation: bird-hop-a 0.62s ease-out;
+}
+.bird.is-post-b {
+  animation: bird-hop-b 0.62s ease-out;
+}
+.bird.is-post-a .bird__beak-open,
+.bird.is-post-b .bird__beak-open {
+  animation: bird-beak 0.9s steps(1, end);
+}
+.bird.is-post-a .bird__beak:has(+ .bird__beak-open),
+.bird.is-post-b .bird__beak:has(+ .bird__beak-open) {
+  animation: bird-beak-shut 0.9s steps(1, end);
+}
+
+@keyframes bird-hop-a {
+  0%,
+  100% {
+    transform: none;
+  }
+  18% {
+    transform: translateY(0) scale(1.06, 0.9);
+  }
+  42% {
+    transform: translateY(-7px) scale(0.96, 1.05);
+  }
+  70% {
+    transform: translateY(0) scale(1.04, 0.95);
+  }
+}
+@keyframes bird-hop-b {
+  0%,
+  100% {
+    transform: none;
+  }
+  18% {
+    transform: translateY(0) scale(1.06, 0.9);
+  }
+  42% {
+    transform: translateY(-7px) scale(0.96, 1.05);
+  }
+  70% {
+    transform: translateY(0) scale(1.04, 0.95);
+  }
+}
+@keyframes bird-beak {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes bird-beak-shut {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Gary posts in a panic: a double hop */
+.bird--gary.is-post-a,
+.bird--gary.is-post-b {
+  animation-duration: 0.5s;
+  animation-iteration-count: 2;
+}
+
+/* Steve does not hop. He leans in a little and chews. */
+.bird--steve.is-post-a,
+.bird--steve.is-post-b {
+  animation-name: bird-mumble;
+}
+.bird--steve.is-post-a .bird__fry,
+.bird--steve.is-post-b .bird__fry {
+  animation: bird-chew 0.3s ease-in-out 2;
+}
+@keyframes bird-mumble {
+  0%,
+  100% {
+    transform: none;
+  }
+  40% {
+    transform: rotate(4deg);
+  }
+}
+@keyframes bird-chew {
+  50% {
+    translate: 0 1px;
+  }
+}
+
+/* the Goose honks: neck up, crown wobbling */
+.bird--goose.is-post-a,
+.bird--goose.is-post-b {
+  animation-name: bird-none;
+}
+.bird--goose.is-post-a .bird__head,
+.bird--goose.is-post-b .bird__head {
+  animation: goose-honk 0.8s ease-out;
+}
+.bird--goose.is-post-a .bird__crown,
+.bird--goose.is-post-b .bird__crown {
+  animation: goose-crown 0.8s ease-in-out;
+}
+@keyframes bird-none {
+  to {
+    transform: none;
+  }
+}
+@keyframes goose-honk {
+  0%,
+  100% {
+    transform: none;
+  }
+  30%,
+  70% {
+    transform: translateY(-5px);
+  }
+}
+@keyframes goose-crown {
+  25% {
+    rotate: -8deg;
+  }
+  50% {
+    rotate: 6deg;
+  }
+  75% {
+    rotate: -3deg;
+  }
+}
+
+/* Linda's photo: the flash blooms for a blink */
+.bird--linda.is-flash .bird__flash {
+  animation: bird-flash 0.5s ease-out;
+}
+@keyframes bird-flash {
+  0% {
+    opacity: 1;
+    scale: 0.4;
+  }
+  40% {
+    opacity: 1;
+    scale: 1.15;
+  }
+  100% {
+    opacity: 0;
+    scale: 1;
+  }
+}
+
+/* the pig joins: Gary shudders, the Goose narrows her eyes under a tilted crown */
+.bird--gary.is-stirred {
+  animation: gary-shudder 0.12s linear 5;
+}
+@keyframes gary-shudder {
+  50% {
+    translate: 1px 0;
+  }
+}
+.bird--goose.is-stirred .bird__crown {
+  rotate: -10deg;
+  transition: rotate 0.3s;
+}
+
+/* ── Gary leaves the group ── */
+.bird-leave.is-gone {
+  animation: gary-leave 1.3s cubic-bezier(0.4, 0, 0.7, 1) forwards;
+}
+/* he turns to flee up and to the right, whichever way he was facing */
+.bird-leave.is-gone .bird-face {
+  transform: none;
+}
+.bird-leave.is-gone .bird__wing {
+  opacity: 0;
+}
+.bird-leave.is-gone .bird__flight {
+  opacity: 1;
+}
+.bird-leave.is-gone .bird__flap {
+  transform-box: fill-box;
+  transform-origin: 100% 100%;
+  animation: gary-flap 0.13s linear infinite alternate;
+}
+@keyframes gary-leave {
+  0% {
+    transform: none;
+    opacity: 1;
+  }
+  12% {
+    transform: scale(1.08, 0.82);
+  }
+  22% {
+    transform: translate(12px, -16px) rotate(-22deg);
+  }
+  60% {
+    transform: translate(110px, -95px) rotate(-12deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(290px, -210px) rotate(-4deg);
+    opacity: 0;
+  }
+}
+@keyframes gary-flap {
+  from {
+    transform: scaleY(1);
+  }
+  to {
+    transform: scaleY(-0.5);
+  }
+}
+
+.bird-feathers {
+  opacity: 0;
+  transition: opacity 0.4s 0.5s;
+}
+.bird-feathers.is-on {
+  opacity: 1;
+}
+
+.bird__z {
+  animation: bird-z 2.6s ease-in-out infinite;
+}
+@keyframes bird-z {
+  0%,
+  100% {
+    opacity: 0;
+    translate: 0 2px;
+  }
+  50% {
+    opacity: 1;
+    translate: 2px -3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bird-leave.is-gone {
+    animation: none;
+    opacity: 0;
+  }
+  .bird__z {
+    animation: none;
+  }
+}

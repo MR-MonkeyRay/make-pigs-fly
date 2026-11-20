@@ -6,6 +6,7 @@ import { frame } from '../engine/scroll';
 import { PigArt } from '../art/PigArt';
 import { Chicken, Fence, GrassEdge, Hills, MudField, RunwaySign, TreeWithPig } from '../art/Scenery';
 import { Rooftops } from '../art/Aloft';
+import { BirdCast } from '../art/Birds';
 import { PigMark } from '../art/PigMark';
 import { ChatAvatar, type Chatter } from '../art/ChatAvatars';
 import { Section, useSectionFrame, useSectionStep } from './Section';
@@ -389,7 +390,9 @@ export function Birds() {
   return (
     <Section id="birds" vars h={2.5} hm={2.6} label={t.layers[3]}>
       <div className="sticky birds__stage">
-        <Rooftops className="birds__roofs" />
+        <Rooftops className="birds__roofs">
+          <BirdCast shown={shown} messages={b.messages} />
+        </Rooftops>
         <div className="birds__col">
           <p className="kicker birds__kicker">{b.kicker}</p>
           <div className="phone">

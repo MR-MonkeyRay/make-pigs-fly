@@ -146,87 +146,8 @@ function Window({
   );
 }
 
-function RoofPigeon({
-  x,
-  y,
-  pose,
-  flip,
-}: {
-  x: number;
-  y: number;
-  pose: 'gawk' | 'sleep' | 'coo';
-  flip?: boolean;
-}) {
-  const sx = flip ? -1 : 1;
-  if (pose === 'sleep') {
-    return (
-      <g transform={`translate(${x} ${y}) scale(${sx} 1)`}>
-        {/* Tucked round loaf pigeon */}
-        <path
-          d="M -15,4 C -15,-8 -4,-13 8,-10 C 17,-8 20,2 14,7 C 6,10 -12,10 -15,4 Z"
-          fill="#9aa9c4"
-          stroke={O}
-          strokeWidth="2.5"
-          strokeLinejoin="round"
-        />
-        <path d="M -10,5 C -2,9 10,8 15,3 C 12,9 -6,10 -10,5 Z" fill="#73829e" />
-        <path d="M -4,-2 C 2,-5 10,-2 12,3" stroke="#6c7b96" strokeWidth="2" fill="none" strokeLinecap="round" />
-        {/* Head tucked into chest */}
-        <circle cx="10" cy="-8" r="6.8" fill="#a8b7d1" stroke={O} strokeWidth="2.4" />
-        <path d="M 7,-7 Q 10,-4 13,-7" stroke={O} strokeWidth="1.8" fill="none" strokeLinecap="round" />
-        <path d="M 16,-7 L 20,-5.5 L 16,-4 Z" fill="#f5a524" stroke={O} strokeWidth="1.4" strokeLinejoin="round" />
-      </g>
-    );
-  }
-  const gawk = pose === 'gawk';
-  return (
-    <g transform={`translate(${x} ${y}) scale(${sx} 1)`}>
-      <g className={pose === 'coo' ? 'aloft-coo' : undefined}>
-        {/* Feet */}
-        <path d="M -2,8 V 14 M 5,8 V 14 M -5,14 H 1 M 2,14 H 8" stroke="#f0981c" strokeWidth="2.4" strokeLinecap="round" />
-        {/* Tail + plump body */}
-        <path d="M -12,4 L -23,8 L -18,1 Z" fill="#6d7c99" stroke={O} strokeWidth="2.2" strokeLinejoin="round" />
-        <path
-          d="M -13,1 C -13,-10 2,-14 12,-7 C 18,-2 17,7 9,10 C -2,12 -13,9 -13,1 Z"
-          fill="#a4b3cc"
-          stroke={O}
-          strokeWidth="2.5"
-          strokeLinejoin="round"
-        />
-        {/* Wing bar */}
-        <path d="M -8,0 C -2,-5 6,-4 8,2 C 3,6 -6,6 -8,0 Z" fill="#7c8ca8" stroke={O} strokeWidth="1.8" />
-        {/* Iridescent neck */}
-        <path d="M 4,-8 Q 10,-5 14,-8 L 13,-3 Q 9,-1 4,-4 Z" fill="#2cb890" />
-        {/* Head — gawk tilts sharply up toward the flying pig; coo puffs proudly */}
-        <g transform={gawk ? 'translate(11 -13) rotate(-38)' : 'translate(11 -11)'}>
-          <circle cx="0" cy="0" r="7.5" fill="#b0bed6" stroke={O} strokeWidth="2.4" />
-          {/* Beak */}
-          {gawk ? (
-            <>
-              <path d="M 6,-2 L 14,-5 L 7,1 Z" fill="#4f566b" stroke={O} strokeWidth="1.5" strokeLinejoin="round" />
-              <path d="M 6,1 L 13,4 L 6,4 Z" fill="#4f566b" stroke={O} strokeWidth="1.5" strokeLinejoin="round" />
-            </>
-          ) : (
-            <path d="M 6,-1 L 13,1 L 6,3 Z" fill="#f5a524" stroke={O} strokeWidth="1.6" strokeLinejoin="round" />
-          )}
-          <circle cx="5.8" cy="-1.2" r="1.6" fill="#fffaf0" />
-          {/* Eye */}
-          {gawk ? (
-            <>
-              <circle cx="1.6" cy="-1.5" r="3.4" fill="#ffffff" stroke={O} strokeWidth="1.6" />
-              <circle cx="2.5" cy="-2.2" r="1.4" fill={O} />
-              <circle cx="2" cy="-2.7" r="0.6" fill="#ffffff" />
-            </>
-          ) : (
-            <path d="M -1,-1.5 Q 2,-4.5 5,-1.5" stroke={O} strokeWidth="2" fill="none" strokeLinecap="round" />
-          )}
-        </g>
-      </g>
-    </g>
-  );
-}
-
-export function Rooftops({ className }: { className?: string }) {
+/** The rooftop skyline of the birds floor; `children` (the bird cast) is drawn over the houses. */
+export function Rooftops({ className, children }: { className?: string; children?: React.ReactNode }) {
   return (
     <svg className={className} viewBox="0 0 1200 220" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
       {/* ── Far atmospheric skyline (soft blue-lavender depth row, no heavy outlines) ── */}
@@ -322,8 +243,6 @@ export function Rooftops({ className }: { className?: string }) {
         <Window x={452} y={96} arched lit={false} />
         <Window x={406} y={150} lit flowers />
         <Window x={452} y={150} lit />
-        {/* Pigeon #1: gawking straight UP at the flying pig! */}
-        <RoofPigeon x={422} y={36} pose="gawk" />
       </g>
 
       {/* ── Festive string of riso bunting between building 4 & building 6 (center of phone!) ── */}
@@ -366,7 +285,7 @@ export function Rooftops({ className }: { className?: string }) {
         <Window x={588} y={182} w={24} h={24} lit />
       </g>
 
-      {/* ── 6. Tall emerald-teal mansard with satellite dish & cooing pigeon (x=642..766) ── */}
+      {/* ── 6. Tall emerald-teal mansard with satellite dish (x=642..766) ── */}
       <g>
         {/* Little satellite dish angled skyward */}
         <g transform="translate(736 38) rotate(-28)">
@@ -384,11 +303,9 @@ export function Rooftops({ className }: { className?: string }) {
         <Window x={714} y={96} lit flowers />
         <Window x={666} y={150} lit={false} />
         <Window x={714} y={150} lit />
-        {/* Pigeon #2: mid-coo, puffed chest, happy eyes */}
-        <RoofPigeon x={688} y={28} pose="coo" />
       </g>
 
-      {/* ── 7. Riso-blue tiled cottage with sleeping pigeon (x=758..902) ── */}
+      {/* ── 7. Riso-blue tiled cottage (x=758..902) ── */}
       <g>
         <rect x="764" y="118" width="132" height="106" fill="#f9e8c5" stroke={O} strokeWidth="3.2" />
         <path d="M 756,122 L 830,78 L 904,122 Z" fill="#3570bd" stroke={O} strokeWidth="3.4" strokeLinejoin="round" />
@@ -397,8 +314,6 @@ export function Rooftops({ className }: { className?: string }) {
         <path d="M 852,98 L 872,110 L 858,116 L 838,104 Z" fill="#a8d8f5" stroke={O} strokeWidth="2.2" strokeLinejoin="round" />
         <Window x={786} y={140} lit flowers />
         <Window x={846} y={140} lit curtains />
-        {/* Pigeon #3: fast asleep loaf */}
-        <RoofPigeon x={828} y={71} pose="sleep" />
       </g>
 
       {/* ── 8. Ochre-amber tall townhouse (x=894..1038) ── */}
@@ -416,7 +331,7 @@ export function Rooftops({ className }: { className?: string }) {
         <Window x={976} y={162} lit flowers />
       </g>
 
-      {/* ── 9. Right berry-plum corner house with gawking pigeon (x=1030..1208) ── */}
+      {/* ── 9. Right berry-plum corner house (x=1030..1208) ── */}
       <g>
         <rect x="1036" y="106" width="166" height="118" fill="#e5f0e3" stroke={O} strokeWidth="3.2" />
         <path d="M 1028,110 L 1118,62 L 1208,110 Z" fill="#cc4b72" stroke={O} strokeWidth="3.4" strokeLinejoin="round" />
@@ -427,9 +342,8 @@ export function Rooftops({ className }: { className?: string }) {
         <Window x={1156} y={128} lit />
         <Window x={1082} y={178} lit={false} />
         <Window x={1134} y={178} lit />
-        {/* Pigeon #4: craning up left toward the pig! */}
-        <RoofPigeon x={1118} y={48} pose="gawk" flip />
       </g>
+      {children}
     </svg>
   );
 }
