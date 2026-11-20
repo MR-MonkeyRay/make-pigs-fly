@@ -61,15 +61,21 @@ function GaryArt({ uid, extra }: Uid & { extra?: boolean }) {
 
       {/* flight wings: only shown while he leaves */}
       <g className="bird__flight">
-        <path
-          className="bird__flap"
-          d="M -8,-20 C -16,-34 -22,-44 -16,-50 C -10,-44 -4,-34 2,-24 Z"
-          fill="#9fb0cd"
-          stroke={O}
-          strokeWidth="2.2"
-          strokeLinejoin="round"
-        />
-        <path className="bird__flap" d="M -12,-36 L -6,-30 M -16,-43 L -9,-36" stroke="#252c42" strokeWidth="1.8" strokeLinecap="round" />
+        {[0, 1].map((k) => (
+          // the flap is CSS on the inner group, which would replace a transform attribute on the same element
+          <g key={k} transform={k ? 'translate(9 1) scale(0.86)' : undefined}>
+            <g className="bird__flap">
+            <path
+              d="M 0,-22 C -10,-30 -22,-38 -30,-50 C -24,-50 -20,-48 -17,-46 C -18,-50 -16,-53 -12,-54 C -10,-50 -8,-48 -5,-47 C -5,-51 -2,-54 2,-54 C 3,-44 6,-32 6,-24 Z"
+              fill={k ? '#8e9fbe' : '#a7b8d4'}
+              stroke={O}
+              strokeWidth="2.2"
+              strokeLinejoin="round"
+            />
+            <path d="M -14,-36 C -10,-34 -6,-31 -3,-27 M -6,-41 C -3,-37 0,-33 1,-29" stroke="#252c42" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+            </g>
+          </g>
+        ))}
       </g>
 
       {/* plump pear body */}
@@ -110,14 +116,14 @@ function GaryArt({ uid, extra }: Uid & { extra?: boolean }) {
         {/* crown tuft, ruffled by the shock */}
         {!extra && (
           <path
-            d="M 5.6,-41.6 L 4.4,-47.4 L 7.8,-44.2 L 9.2,-49.6 L 10.8,-44 L 14,-46.8 L 13.2,-41.2 Z"
+            d="M 6.4,-41.8 C 3.6,-45.4 4.4,-49.6 7.8,-50.2 C 6.6,-47.6 7.6,-45 9.6,-43 Z M 10.4,-42.6 C 10.2,-46.6 12.6,-49.4 15.6,-48.2 C 13.4,-46.8 13,-44.6 13.6,-42 Z"
             fill="#7e90b2"
             stroke={O}
             strokeWidth="1.7"
             strokeLinejoin="round"
           />
         )}
-        <circle cx="10" cy="-35" r="9" fill={`url(#gh-${uid})`} stroke={O} strokeWidth="2.8" />
+        <circle cx="10" cy="-35" r="9.8" fill={`url(#gh-${uid})`} stroke={O} strokeWidth="2.8" />
         <ellipse cx="6.4" cy="-40" rx="2.8" ry="1.3" fill="#ffffff" opacity="0.55" transform="rotate(-28 6.4 -40)" />
         <ellipse cx="13.4" cy="-30.4" rx="2.3" ry="1.1" fill="#ff8fb8" opacity="0.55" />
 
@@ -174,7 +180,7 @@ function SteveArt({ uid }: Uid) {
         </linearGradient>
       </defs>
 
-      <Feet d="M -4,-4 V -0.5 M -7.5,0 H -0.5 M 4,-4 V -0.5 M 0.5,0 H 7.5" color="#f4a2a0" />
+      <Feet d="M -4,-4 V -0.5 M -7.5,0 H -0.5 M 4,-4 V -0.5 M 0.5,0 H 7.5" color="#f2b94b" />
 
       {/* barrel body */}
       <path
@@ -201,6 +207,8 @@ function SteveArt({ uid }: Uid) {
 
       <g className="bird__head">
         <circle cx="8" cy="-37" r="10.4" fill={`url(#sb-${uid})`} stroke={O} strokeWidth="2.8" />
+        {/* one white throat into the chest, so head and body are one bird, not two balls */}
+        <path d="M 1.6,-29.6 C 4,-26.4 11,-26.2 14.4,-29.8 L 15.4,-24 C 11,-21.6 4,-21.8 0.6,-24.6 Z" fill="#fbfcfe" />
         {/* winter streaks */}
         <path d="M 2.6,-41.4 l 2.2,1 M 1.8,-37.6 l 2.2,1 M 5,-44.6 l 2.2,0.6" stroke="#b5c1d4" strokeWidth="1.1" strokeLinecap="round" />
         <ellipse cx="4.6" cy="-42.4" rx="2.6" ry="1.2" fill="#ffffff" opacity="0.9" transform="rotate(-30 4.6 -42.4)" />
@@ -223,10 +231,13 @@ function SteveArt({ uid }: Uid) {
           <circle cx="23.6" cy="-33.6" r="1.25" fill="#f1384b" />
         </g>
         {/* the fry */}
-        <g className="bird__fry" transform="translate(25.6 -34.6) rotate(-42)">
-          <rect x="0" y="-1.7" width="14" height="3.4" rx="0.7" fill="#ffe97a" stroke={O} strokeWidth="1.4" />
-          <rect x="11.4" y="-1.7" width="2.6" height="3.4" rx="0.6" fill="#f1384b" stroke={O} strokeWidth="1.4" />
-          <path d="M 2,-0.4 H 9.4" stroke="#d98018" strokeWidth="0.9" opacity="0.7" />
+        {/* the fry, clamped in the bill and drooping (ketchup dripping off the end) */}
+        <g transform="translate(22.4 -33.6) rotate(22)">
+          <g className="bird__fry">
+            <rect x="-3" y="-2.1" width="16" height="4.2" rx="1" fill="#ffe97a" stroke={O} strokeWidth="1.4" />
+            <path d="M -1,-0.6 H 9.6" stroke="#e0a030" strokeWidth="0.9" opacity="0.7" />
+            <path d="M 10.4,-2.1 H 12 C 13.4,-2.1 13.6,2.1 12,2.1 L 11.4,2.1 C 11.6,4.4 10.6,5.6 9.8,4.4 C 9.4,3.6 9.8,2.8 9.6,2.1 Z" fill="#f1384b" stroke={O} strokeWidth="1.2" strokeLinejoin="round" />
+          </g>
         </g>
       </g>
     </g>
@@ -294,9 +305,10 @@ function LindaArt({ uid }: Uid) {
         <circle cx="9" cy="-35.6" r="8.6" fill={`url(#lb-${uid})`} stroke={O} strokeWidth="2.8" />
         <path d="M 3.4,-40 C 6,-43.6 11,-44 14,-41.6" stroke="#b8cbff" strokeWidth="1.5" strokeLinecap="round" fill="none" opacity="0.75" />
         {/* flat, unimpressed lid */}
-        <circle cx="12.6" cy="-36.8" r="2.9" fill="#fffaf0" stroke={O} strokeWidth="1.4" />
-        <circle cx="13.4" cy="-36.4" r="1.35" fill={O} />
-        <path d="M 9.6,-37.2 A 3,3 0 0 1 15.6,-37.2 Z" fill="#3c4366" stroke={O} strokeWidth="1.3" strokeLinejoin="round" />
+        <circle cx="12.6" cy="-36.6" r="3.5" fill="#fffaf0" stroke={O} strokeWidth="1.4" />
+        <circle cx="13.5" cy="-36.1" r="1.6" fill={O} />
+        <path d="M 9,-37.1 A 3.6,3.6 0 0 1 16.2,-37.1 Z" fill="#3c4366" stroke={O} strokeWidth="1.3" strokeLinejoin="round" />
+        <path d="M 9.6,-41 C 11.6,-42.2 14,-42 15.8,-40.6" stroke="#c8d6ff" strokeWidth="1.2" strokeLinecap="round" fill="none" />
         <g className="bird__beak">
           <path
             d="M 15.4,-37.8 L 28.6,-35.2 C 29.6,-35 29.5,-33.6 28.5,-33.5 L 15.6,-31.6 Z"
@@ -310,8 +322,9 @@ function LindaArt({ uid }: Uid) {
       </g>
 
       {/* the flash, shown for a blink when her photo lands */}
-      <g transform="translate(15 -20.4)">
+      <g transform="translate(10.6 -16.8)">
         <g className="bird__flash">
+          <circle r="8" fill="none" stroke="#ffffff" strokeWidth="1.4" opacity="0.8" />
           <path d="M 0,-11 L 2,-2 L 11,0 L 2,2 L 0,11 L -2,2 L -11,0 L -2,-2 Z" fill="#fffaf0" stroke="#ffe800" strokeWidth="1.3" strokeLinejoin="round" />
           <circle r="3.2" fill="#ffffff" />
         </g>
@@ -357,9 +370,9 @@ function GooseArt({ uid }: Uid) {
         <ellipse cx="11" cy="-55.6" rx="8" ry="7" fill="#ffffff" stroke={O} strokeWidth="2.8" />
         <ellipse cx="7.6" cy="-58.8" rx="2.6" ry="1.2" fill="#ffffff" opacity="0.9" transform="rotate(-20 7.6 -58.8)" />
         {/* side-eye down her bill */}
-        <circle cx="13" cy="-57" r="2.5" fill="#fffaf0" stroke={O} strokeWidth="1.3" />
-        <circle cx="14" cy="-56.7" r="1.2" fill={O} />
-        <path d="M 10,-59.2 L 16.2,-57.6" stroke={O} strokeWidth="1.8" strokeLinecap="round" />
+        <circle cx="12.8" cy="-56.6" r="3.2" fill="#fffaf0" stroke={O} strokeWidth="1.4" />
+        <circle cx="13.9" cy="-56.2" r="1.45" fill={O} />
+        <path d="M 9.2,-58.6 C 11,-60.4 14.4,-59.8 16.6,-58" stroke={O} strokeWidth="1.9" strokeLinecap="round" fill="none" />
         <g className="bird__beak">
           <path
             d="M 17.4,-58.4 L 28.6,-56.4 C 30.4,-55.8 30,-53.2 28,-53 L 17.6,-51.8 Z"
@@ -376,7 +389,7 @@ function GooseArt({ uid }: Uid) {
           <path d="M 18,-55.6 L 24.4,-54.6 L 18,-53.8 Z" fill="#c21f56" />
         </g>
         {/* the knob at the base of the bill */}
-        <circle cx="17.6" cy="-58.6" r="2.7" fill="#ff8f22" stroke={O} strokeWidth="1.4" />
+        <circle cx="18.2" cy="-58.2" r="1.7" fill="#ff8f22" stroke={O} strokeWidth="1.2" />
         {/* a small, tilted, entirely self-awarded crown */}
         <g transform="translate(8.6 -62) rotate(-14)">
           {/* CSS tilts this inner group about the crown's own base */}
@@ -474,7 +487,7 @@ export function BirdCast({ shown, messages }: { shown: number; messages: BirdMes
       </g>
 
       {/* Steve, back to back with Gary on the coral townhouse, looking at nothing but his fry */}
-      <g transform="translate(546 93.2) scale(-1 1)">
+      <g transform="translate(553 89.5) scale(-1 1)">
         <g className={`bird bird--steve${act('steve')}`}>
           <SteveArt uid={`${uid}s`} />
         </g>
@@ -490,7 +503,7 @@ export function BirdCast({ shown, messages }: { shown: number; messages: BirdMes
       </g>
 
       {/* Linda, on the satellite dish's rim */}
-      <g transform="translate(744 29.6)">
+      <g transform="translate(740 33.4)">
         <g className="bird-face">
           <g className={`bird bird--linda${act('linda')}${flash}`}>
             <LindaArt uid={`${uid}n`} />

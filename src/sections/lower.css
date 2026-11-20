@@ -826,12 +826,14 @@
 }
 
 .phone__mark {
+  display: inline-block;
   width: 15px;
   height: 15px;
   vertical-align: -2px;
 }
 
 .msg__pig {
+  display: inline-block;
   width: 1.3em;
   height: 1.3em;
   margin-left: 2px;
