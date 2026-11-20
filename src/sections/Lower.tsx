@@ -193,14 +193,19 @@ export function Doubters() {
   });
 
   return (
-    <Section id="doubters" h={1.9} hm={1.7} label={t.layers[1]}>
+    // Two bands, each exactly one screen: the first stop shows the lower one
+    // (kicker, Kevin, Management, the teenager), the second the upper one (the
+    // PM, then Newton, who hands over to the physics floor). Each band leaves
+    // a hole in its middle where the pig rests, so no quote sits under him or
+    // under the top bar and the bottom buttons when the page stops.
+    <Section id="doubters" h={2} hm={2} label={t.layers[1]}>
       <div className="sec__inner doubters__inner" ref={secRef}>
         <p className="kicker doubters__kicker">{t.doubters.kicker}</p>
         <ol className="doubters__list">
           {t.doubters.quotes.map((q, i) => (
             <li
               key={`${q.q}-${i}`}
-              className={`doubt doubt--${i % 2 ? 'r' : 'l'}`}
+              className={`doubt doubt--${i % 2 ? 'r' : 'l'} doubt--at${i}`}
               ref={(el) => {
                 if (el) items.current[i] = el;
               }}

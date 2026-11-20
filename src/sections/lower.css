@@ -408,26 +408,68 @@
 
 /* ═════════════════ DOUBTERS ═════════════════ */
 .doubters__inner {
-  display: flex;
-  flex-direction: column;
+  /* both bands are laid out on this box: 0-50% is the upper band, 50-100% the lower */
+  --pad-t: 104px;
+  --pad-b: 96px;
+  --hole: 190px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.doubters__kicker {
+  position: absolute;
+  top: calc(50% + var(--pad-t));
+  margin: 0;
 }
 
 .doubters__list {
   list-style: none;
   margin: 0;
   padding: 0;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
+  height: 100%;
+  display: grid;
+  /* per band: top chrome, above the pig, the pig, below the pig, bottom chrome.
+     The rows around the hole are sized so the hole sits at each band's centre,
+     where the pig rests (pose y 0.5). */
+  grid-template-rows:
+    var(--pad-t) calc(25% - var(--hole) / 2 - var(--pad-t)) var(--hole) calc(25% - var(--hole) / 2 - var(--pad-b)) var(--pad-b)
+    var(--pad-t) calc(25% - var(--hole) / 2 - var(--pad-t)) var(--hole) calc((25% - var(--hole) / 2 - var(--pad-b)) / 2) calc((25% - var(--hole) / 2 - var(--pad-b)) / 2) var(--pad-b);
+}
+
+.doubt {
+  align-self: center;
+  min-height: 0;
+}
+
+/* lower band (seen first): Kevin above the pig, under the kicker; Management and the teenager below */
+.doubt--at0 {
+  grid-row: 7;
+  padding-top: 1.6em;
+}
+.doubt--at1 {
+  grid-row: 9;
+}
+.doubt--at2 {
+  grid-row: 10;
+}
+/* upper band: the PM above the pig, Newton below, right before the physics floor */
+.doubt--at3 {
+  grid-row: 2;
+}
+.doubt--at4 {
+  grid-row: 4;
 }
 
 .doubt {
   max-width: min(980px, 88%);
 }
 
+.doubt--l {
+  justify-self: start;
+}
+
 .doubt--r {
-  align-self: flex-end;
+  justify-self: end;
   text-align: right;
 }
 
@@ -435,7 +477,8 @@
   margin: 0;
   font-style: italic;
   font-weight: 700;
-  font-size: clamp(30px, 4.4vw, 68px);
+  /* one line per quote on a laptop, so two fit in the space below the pig */
+  font-size: clamp(28px, 3.6vw, 56px);
   color: var(--ink);
 }
 
@@ -451,16 +494,21 @@
 :lang(ja) .doubt__q,
 :lang(ko) .doubt__q {
   font-style: normal;
-  font-size: clamp(26px, 3.9vw, 60px);
+  font-size: clamp(26px, 3.4vw, 52px);
 }
 
-/* phones: smaller quotes with real gaps between them, so the pig has somewhere to hover when the page rests */
+/* phones: smaller quotes; the top chrome is taller (altimeter chip under the bar) */
 @media (max-width: 759px) {
+  .doubters__inner {
+    --pad-t: 124px;
+    --pad-b: 84px;
+    --hole: 150px;
+  }
   .doubt__q,
   :lang(zh) .doubt__q,
   :lang(ja) .doubt__q,
   :lang(ko) .doubt__q {
-    font-size: clamp(22px, 6.2vw, 30px);
+    font-size: clamp(20px, 5.8vw, 26px);
   }
 }
 
@@ -471,6 +519,13 @@
   font-style: normal;
   font-size: 13px;
   opacity: 0.75;
+}
+
+@media (max-width: 759px) {
+  .doubt__by {
+    margin-top: 4px;
+    font-size: 12px;
+  }
 }
 
 .scatter__word {
