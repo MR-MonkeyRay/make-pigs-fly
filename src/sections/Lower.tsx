@@ -314,7 +314,8 @@ export function Science() {
 
         <div
           className="science__wings"
-          style={narrow ? { left: 20, top: cy - 230, maxWidth: cx - 36 } : { left: cx - 260, top: cy - 190 }}
+          // phones: narrow enough to keep clear of the LIFT arrowhead at cx
+          style={narrow ? { left: 20, top: cy - 230, maxWidth: cx - 60 } : { left: cx - 260, top: cy - 190 }}
         >
           <strong>{s.wingsNew}</strong>
           <s>{s.wingsOld}</s>

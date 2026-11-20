@@ -351,13 +351,28 @@
   .exhibits {
     grid-template-columns: 1fr;
     max-width: 520px;
+    /* room between cards so a stop can frame one without slicing the next under the top bar */
+    gap: 44px;
   }
   .exhibit__case {
     height: 150px;
   }
   .precedents__inner {
-    justify-content: flex-start;
     padding-top: 120px;
+    /* A phone floor is read bottom-up while climbing: open on the sign and
+       1909, end on Today right under the pig. DOM order stays chronological.
+       Packed to the top, so no empty sky is left above Today. */
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+  }
+  .exhibit--0 {
+    order: 3;
+  }
+  .exhibit--1 {
+    order: 2;
+  }
+  .exhibit--2 {
+    order: 1;
   }
 }
 
