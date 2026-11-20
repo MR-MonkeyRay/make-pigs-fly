@@ -793,11 +793,14 @@
 }
 
 .tw-caret {
+  /* out of flow, so it never takes room on the line or offers a break mid-word:
+     the text wraps while typing exactly as it will once typed */
+  position: absolute;
   display: inline-block;
   width: 0.5em;
   height: 1em;
   margin-left: 2px;
-  vertical-align: -0.12em;
+  margin-top: 0.22em;
   background: currentColor;
   animation: live-blink 0.8s steps(2) infinite;
 }
