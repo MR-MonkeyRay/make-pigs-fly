@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useI18n } from '../i18n';
-import { useStore } from '../engine/store';
+import { store, useStore } from '../engine/store';
 import { fmt, type Personal } from '../engine/params';
 import { frame } from '../engine/scroll';
 import { PigArt } from '../art/PigArt';
@@ -98,11 +98,13 @@ function ScatterLine({ text, seed }: { text: string; seed: number }) {
       const letters = Array.from(tok).map((ch) => {
         const pos = idx++ / Math.max(1, total - 1);
         const w = Math.max(0.15, 1 - Math.abs(pos - 0.5) * 1.5);
+        // Offsets are in em and stay well under half a glyph sideways, so
+        // neighbouring letters can bob and tilt but never swap places.
         return {
           ch,
-          dx: (r() * 2 - 1) * 160 * w,
-          dy: (r() * 2 - 1) * 140 * w - 40 * w,
-          dr: (r() * 2 - 1) * 70 * w,
+          dx: (r() * 2 - 1) * 0.1 * w,
+          dy: ((r() * 2 - 1) * 0.5 - 0.15) * w,
+          dr: (r() * 2 - 1) * 16 * w,
         };
       });
       return { tok, letters, space: /^\s+$/.test(tok) };
@@ -122,7 +124,7 @@ function ScatterLine({ text, seed }: { text: string; seed: number }) {
               <span
                 key={j}
                 className="scatter__ch"
-                style={{ '--dx': `${l.dx.toFixed(0)}px`, '--dy': `${l.dy.toFixed(0)}px`, '--dr': `${l.dr.toFixed(0)}deg` } as React.CSSProperties}
+                style={{ '--dx': `${l.dx.toFixed(3)}em`, '--dy': `${l.dy.toFixed(3)}em`, '--dr': `${l.dr.toFixed(1)}deg` } as React.CSSProperties}
               >
                 {l.ch}
               </span>
@@ -162,17 +164,31 @@ export function Doubters() {
     };
   }, [t]);
 
+  // How hard the pig is ploughing through the quotes right now. Letters only get
+  // knocked about while he is actually moving; once the page settles on a floor
+  // this decays to 0 and every quote snaps back into a readable line.
+  const energy = useRef(0);
+  const lastHit = useRef<string[]>([]);
+
   useSectionFrame('doubters', (q) => {
     const { h, c } = geo.current;
     const vh = frame.vh;
     const secTop = q * (h + vh) - h;
     const pigY = vh * 0.5;
+    const want = store.get().reduced ? 0 : Math.min(1, Math.abs(frame.climb) / 0.9);
+    const rate = want > energy.current ? 14 : 5; // per second: kick in fast, settle gently
+    energy.current += (want - energy.current) * Math.min(1, frame.dt * rate);
+    if (energy.current < 0.002) energy.current = 0;
     items.current.forEach((el, i) => {
       const cy = secTop + (c[i] ?? 0);
       const d = Math.abs(cy - pigY) / (vh * 0.3);
       const hit = Math.max(0, 1 - d);
       const eased = hit * hit * (3 - 2 * hit);
-      el.style.setProperty('--hit', eased.toFixed(3));
+      const v = (eased * energy.current).toFixed(3);
+      if (lastHit.current[i] !== v) {
+        lastHit.current[i] = v;
+        el.style.setProperty('--hit', v);
+      }
     });
   });
 
