@@ -48,16 +48,18 @@ html.is-falling .pig-actor__hit {
   pointer-events: none;
   max-width: min(240px, 70vw);
   will-change: transform;
+  /* one pink plate under the bubble and its tail, like a single riso stamp */
+  filter: drop-shadow(4px 4px 0 var(--pink));
 }
 
 .pig-bubble span {
+  position: relative;
   display: inline-block;
   padding: 10px 14px;
   background: #fffef8;
   color: var(--ink);
   border: 2.5px solid var(--ink);
   border-radius: 18px 18px 18px 4px;
-  box-shadow: 4px 4px 0 var(--pink);
   font-family: var(--f-display);
   font-variation-settings: var(--display-vars);
   font-weight: 700;
@@ -74,4 +76,65 @@ html.is-falling .pig-actor__hit {
 .pig-bubble.is-on span {
   transform: translateY(-100%) scale(1);
   opacity: 1;
+}
+
+/* the tail: a paper square turned 45°, inked on its two outer edges, overlapping
+   the bubble's border so there is no seam; it points down at the pig */
+.pig-bubble span::after {
+  content: '';
+  position: absolute;
+  left: 16px;
+  bottom: -9px;
+  width: 12px;
+  height: 12px;
+  background: #fffef8;
+  border-right: 2.5px solid var(--ink);
+  border-bottom: 2.5px solid var(--ink);
+  border-bottom-right-radius: 2px;
+  transform: rotate(45deg);
+}
+
+/* no room above him (top bar, phone altimeter): the bubble sits to his left, tail
+   pointing right at him… */
+.pig-bubble[data-at='side'] span {
+  max-width: min(200px, 52vw);
+  border-radius: 18px;
+  transform: translate(-100%, -50%) scale(0.4);
+  transform-origin: 100% 50%;
+}
+
+.pig-bubble.is-on[data-at='side'] span {
+  transform: translate(-100%, -50%);
+}
+
+.pig-bubble[data-at='side'] span::after {
+  left: auto;
+  right: -9px;
+  top: 50%;
+  bottom: auto;
+  margin-top: -7px;
+  border: 0;
+  border-top: 2.5px solid var(--ink);
+  border-right: 2.5px solid var(--ink);
+  border-radius: 0 2px 0 0;
+}
+
+/* …and when even that does not fit, it hangs underneath, tail up */
+.pig-bubble[data-at='below'] span {
+  border-radius: 4px 18px 18px 18px;
+  transform: scale(0.4);
+  transform-origin: 0% 0%;
+}
+
+.pig-bubble.is-on[data-at='below'] span {
+  transform: none;
+}
+
+.pig-bubble[data-at='below'] span::after {
+  top: -9px;
+  bottom: auto;
+  border: 0;
+  border-left: 2.5px solid var(--ink);
+  border-top: 2.5px solid var(--ink);
+  border-radius: 2px 0 0 0;
 }

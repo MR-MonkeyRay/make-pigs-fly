@@ -72,6 +72,19 @@ export function PigActor() {
   const bubble = useStore((s) => s.bubble ?? s.say);
   const hopRef = useRef(0);
   const quipRef = useRef(0);
+  /** bubble size and the bottom edge of the fixed chrome, measured when a line is shown */
+  const bubbleBox = useRef({ h: 0, w: 0, chrome: 64 });
+
+  useEffect(() => {
+    if (!bubble) return;
+    const span = bubbleRef.current?.firstElementChild as HTMLElement | null;
+    let chrome = 64;
+    for (const sel of ['.topbar', window.innerWidth < 900 ? '.alt__read' : '']) {
+      const el = sel && document.querySelector(sel);
+      if (el) chrome = Math.max(chrome, el.getBoundingClientRect().bottom);
+    }
+    bubbleBox.current = { h: span?.offsetHeight ?? 0, w: span?.offsetWidth ?? 0, chrome };
+  }, [bubble]);
 
   useEffect(() => {
     const svg = svgRef.current!;
@@ -199,10 +212,28 @@ export function PigActor() {
 
       wrap.style.transform = `translate3d(${(px - size / 2).toFixed(1)}px, ${(py - size / 2 + bob).toFixed(1)}px, 0) scale(${(ps * breathe).toFixed(3)}) rotate(${rot.toFixed(2)}deg)`;
 
-      if (bubbleRef.current) {
-        const bx = clamp(px + size * ps * 0.18, 12, f.vw - 230);
-        const by = Math.max(70, py - size * ps * 0.62 + bob);
-        bubbleRef.current.style.transform = `translate3d(${bx.toFixed(1)}px, ${by.toFixed(1)}px, 0)`;
+      const bub = bubbleRef.current;
+      if (bub) {
+        // The bubble hangs above his head. When that would push it into the fixed
+        // chrome (top bar, the phone altimeter chip), it moves to his left, tail
+        // pointing at him; only if that does not fit either does it go underneath.
+        const { h, w, chrome } = bubbleBox.current;
+        const above = py - size * ps * 0.62 + bob;
+        const sideRight = px - size * ps * 0.38;
+        const sideW = Math.min(w, 200, f.vw * 0.52);
+        const at = above - h >= chrome + 8 ? 'above' : sideRight - sideW >= 12 ? 'side' : 'below';
+        let bx: number;
+        let by: number;
+        if (at === 'side') {
+          bx = sideRight;
+          by = Math.max(py - size * ps * 0.15 + bob, chrome + 52);
+        } else {
+          bx = clamp(px + size * ps * 0.18, 12, f.vw - 230);
+          by = at === 'above' ? above : py + size * ps * 0.36 + bob;
+        }
+        // a data attribute, not a class: React rewrites className whenever the line changes
+        if (bub.dataset.at !== at) bub.dataset.at = at;
+        bub.style.transform = `translate3d(${bx.toFixed(1)}px, ${by.toFixed(1)}px, 0)`;
       }
 
       if (reduced) {
