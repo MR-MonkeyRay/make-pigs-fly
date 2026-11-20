@@ -61,7 +61,7 @@ export const SECTIONS: SectionSpec[] = [
   { id: 'ground', alt: [0, 0], pose: { x: 0.7, y: 0.6, s: 1 }, poseM: { x: 0.45, y: 0.6, s: 0.72 }, mood: 'smug', stops: [0] },
   { id: 'doubters', alt: [0, 12], pose: { x: 0.5, y: 0.5, s: 0.85 }, poseM: { x: 0.5, y: 0.5, s: 0.66 }, mood: 'calm', stops: [0, 1], clear: '.doubt__q', play: { hold: 1000, speed: 0.2 } },
   { id: 'science', alt: [12, 40], pose: { x: 0.5, y: 0.53, s: 0.82 }, poseM: { x: 0.5, y: 0.5, s: 0.56 }, mood: 'calm', stops: [0.25, 0.62, 0.78, 0.95], play: { hold: 1500, speed: 0.3 } },
-  { id: 'birds', alt: [40, 180], pose: { x: 0.74, y: 0.46, s: 0.85 }, poseM: { x: 0.82, y: 0.17, s: 0.4 }, mood: 'smug', stops: [0.15, 0.4, 0.65, 0.92], play: { hold: 1500, speed: 0.25 } },
+  { id: 'birds', alt: [40, 180], pose: { x: 0.74, y: 0.46, s: 0.85 }, poseM: { x: 0.15, y: 0.885, s: 0.4 }, mood: 'smug', stops: [0.15, 0.4, 0.65, 0.92], play: { hold: 1500, speed: 0.25 } },
   { id: 'updraft', alt: [180, 900], pose: { x: 0.68, y: 0.5, s: 0.88 }, poseM: { x: 0.5, y: 0.58, s: 0.58 }, mood: 'thrilled', stops: [0.5], stopsM: [0.2, 0.85] },
   { id: 'precedents', alt: [900, 2500], pose: { x: 0.86, y: 0.22, s: 0.55 }, poseM: { x: 0.84, y: 0.15, s: 0.38 }, mood: 'calm', stops: [0.5], stopsM: [0, 0.5, 1], anchorsM: '.exhibit, .precedents__head' },
   { id: 'news', alt: [2500, 8000], pose: { x: 0.87, y: 0.2, s: 0.52 }, poseM: { x: 0.84, y: 0.15, s: 0.38 }, mood: 'smug', stops: [0.5] },
