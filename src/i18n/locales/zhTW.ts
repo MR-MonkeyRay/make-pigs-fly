@@ -26,6 +26,9 @@ export const zhTW: Messages = {
     prevFloor: '往下一層',
     gaze: '隱藏文字，只看風景',
     gazeOff: '把文字請回來',
+    playing: '自動播放中 · 滑動即可接手',
+    cueDesktop: '繼續往上滑（或按 ↑）',
+    cueTouch: '手指往下滑，繼續往上飛',
   },
   loader: {
     loading: '正在載入 makepigs.fly……',

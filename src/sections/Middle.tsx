@@ -230,7 +230,7 @@ export function Cruise({ personal }: { personal: Personal }) {
             <div>
               <strong>{c.captainLabel}</strong>
               <p>
-                <Typewriter text={c.captain} active={once} speed={30} />
+                <Typewriter text={c.captain} active={once} speed={30} hold="cruise" />
               </p>
             </div>
           </div>
@@ -245,7 +245,7 @@ export function Cruise({ personal }: { personal: Personal }) {
               <small>{c.board.sub}</small>
             </div>
           </header>
-          <SplitFlap rows={rows} cols={c.board.cols} active={v} />
+          <SplitFlap rows={rows} cols={c.board.cols} active={v} hold="cruise" />
         </div>
       </div>
     </Section>

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { subscribe } from '../engine/scroll';
-import { onStop } from '../engine/pager';
+import { onStop, stopAutoplay } from '../engine/pager';
 import { PHOTOS, currentPhoto, photoOpacity, photoUrl } from '../engine/photos';
 import { useI18n } from '../i18n';
 import './sky.css';
@@ -174,6 +174,8 @@ export function SkyCaption() {
   useEffect(() => {
     document.documentElement.classList.toggle('is-gazing', gaze);
     if (!gaze) return;
+    // looking at the photo: autoplay must not glide away from it
+    stopAutoplay();
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setGaze(false);
     };

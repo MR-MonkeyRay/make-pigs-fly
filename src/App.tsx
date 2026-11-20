@@ -10,6 +10,7 @@ import { PigActor } from './components/PigActor';
 import { Altimeter } from './components/Altimeter';
 import { TopBar } from './components/TopBar';
 import { Loader } from './components/Loader';
+import { PlayCue } from './components/PlayCue';
 import { FallFx, Flock, Splat, TabTitle } from './components/Fx';
 import { PigArt } from './art/PigArt';
 import { Birds, Doubters, Ground, Science } from './sections/Lower';
@@ -99,6 +100,7 @@ export function App() {
       <PigActor />
       <Altimeter />
       <SkyCaption />
+      <PlayCue />
       <TopBar />
       <FallFx />
       <Splat />

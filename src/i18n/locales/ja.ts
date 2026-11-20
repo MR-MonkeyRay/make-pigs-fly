@@ -27,6 +27,9 @@ export const ja: Messages = {
     prevFloor: 'ひとつ下へ',
     gaze: '文字を隠して、景色だけ見る',
     gazeOff: '文字を戻す',
+    playing: '自動再生中 · スクロールで操作を戻せます',
+    cueDesktop: '続けて上へスクロール（または ↑）',
+    cueTouch: '指を下にスワイプして、さらに上へ',
   },
   loader: {
     loading: 'makepigs.fly を読み込み中…',

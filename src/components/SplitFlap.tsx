@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { store } from '../engine/store';
 import { sound } from '../engine/sound';
+import { holdPlayback } from '../engine/pager';
 import type { FlapTone } from '../i18n/locales/en';
 
 export interface FlapRow {
@@ -27,7 +28,8 @@ function Cells({ text, className }: { text: string; className?: string }) {
   );
 }
 
-export function SplitFlap({ rows, cols, active }: { rows: FlapRow[]; cols: string[]; active: boolean }) {
+/** `hold` names the section whose autoplay should wait while the board is flipping */
+export function SplitFlap({ rows, cols, active, hold }: { rows: FlapRow[]; cols: string[]; active: boolean; hold?: string }) {
   const root = useRef<HTMLDivElement>(null);
   const runId = useRef(0);
 
@@ -36,6 +38,7 @@ export function SplitFlap({ rows, cols, active }: { rows: FlapRow[]; cols: strin
     const el = root.current;
     if (!el || store.get().reduced) return;
     const id = ++runId.current;
+    const release = hold ? holdPlayback(hold) : () => {};
     const cells = Array.from(el.querySelectorAll<HTMLSpanElement>('.flap__c'));
     const plan = cells.map((c) => {
       const t = c.dataset.t ?? '';
@@ -52,6 +55,7 @@ export function SplitFlap({ rows, cols, active }: { rows: FlapRow[]; cols: strin
     const timer = window.setInterval(() => {
       if (runId.current !== id) {
         window.clearInterval(timer);
+        release();
         return;
       }
       tick++;
@@ -68,13 +72,17 @@ export function SplitFlap({ rows, cols, active }: { rows: FlapRow[]; cols: strin
         }
       }
       if (busy) sound.clack();
-      if (!busy) window.clearInterval(timer);
+      if (!busy) {
+        window.clearInterval(timer);
+        release();
+      }
     }, 60);
     return () => {
       window.clearInterval(timer);
+      release();
       plan.forEach((p) => (p.c.textContent = p.t));
     };
-  }, [active, rows]);
+  }, [active, rows, hold]);
 
   return (
     <div className="flap" ref={root}>

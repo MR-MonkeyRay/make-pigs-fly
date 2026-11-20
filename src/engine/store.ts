@@ -20,6 +20,10 @@ export interface AppState {
   say: string | null;
   /** id of the "OINK" flock run, 0 = none */
   flock: number;
+  /** the current section is playing itself (autoplay) */
+  playing: boolean;
+  /** the scene has finished: cue the reader to keep climbing */
+  cue: boolean;
 }
 
 type Listener = () => void;
@@ -60,6 +64,8 @@ let state: AppState = {
   bubble: null,
   say: null,
   flock: 0,
+  playing: false,
+  cue: false,
 };
 
 const listeners = new Set<Listener>();

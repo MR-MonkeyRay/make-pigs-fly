@@ -37,6 +37,9 @@ export const en = {
     prevFloor: 'Down one floor',
     gaze: 'Hide the words, just look',
     gazeOff: 'Bring the words back',
+    playing: 'Autoplay · scroll to take over',
+    cueDesktop: 'Keep scrolling up (or press ↑)',
+    cueTouch: 'Swipe down to keep climbing',
   },
   loader: {
     loading: 'Loading makepigs.fly…',

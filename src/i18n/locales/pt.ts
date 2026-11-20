@@ -27,6 +27,9 @@ export const pt: Messages = {
     prevFloor: 'Descer um andar',
     gaze: 'Esconder o texto e só olhar',
     gazeOff: 'Mostrar o texto de novo',
+    playing: 'Reprodução automática · role para assumir',
+    cueDesktop: 'Continue subindo (ou aperte ↑)',
+    cueTouch: 'Deslize para baixo para continuar subindo',
   },
   loader: {
     loading: 'Carregando makepigs.fly…',

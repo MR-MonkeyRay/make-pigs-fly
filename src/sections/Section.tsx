@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { SECTION_INDEX } from '../engine/specs';
 import { subscribeSection } from '../engine/scroll';
+import { holdPlayback } from '../engine/pager';
 import { useStore } from '../engine/store';
 
 interface Props {
@@ -63,11 +64,40 @@ export function useInView(id: string, once = false): boolean {
   return v;
 }
 
-/** reveal text progressively, character by character (CJK-safe) */
-export function Typewriter({ text, active, speed = 26, className }: { text: string; active: boolean; speed?: number; className?: string }) {
+/**
+ * Reveal text progressively, character by character (CJK-safe).
+ * `hold` names the section whose autoplay should wait while this is typing;
+ * `onDone` fires once the whole line is out.
+ */
+export function Typewriter({
+  text,
+  active,
+  speed = 26,
+  className,
+  hold,
+  onDone,
+}: {
+  text: string;
+  active: boolean;
+  speed?: number;
+  className?: string;
+  hold?: string;
+  onDone?: () => void;
+}) {
   const [n, setN] = useState(0);
   const chars = Array.from(text);
   const reduced = useStore((st) => st.reduced);
+  const typing = active && n < chars.length;
+  const done = active && n >= chars.length;
+  const doneRef = useRef(onDone);
+  doneRef.current = onDone;
+  useEffect(() => {
+    if (done) doneRef.current?.();
+  }, [done]);
+  useEffect(() => {
+    if (!hold || !typing) return;
+    return holdPlayback(hold);
+  }, [hold, typing]);
   useEffect(() => {
     if (!active) return;
     if (n >= chars.length) return;

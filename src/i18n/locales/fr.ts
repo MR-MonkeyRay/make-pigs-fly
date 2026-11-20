@@ -27,6 +27,9 @@ export const fr: Messages = {
     prevFloor: 'Descendre d’un étage',
     gaze: 'Masquer le texte, juste admirer',
     gazeOff: 'Réafficher le texte',
+    playing: 'Lecture auto · fais défiler pour reprendre la main',
+    cueDesktop: 'Continue vers le haut (ou ↑)',
+    cueTouch: 'Glisse vers le bas pour continuer à monter',
   },
   loader: {
     loading: 'Chargement de makepigs.fly…',

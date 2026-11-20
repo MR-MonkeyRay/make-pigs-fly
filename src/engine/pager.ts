@@ -1,4 +1,4 @@
-import { SECTIONS } from './specs';
+import { SECTIONS, SECTION_INDEX } from './specs';
 import { frame, getSections, isLocked, markUserMoved, maxScroll, onMeasured, setSectionJumper } from './scroll';
 import { store } from './store';
 
@@ -10,6 +10,11 @@ import { store } from './store';
  *
  * Direction follows the site's joke: scrolling UP (wheel up, finger dragging
  * down, ↑) climbs; the opposite descends.
+ *
+ * Autoplay: climbing into a section with a `play` spec hands the controls to
+ * the page for a moment. It steps through that section's stops by itself, so
+ * the scroll-driven scene plays like a short film, then cues the reader to keep
+ * climbing. Any input from the reader takes over immediately.
  */
 
 interface Stop {
@@ -24,6 +29,14 @@ let queued = 0;
 let tweenRaf = 0;
 let snapTimer = 0;
 let lastProgrammatic = 0;
+/** the running tween was started by autoplay (the reader may cut in) */
+let autoTween = false;
+/** section that is currently playing itself, -1 = none */
+let playSec = -1;
+let playTimer = 0;
+let cueTimer = 0;
+/** time-based scene animations still running, per section */
+const holds = new Map<number, number>();
 
 // wheel gesture tracking
 let acc = 0;
@@ -86,12 +99,24 @@ function emit() {
 }
 
 const ease = (u: number) => (u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2);
+/** autoplay glides: slower and softer, like a camera dolly */
+const easeSoft = (u: number) => (1 - Math.cos(Math.PI * u)) / 2;
 
-function tweenTo(index: number, opts: { instant?: boolean } = {}) {
+interface TweenOpts {
+  instant?: boolean;
+  /** started by autoplay: keep playing on arrival */
+  auto?: boolean;
+  /** a climb by the reader: arriving at a section's first stop starts its autoplay */
+  play?: boolean;
+  dur?: number;
+}
+
+function tweenTo(index: number, opts: TweenOpts = {}) {
   if (!stops.length) computeStops();
   index = Math.max(0, Math.min(stops.length - 1, index));
   target = index;
   emit();
+  hideCue();
   const y1 = stops[index].y;
   const y0 = window.scrollY;
   cancelAnimationFrame(tweenRaf);
@@ -100,36 +125,161 @@ function tweenTo(index: number, opts: { instant?: boolean } = {}) {
   if (opts.instant || store.get().reduced || dist < 2) {
     window.scrollTo({ top: y1, left: 0, behavior: 'instant' as ScrollBehavior });
     busy = false;
+    autoTween = false;
     cooling = true;
+    settle(index, opts);
     return;
   }
   busy = true;
+  autoTween = !!opts.auto;
   // ~1 s for one screen, longer jumps stretch but stay snappy
-  const dur = Math.min(2200, 620 + Math.sqrt(dist) * 16);
+  const dur = opts.dur ?? Math.min(2200, 620 + Math.sqrt(dist) * 16);
+  const curve = opts.auto ? easeSoft : ease;
   const t0 = performance.now();
   const step = (now: number) => {
     const u = Math.min(1, (now - t0) / dur);
     lastProgrammatic = now;
-    window.scrollTo({ top: Math.round(y0 + (y1 - y0) * ease(u)), left: 0, behavior: 'instant' as ScrollBehavior });
+    window.scrollTo({ top: Math.round(y0 + (y1 - y0) * curve(u)), left: 0, behavior: 'instant' as ScrollBehavior });
     if (u < 1) {
       tweenRaf = requestAnimationFrame(step);
       return;
     }
     busy = false;
+    autoTween = false;
     cooling = true;
     if (queued) {
       const q = queued;
       queued = 0;
       go(q);
+      return;
     }
+    settle(index, opts);
   };
   tweenRaf = requestAnimationFrame(step);
+}
+
+// ───────────────────────── autoplay ─────────────────────────
+
+/**
+ * A time-based scene animation (typewriter, split-flap…) has started in this
+ * section. Autoplay won't move on, and the "keep climbing" cue won't show,
+ * until every hold is released. Returns the release function.
+ */
+export function holdPlayback(id: string): () => void {
+  const sec = SECTION_INDEX[id];
+  holds.set(sec, (holds.get(sec) ?? 0) + 1);
+  let released = false;
+  return () => {
+    if (released) return;
+    released = true;
+    holds.set(sec, Math.max(0, (holds.get(sec) ?? 1) - 1));
+  };
+}
+
+const held = (sec: number) => (holds.get(sec) ?? 0) > 0;
+const firstOfSection = (i: number) => i === 0 || stops[i - 1].sec !== stops[i].sec;
+const lastOfSection = (i: number) => i === stops.length - 1 || stops[i + 1].sec !== stops[i].sec;
+
+function settle(index: number, opts: TweenOpts) {
+  if (opts.auto && playSec >= 0) {
+    playStep();
+    return;
+  }
+  if (opts.play && startPlay(index)) return;
+  scheduleCue();
+}
+
+function startPlay(i: number): boolean {
+  const s = stops[i];
+  const spec = s && SECTIONS[s.sec]?.play;
+  if (!spec || !firstOfSection(i) || store.get().reduced || isLocked()) return false;
+  playSec = s.sec;
+  store.set({ playing: true });
+  playStep();
+  return true;
+}
+
+/** linger on the current stop, then glide to the next one (or finish) */
+function playStep() {
+  const sec = playSec;
+  const spec = SECTIONS[sec]?.play;
+  if (!spec) return;
+  const t0 = performance.now();
+  window.clearTimeout(playTimer);
+  const tick = () => {
+    if (playSec !== sec) return;
+    const i = target;
+    if (isLocked() || store.get().falling || stops[i]?.sec !== sec) {
+      stopPlay();
+      return;
+    }
+    const last = lastOfSection(i);
+    const linger = last ? Math.min(900, spec.hold) : spec.hold;
+    if (performance.now() - t0 < linger || held(sec)) {
+      playTimer = window.setTimeout(tick, 120);
+      return;
+    }
+    if (last) {
+      stopPlay();
+      scheduleCue(0);
+      return;
+    }
+    const dist = Math.abs(stops[i + 1].y - window.scrollY);
+    tweenTo(i + 1, { auto: true, dur: Math.min(4200, Math.max(800, dist / spec.speed)) });
+  };
+  playTimer = window.setTimeout(tick, 120);
+}
+
+function stopPlay() {
+  window.clearTimeout(playTimer);
+  if (playSec < 0) return;
+  playSec = -1;
+  store.set({ playing: false });
+}
+
+/** the reader takes the controls back: freeze an autoplay glide where it is */
+export function stopAutoplay(): void {
+  if (busy && autoTween) {
+    cancelAnimationFrame(tweenRaf);
+    busy = false;
+    autoTween = false;
+  }
+  if (playSec >= 0) {
+    stopPlay();
+    scheduleCue();
+  }
+}
+
+function hideCue() {
+  window.clearTimeout(cueTimer);
+  if (store.get().cue) store.set({ cue: false });
+}
+
+/** once the page is at rest and the scene has finished, cue the next climb */
+function scheduleCue(delay = 500) {
+  window.clearTimeout(cueTimer);
+  const t0 = performance.now();
+  const check = () => {
+    if (busy || playSec >= 0) return;
+    const s = stops[target];
+    if (!s) return;
+    const st = store.get();
+    if (isLocked() || st.booting || st.falling || held(s.sec) || performance.now() - t0 < delay) {
+      cueTimer = window.setTimeout(check, 150);
+      return;
+    }
+    // the mud has its own big hint; the top of the sky has nowhere left to go
+    const show = s.sec > 0 && target < stops.length - 1;
+    if (st.cue !== show) store.set({ cue: show });
+  };
+  cueTimer = window.setTimeout(check, 60);
 }
 
 /** +1 = climb one floor, -1 = descend one floor */
 export function go(dir: 1 | -1 | number): void {
   if (isLocked() || store.get().booting) return;
   markUserMoved();
+  stopAutoplay();
   if (busy) {
     queued = dir > 0 ? 1 : -1;
     return;
@@ -142,7 +292,7 @@ export function go(dir: 1 | -1 | number): void {
   // If we are resting between floors, the nearest one in that direction counts.
   if (dir > 0) {
     const next = off > 6 ? i : i + 1;
-    tweenTo(Math.min(stops.length - 1, next));
+    tweenTo(Math.min(stops.length - 1, next), { play: true });
   } else {
     const next = off < -6 ? i : i - 1;
     tweenTo(Math.max(0, next));
@@ -155,22 +305,26 @@ export function goToSection(sec: number): void {
   const i = stops.findIndex((s) => s.sec === sec);
   if (i >= 0) {
     markUserMoved();
+    stopAutoplay();
     queued = 0;
-    tweenTo(i);
+    tweenTo(i, { play: true });
   }
 }
 
 export function goToEnd(top: boolean): void {
   if (isLocked()) return;
   markUserMoved();
+  stopAutoplay();
   tweenTo(top ? stops.length - 1 : 0);
 }
 
 /** after the fall director (or anything else) moves the page itself */
 export function resync(): void {
   if (!stops.length) computeStops();
+  stopPlay();
   target = nearest(window.scrollY);
   emit();
+  scheduleCue();
 }
 
 // ───────────────────────── input ─────────────────────────
@@ -203,7 +357,12 @@ function onWheel(e: WheelEvent) {
   lastAbs = abs;
 
   if (busy) {
-    if (fresh) queued = d < 0 ? 1 : -1;
+    // a fresh flick cuts into an autoplay glide right away; during the
+    // reader's own glide it is queued as the next move
+    if (fresh) {
+      if (autoTween) go(d < 0 ? 1 : -1);
+      else queued = d < 0 ? 1 : -1;
+    }
     return;
   }
   if (cooling && !fresh) return; // swallow the momentum tail of the last flick
@@ -284,6 +443,7 @@ function onScroll() {
   snapTimer = window.setTimeout(() => {
     if (busy || isLocked() || touching) return;
     if (editable(document.activeElement)) return;
+    stopAutoplay();
     const i = nearest(window.scrollY);
     if (Math.abs(stops[i].y - window.scrollY) > 2) tweenTo(i);
     else {
@@ -301,6 +461,8 @@ export function startPager(): () => void {
     const was = target;
     computeStops();
     if (busy || isLocked()) return;
+    // the stop list may have changed shape (phone ↔ desktop): don't play on from a stale floor
+    if (playSec >= 0 && stops[was]?.sec !== playSec) stopPlay();
     // keep the reader on the same floor after a resize / reflow
     if (was >= 0 && was < stops.length) tweenTo(was, { instant: true });
     else resync();
@@ -312,9 +474,12 @@ export function startPager(): () => void {
   window.addEventListener('touchend', onTouchEnd, { passive: true });
   window.addEventListener('scroll', onScroll, { passive: true });
   emit();
+  scheduleCue();
   return () => {
     offMeasured();
     cancelAnimationFrame(tweenRaf);
+    stopPlay();
+    window.clearTimeout(cueTimer);
     window.removeEventListener('wheel', onWheel);
     window.removeEventListener('keydown', onKey);
     window.removeEventListener('touchstart', onTouchStart);

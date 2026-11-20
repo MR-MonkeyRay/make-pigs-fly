@@ -27,6 +27,9 @@ export const ko: Messages = {
     prevFloor: '한 층 아래로',
     gaze: '글자는 숨기고 풍경만 보기',
     gazeOff: '글자 다시 보기',
+    playing: '자동 재생 중 · 스크롤하면 직접 조작',
+    cueDesktop: '계속 위로 스크롤 (또는 ↑ 키)',
+    cueTouch: '아래로 쓸어내려 계속 올라가기',
   },
   loader: {
     loading: 'makepigs.fly 불러오는 중…',

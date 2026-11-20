@@ -9,6 +9,7 @@ import { sound } from '../engine/sound';
 import { DelegateArt } from '../art/Delegates';
 import { Hoofprint, MissionPatch } from '../art/Aloft';
 import { Constellation } from '../art/Constellation';
+import { holdPlayback } from '../engine/pager';
 import { Section, Typewriter, useSectionFrame, useSectionStep } from './Section';
 import './upper.css';
 
@@ -132,7 +133,24 @@ export function Station() {
   const { t } = useI18n();
   const s = t.iss;
   const n = s.log.length;
-  const shown = useSectionStep('iss', (q) => Math.max(0, Math.min(n, Math.floor(((q - 0.22) / 0.42) * n) + 1)));
+  // The radio log plays itself once the station is in sight: one transmission
+  // at a time, each starting a beat after the previous one finished typing.
+  const reached = useSectionStep('iss', (q) => (q > 0.36 ? 1 : 0));
+  const [shown, setShown] = useState(0);
+  const [typed, setTyped] = useState(0);
+  useEffect(() => {
+    if (reached && shown === 0) setShown(1);
+  }, [reached, shown]);
+  useEffect(() => {
+    if (!shown || typed < shown || shown >= n) return;
+    const id = window.setTimeout(() => setShown((x) => Math.min(n, x + 1)), 420);
+    return () => window.clearTimeout(id);
+  }, [typed, shown, n]);
+  const talking = shown > 0 && typed < n;
+  useEffect(() => {
+    if (!talking) return;
+    return holdPlayback('iss');
+  }, [talking]);
 
   return (
     <Section id="iss" h={1.6} hm={1.9} className="dark" label={t.layers[10]}>
@@ -153,7 +171,7 @@ export function Station() {
             <ol className="radio__log">
               {s.log.map((l, i) => (
                 <li key={i} className={`${i < shown ? 'is-on' : ''} ${/HOUSTON|休斯顿|休士頓|ヒューストン|휴스턴|ХЬЮСТОН/i.test(l.who) ? 'is-ground' : ''}`}>
-                  <span className="radio__t">[{l.t}]</span> <b>{l.who}:</b> <Typewriter text={l.text} active={i < shown} speed={24} />
+                  <span className="radio__t">[{l.t}]</span> <b>{l.who}:</b> <Typewriter text={l.text} active={i < shown} speed={24} onDone={() => setTyped((x) => Math.max(x, i + 1))} />
                 </li>
               ))}
             </ol>
