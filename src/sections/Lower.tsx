@@ -3,6 +3,7 @@ import { useI18n } from '../i18n';
 import { store, useStore } from '../engine/store';
 import { fmt, type Personal } from '../engine/params';
 import { frame } from '../engine/scroll';
+import { sound } from '../engine/sound';
 import { PigArt } from '../art/PigArt';
 import { Chicken, Fence, GrassEdge, Hills, MudField, RunwaySign, TreeWithPig } from '../art/Scenery';
 import { Rooftops } from '../art/Aloft';
@@ -237,6 +238,19 @@ export function Science() {
     return () => window.removeEventListener('resize', r);
   }, []);
 
+  // Flattery is the lift: each compliment the reader sends rises into the pig,
+  // makes him hop and adds 10% to the diagram's LIFT.
+  const [flattered, setFlattered] = useState(0);
+  const [bursts, setBursts] = useState<{ id: number; text: string; x: number }[]>([]);
+  const flatter = () => {
+    const n = flattered + 1;
+    setFlattered(n);
+    const text = s.compliments[(n * 3) % s.compliments.length];
+    setBursts((b) => [...b.slice(-4), { id: n, text, x: ((n * 37) % 5) - 2 }]);
+    store.set({ hop: Date.now() });
+    sound.oink(1.1 + Math.min(n, 10) * 0.04);
+  };
+
   const narrow = vp.w < 760 || vp.w / vp.h < 0.8;
   const cx = vp.w * 0.5;
   const cy = vp.h * (narrow ? 0.5 : 0.53);
@@ -313,7 +327,10 @@ export function Science() {
           const L = labels[a.key];
           return (
             <div key={a.key} className={`science__label science__label--${a.key}`} style={{ ...slot(a.key, a.x2, a.y2), '--a': a.a } as React.CSSProperties}>
-              <strong>{L.title}</strong>
+              <strong>
+                {L.title}
+                {a.key === 'lift' && flattered > 0 && <em className="science__gain"> +{flattered * 10}%</em>}
+              </strong>
               <span>{L.body}</span>
               {L.note && <small>{L.note}</small>}
             </div>
@@ -335,6 +352,26 @@ export function Science() {
           {s.compliments.map((c, i) => (
             <span key={c} style={{ '--i': i, '--n': s.compliments.length } as React.CSSProperties}>
               {c}
+            </span>
+          ))}
+        </div>
+
+        {/* below him, where the compliments set off from */}
+        <div className="science__label science__label--flatter" style={{ left: narrow ? 20 : cx - 220, top: narrow ? cy + 180 : cy + 150, '--a': 0.04 } as React.CSSProperties}>
+          <button type="button" className="science__flatter" onClick={flatter}>
+            + {s.flatter}
+          </button>
+        </div>
+
+        {/* the reader's own compliments, on their way up to him */}
+        <div className="science__boost" style={{ left: cx, top: cy + 110 * k }} aria-hidden="true">
+          {bursts.map((b) => (
+            <span
+              key={b.id}
+              style={{ '--x': b.x } as React.CSSProperties}
+              onAnimationEnd={() => setBursts((all) => all.filter((x) => x.id !== b.id))}
+            >
+              {b.text}
             </span>
           ))}
         </div>

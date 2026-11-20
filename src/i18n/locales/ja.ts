@@ -90,6 +90,7 @@ export const ja: Messages = {
     lift: '揚力',
     liftBody: 'おだて。',
     liftNote: '「豚もおだてりゃ木に登る」ということわざではここまで。うちはもう少しおだてた。',
+    flatter: 'ブタをほめる',
     thrust: '推力',
     thrustBody: '巻き尾、毎分3,000回転。実質バネです。',
     drag: '抗力',

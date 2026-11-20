@@ -89,6 +89,7 @@ export const zh: Messages = {
     lift: '升力',
     liftBody: '彩虹屁。',
     liftNote: '日本俗语：「豚もおだてりゃ木に登る」—— 夸一夸，猪都能上树。我们只是夸得更狠一点。',
+    flatter: '夸夸它',
     thrust: '推力',
     thrustBody: '卷尾巴，3000 转/分。本质是根弹簧。',
     drag: '阻力',

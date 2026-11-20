@@ -100,6 +100,7 @@ export const en = {
     lift: 'LIFT',
     liftBody: 'Flattery.',
     liftNote: 'Japanese proverb: “Flatter a pig and it will climb a tree.” We simply kept going.',
+    flatter: 'Flatter him',
     thrust: 'THRUST',
     thrustBody: 'Curly tail, 3,000 rpm. It’s basically a spring.',
     drag: 'DRAG',

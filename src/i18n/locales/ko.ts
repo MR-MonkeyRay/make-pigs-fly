@@ -91,6 +91,7 @@ export const ko: Messages = {
     lift: '양력',
     liftBody: '아부.',
     liftNote: '일본 속담: “돼지도 칭찬하면 나무에 오른다.” 우리는 그냥 계속 칭찬했을 뿐입니다.',
+    flatter: '칭찬해 주기',
     thrust: '추력',
     thrustBody: '돌돌 말린 꼬리, 분당 3,000회전. 사실상 용수철입니다.',
     drag: '항력',

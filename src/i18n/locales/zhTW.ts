@@ -89,6 +89,7 @@ export const zhTW: Messages = {
     lift: '升力',
     liftBody: '拍馬屁。',
     liftNote: '日本諺語：「豚もおだてりゃ木に登る」——捧一捧，豬都能爬上樹。我們只是捧得更用力一點。',
+    flatter: '誇誇它',
     thrust: '推力',
     thrustBody: '捲尾巴，3000 轉/分。本質上就是一根彈簧。',
     drag: '阻力',

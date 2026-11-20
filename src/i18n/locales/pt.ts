@@ -90,6 +90,7 @@ export const pt: Messages = {
     lift: 'SUSTENTAÇÃO',
     liftBody: 'Elogios.',
     liftNote: 'Provérbio japonês: “Elogie um porco e ele sobe numa árvore.” Nós apenas continuamos.',
+    flatter: 'Elogie-o',
     thrust: 'IMPULSO',
     thrustBody: 'Rabo enrolado, 3.000 rpm. Basicamente é uma mola.',
     drag: 'ARRASTO',

@@ -90,6 +90,7 @@ export const it: Messages = {
     lift: 'PORTANZA',
     liftBody: 'Lusinghe.',
     liftNote: 'Proverbio giapponese: «Lusinga un maiale e si arrampicherà su un albero.» Noi abbiamo semplicemente continuato.',
+    flatter: 'Lusingalo',
     thrust: 'SPINTA',
     thrustBody: 'Coda a ricciolo, 3.000 giri/min. In pratica è una molla.',
     drag: 'RESISTENZA',

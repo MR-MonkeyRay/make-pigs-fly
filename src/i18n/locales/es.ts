@@ -90,6 +90,7 @@ export const es: Messages = {
     lift: 'SUSTENTACIÓN',
     liftBody: 'Halagos.',
     liftNote: 'Proverbio japonés: «Halaga a un cerdo y trepará a un árbol». Nosotros nos limitamos a seguir.',
+    flatter: 'Halágalo',
     thrust: 'EMPUJE',
     thrustBody: 'Cola rizada, 3000 rpm. Es prácticamente un muelle.',
     drag: 'RESISTENCIA',

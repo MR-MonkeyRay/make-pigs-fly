@@ -90,6 +90,7 @@ export const fr: Messages = {
     lift: 'PORTANCE',
     liftBody: 'Flatterie.',
     liftNote: 'Proverbe japonais : « Flatte un cochon et il grimpera à un arbre. » Nous avons simplement continué.',
+    flatter: 'Flatte-le',
     thrust: 'POUSSÉE',
     thrustBody: 'Queue en tire-bouchon, 3 000 tr/min. C’est en gros un ressort.',
     drag: 'TRAÎNÉE',

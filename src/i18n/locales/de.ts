@@ -90,6 +90,7 @@ export const de: Messages = {
     lift: 'AUFTRIEB',
     liftBody: 'Schmeicheleien.',
     liftNote: 'Japanisches Sprichwort: „Lob ein Schwein, und es klettert auf einen Baum.“ Wir haben einfach weitergemacht.',
+    flatter: 'Schmeichle ihm',
     thrust: 'SCHUB',
     thrustBody: 'Ringelschwanz, 3.000 U/min. Im Grunde eine Feder.',
     drag: 'WIDERSTAND',

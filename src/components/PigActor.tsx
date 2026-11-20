@@ -307,6 +307,12 @@ export function PigActor() {
     return unsub;
   }, []);
 
+  // a hop asked for elsewhere (the science floor's flattery button)
+  const hopAt = useStore((s) => s.hop);
+  useEffect(() => {
+    if (hopAt) hopRef.current = 1;
+  }, [hopAt]);
+
   const poke = () => {
     if (store.get().falling) return;
     hopRef.current = 1;
