@@ -214,10 +214,19 @@
 
 .karman__earth figcaption {
   position: absolute;
-  right: var(--gutter);
-  /* clear of the real-view button docked bottom right */
+  /* bottom left, under the text column: the real-view button owns bottom right */
+  left: calc(var(--gutter) + var(--hud-w));
   bottom: 76px;
   color: var(--paper);
+}
+
+@media (max-width: 759px) {
+  .karman__earth figcaption {
+    /* on the limb's upper edge: the bottom of the screen belongs to the pills here */
+    left: 16px;
+    top: 10px;
+    bottom: auto;
+  }
 }
 
 @media (max-width: 759px) {
@@ -563,6 +572,13 @@
   flex-direction: column;
   gap: 0.15em;
   font-size: clamp(32px, 4.4vw, 70px);
+}
+
+/* the pink line sits on the pink-and-blue halftone Moon: a night halo keeps it off the craters */
+.moon__quote .riso {
+  text-shadow:
+    0.045em 0.04em 0 rgba(0, 120, 191, 0.85),
+    0 4px 24px rgba(8, 10, 30, 0.92);
 }
 
 @media (max-width: 899px), (max-aspect-ratio: 4/5) {

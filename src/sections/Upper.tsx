@@ -131,7 +131,7 @@ export function Karman() {
   }, [stamped]);
 
   return (
-    <Section id="karman" h={1.7} hm={1.8} className="dark" label={t.layers[9]}>
+    <Section id="karman" h={1.85} hm={1.8} className="dark" label={t.layers[9]}>
       <figure className="karman__earth">
         <img src={img('earth-limb.webp')} alt={k.photo} loading="lazy" decoding="async" width={1500} height={955} />
         <figcaption className="fig">{k.photo}</figcaption>
