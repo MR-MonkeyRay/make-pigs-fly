@@ -786,7 +786,9 @@
   width: 34px;
   height: 34px;
   border-radius: 50%;
+  border: 2.5px solid var(--ink);
   background: var(--blue);
+  box-shadow: 2px 2px 0 var(--pink);
   color: #fffef8;
 }
 

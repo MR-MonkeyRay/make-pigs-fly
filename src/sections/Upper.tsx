@@ -189,11 +189,11 @@ export function Station() {
         <div className="radio">
           <p className="kicker">{s.kicker}</p>
           <div className="radio__term">
+            {/* a mission-control strip, not a desktop window's traffic lights */}
             <div className="radio__bar">
-              <i />
-              <i />
-              <i />
+              <b className="radio__rec">REC</b>
               <span>{s.title}</span>
+              <em className="radio__band">S-band · 2287.5 MHz</em>
             </div>
             <ol className="radio__log">
               {s.log.map((l, i) => (

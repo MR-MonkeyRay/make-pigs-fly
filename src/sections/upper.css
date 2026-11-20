@@ -381,23 +381,46 @@
   text-transform: uppercase;
 }
 
-.radio__bar i {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--red);
+.radio__rec {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #ff6b7a;
+  font-weight: 700;
 }
 
-.radio__bar i:nth-child(2) {
-  background: var(--yellow);
+.radio__rec::before {
+  content: '';
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+  animation: rec-blink 1.6s steps(1, end) infinite;
 }
-.radio__bar i:nth-child(3) {
-  background: #2fbf71;
+
+@keyframes rec-blink {
+  50% {
+    opacity: 0.25;
+  }
 }
 
 .radio__bar span {
   margin-left: 8px;
   opacity: 0.7;
+}
+
+.radio__band {
+  margin-left: auto;
+  font-style: normal;
+  opacity: 0.45;
+  white-space: nowrap;
+}
+
+@media (max-width: 479px) {
+  .radio__band {
+    display: none;
+  }
 }
 
 .radio__log {
@@ -718,7 +741,9 @@
   width: 100%;
   padding: 9px 12px;
   border-radius: 10px;
-  border: 2px solid var(--paper);
+  /* inked like every other card, with a blue plate */
+  border: 2.5px solid var(--ink);
+  box-shadow: 3px 3px 0 var(--blue);
   background: #fffef8;
   color: var(--ink);
   font-family: var(--f-body);
