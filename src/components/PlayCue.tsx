@@ -26,7 +26,9 @@ export function PlayCue() {
   }, [mode]);
 
   return (
-    <div className={`playcue${mode ? ' is-on' : ''} playcue--${face}`} aria-hidden={mode ? undefined : true}>
+    // inert while off: out of the tab order and the accessibility tree, and a button
+    // that still had focus (Enter on the cue) lets go of it
+    <div className={`playcue${mode ? ' is-on' : ''} playcue--${face}`} inert={!mode}>
       {face === 'play' ? (
         <p className="playcue__play" aria-hidden="true">
           <span className="playcue__rec" />
