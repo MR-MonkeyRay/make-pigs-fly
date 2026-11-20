@@ -6,6 +6,7 @@ import { frame } from '../engine/scroll';
 import { PigArt } from '../art/PigArt';
 import { Chicken, Fence, GrassEdge, Hills, MudField, RunwaySign, TreeWithPig } from '../art/Scenery';
 import { Rooftops } from '../art/Aloft';
+import { PigMark } from '../art/PigMark';
 import { ChatAvatar, type Chatter } from '../art/ChatAvatars';
 import { Section, useSectionFrame, useSectionStep } from './Section';
 import './lower.css';
@@ -345,6 +346,31 @@ export function Science() {
 
 /* ─────────────────────────── 3 · BIRDS ─────────────────────────── */
 
+/** the group's mark, drawn instead of the OS dove emoji */
+function Feather() {
+  return (
+    <svg className="phone__mark" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M 19,3 C 10,4 5,10 5,19 C 12,18 18,12 19,3 Z" fill="#a9d4ee" stroke="#3a2438" strokeWidth="2" strokeLinejoin="round" />
+      <path d="M 4,21 L 15,8 M 9,14 H 13 M 7,17 H 10" stroke="#3a2438" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+/** chat text with the pig emoji swapped for the site's own pig mark */
+function Emojiless({ text }: { text: string }) {
+  const parts = text.split('🐷');
+  return (
+    <>
+      {parts.map((p, i) => (
+        <span key={i}>
+          {p}
+          {i < parts.length - 1 && <PigMark className="msg__pig" />}
+        </span>
+      ))}
+    </>
+  );
+}
+
 export function Birds() {
   const { t } = useI18n();
   const b = t.birds;
@@ -371,7 +397,9 @@ export function Birds() {
             <header className="phone__head">
               <span className="phone__back">‹</span>
               <div>
-                <strong>{b.group} 🕊️</strong>
+                <strong>
+                  {b.group} <Feather />
+                </strong>
                 <small>{b.members}</small>
               </div>
               <span className="phone__dots">···</span>
@@ -392,7 +420,9 @@ export function Birds() {
                           <PigArt mood="calm" costume={{ wings: 'feather', goggles: true }} />
                         </span>
                       ) : (
-                        <span className="msg__bubble">{m.text}</span>
+                        <span className="msg__bubble">
+                          <Emojiless text={m.text} />
+                        </span>
                       )}
                     </div>
                   </li>

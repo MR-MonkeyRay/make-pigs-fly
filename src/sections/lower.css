@@ -821,6 +821,19 @@
   font-size: 15px;
 }
 
+.phone__mark {
+  width: 15px;
+  height: 15px;
+  vertical-align: -2px;
+}
+
+.msg__pig {
+  width: 1.3em;
+  height: 1.3em;
+  margin-left: 2px;
+  vertical-align: -0.32em;
+}
+
 .phone__head small {
   font-family: var(--f-mono);
   font-size: 11px;
