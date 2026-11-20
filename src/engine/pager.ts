@@ -114,7 +114,28 @@ function anchorYs(root: HTMLElement, sel: string, vh: number): number[] {
   }
   return groups.map((g) => {
     const h = g.bottom - g.top;
-    return h <= free ? g.top - band.top - (free - h) / 2 : g.top - band.top - 8;
+    if (h > free) return g.top - band.top - 8;
+    // Slide the group within the free band so its neighbours are either shown
+    // whole or kept off screen, not sliced in half under the top bar; when
+    // nothing is cut, stay close to centred.
+    const centred = g.top - band.top - (free - h) / 2;
+    let best = centred;
+    let bc = Infinity;
+    for (let at = band.top; at <= band.bottom - h + 0.5; at += 6) {
+      const y = g.top - at;
+      let c = Math.abs(y - centred) * 0.05;
+      for (const r of rs) {
+        if (r.top >= g.top - 1 && r.bottom <= g.bottom + 1) continue;
+        const hh = r.bottom - r.top;
+        const f = Math.max(0, Math.min(r.bottom - y, vh) - Math.max(r.top - y, 0)) / hh;
+        c += Math.min(f, 1 - f) * hh;
+      }
+      if (c < bc) {
+        bc = c;
+        best = y;
+      }
+    }
+    return best;
   });
 }
 
