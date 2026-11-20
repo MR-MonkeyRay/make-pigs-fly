@@ -55,7 +55,8 @@ function costumeFor(idx: number, p: number, alt: number): Costume {
     scarf: idx >= 4,
     pillow: idx >= 7 && !helmet,
     helmet,
-    flag: idx > 11 || (idx === 11 && p > 0.3),
+    // brought for the Moon and left there: past it, a flag beside a flying pig just hovers
+    flag: idx === 11 && p > 0.3,
     chute: s.chute,
     undies: s.landed && idx === 0,
     mud: s.muddy,
