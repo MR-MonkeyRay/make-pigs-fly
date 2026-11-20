@@ -320,7 +320,7 @@ export const es: Messages = {
     title: 'Felicidades.',
     body: 'Técnicamente, este cerdo ahora es astronauta.',
     patchNote: 'Lema de la misión: SUS VOLAT — latín para «el cerdo vuela».',
-    helmet: 'Alas: jubiladas. Mochila cohete: prestada. Casco: una (1) pecera.',
+    helmet: 'Alas: jubiladas. Botas cohete: prestadas. Casco: una (1) pecera.',
     photo: 'La Tierra vista desde la órbita. Foto de la NASA.',
   },
   iss: {
@@ -333,7 +333,7 @@ export const es: Messages = {
       { t: 'T+00:42:22', who: 'ESTACIÓN', text: 'Un cerdo. Rosa. Con gafas. Me acaba de saludar.' },
       { t: 'T+00:42:31', who: 'HOUSTON', text: '…' },
       { t: 'T+00:42:40', who: 'HOUSTON', text: 'Recibido. Lo anoto como «fenómeno atmosférico».' },
-      { t: 'T+00:42:51', who: 'ESTACIÓN', text: 'Lleva una pecera en la cabeza. Y una mochila cohete.' },
+      { t: 'T+00:42:51', who: 'ESTACIÓN', text: 'Lleva una pecera en la cabeza. Y botas cohete.' },
       { t: 'T+00:42:52', who: 'HOUSTON', text: 'Igual que usted, Estación.' },
     ],
   },

@@ -320,7 +320,7 @@ export const pt: Messages = {
     title: 'Parabéns.',
     body: 'Tecnicamente, este porco agora é astronauta.',
     patchNote: 'Lema da missão: SUS VOLAT — latim para “o porco voa”.',
-    helmet: 'Asas: aposentadas. Mochila-foguete: emprestada. Capacete: um (1) aquário.',
+    helmet: 'Asas: aposentadas. Botas-foguete: emprestadas. Capacete: um (1) aquário.',
     photo: 'A Terra vista da órbita. Foto da NASA.',
   },
   iss: {
@@ -333,7 +333,7 @@ export const pt: Messages = {
       { t: 'T+00:42:22', who: 'ESTAÇÃO', text: 'Um porco. Rosa. De óculos. Acabou de acenar pra mim.' },
       { t: 'T+00:42:31', who: 'HOUSTON', text: '…' },
       { t: 'T+00:42:40', who: 'HOUSTON', text: 'Recebido. Registrando como “fenômeno atmosférico”.' },
-      { t: 'T+00:42:51', who: 'ESTAÇÃO', text: 'Está usando um aquário na cabeça. E uma mochila-foguete.' },
+      { t: 'T+00:42:51', who: 'ESTAÇÃO', text: 'Está usando um aquário na cabeça. E botas-foguete.' },
       { t: 'T+00:42:52', who: 'HOUSTON', text: 'Igual a você, Estação.' },
     ],
   },

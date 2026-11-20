@@ -321,7 +321,7 @@ export const de: Messages = {
     title: 'Herzlichen Glückwunsch.',
     body: 'Technisch gesehen ist dieses Schwein jetzt Astronaut.',
     patchNote: 'Missionsmotto: SUS VOLAT — Latein für „das Schwein fliegt“.',
-    helmet: 'Flügel: ausgemustert. Raketenrucksack: geliehen. Helm: ein (1) Goldfischglas.',
+    helmet: 'Flügel: ausgemustert. Raketenstiefel: geliehen. Helm: ein (1) Goldfischglas.',
     photo: 'Die Erde, von der Umlaufbahn aus gesehen. NASA-Foto.',
   },
   iss: {
@@ -334,7 +334,7 @@ export const de: Messages = {
       { t: 'T+00:42:22', who: 'STATION', text: 'Ein Schwein. Rosa. Mit Skibrille. Es hat mir gerade zugewinkt.' },
       { t: 'T+00:42:31', who: 'HOUSTON', text: '…' },
       { t: 'T+00:42:40', who: 'HOUSTON', text: 'Verstanden. Ich trage es als „Wetterphänomen“ ein.' },
-      { t: 'T+00:42:51', who: 'STATION', text: 'Es trägt ein Goldfischglas. Und einen Raketenrucksack.' },
+      { t: 'T+00:42:51', who: 'STATION', text: 'Es trägt ein Goldfischglas. Und Raketenstiefel.' },
       { t: 'T+00:42:52', who: 'HOUSTON', text: 'Sie auch, Station.' },
     ],
   },

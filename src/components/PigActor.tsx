@@ -46,7 +46,7 @@ function stepEye(e: Eye, ax: number, ay: number, dt: number, R: number) {
 function costumeFor(idx: number, p: number, alt: number): Costume {
   const s = store.get();
   const helmet = alt >= 100_000;
-  // past the Kármán line the wings retire and the (borrowed) rocket pack takes over
+  // past the Kármán line the wings retire and the (borrowed) rocket boots take over
   const jet = helmet && !s.chute;
   return {
     wings: jet ? 'none' : idx > 2 || (idx === 2 && p > 0.42) ? 'feather' : 'cardboard',
@@ -89,14 +89,14 @@ export function PigActor() {
       earFar: part('earFar'),
       pupilA: part('pupilA'),
       pupilB: part('pupilB'),
-      flame: svg.querySelector<SVGGElement>('[data-part="flame"]'),
+      flames: Array.from(svg.querySelectorAll<SVGGElement>('[data-part="flame"]')),
     };
 
     const eyes: [Eye, Eye] = [
       { x: 0, y: 0, vx: 0, vy: 0 },
       { x: 0, y: 0, vx: 0, vy: 0 },
     ];
-    let flameLen = 0.6;
+    let flameLen = 0.85;
     let px = -1;
     let py = -1;
     let ps = 1;
@@ -231,11 +231,12 @@ export function PigActor() {
       P.wingNear.setAttribute('transform', `rotate(${(w + 2).toFixed(2)})`);
       P.wingFar.setAttribute('transform', `rotate(${(Math.sin(flap - 0.5) * amp * 0.85 - 4).toFixed(2)})`);
 
-      // ── rocket flame: longer the harder we climb ──
-      if (P.flame) {
-        const want = st.falling ? 0.15 : grounded ? 0 : 0.55 + clamp(climb * 0.5, -0.3, 0.9);
+      // ── rocket boot flames: longer the harder we climb ──
+      if (P.flames.length) {
+        const want = st.falling ? 0.15 : grounded ? 0 : 0.85 + clamp(climb * 0.5, -0.3, 0.75);
         flameLen = lerp(flameLen, want, 1 - Math.exp(-dt * 8));
-        P.flame.style.transform = `scaleY(${flameLen.toFixed(3)})`;
+        const tf = `scaleY(${flameLen.toFixed(3)})`;
+        for (const fl of P.flames) fl.style.transform = tf;
       }
 
       // ── tail propeller ──

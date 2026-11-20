@@ -320,7 +320,7 @@ export const fr: Messages = {
     title: 'Félicitations.',
     body: 'Techniquement, ce cochon est désormais astronaute.',
     patchNote: 'Devise de la mission : SUS VOLAT — latin pour « le cochon vole ».',
-    helmet: 'Ailes : à la retraite. Propulseur : emprunté. Casque : un (1) bocal à poissons.',
+    helmet: 'Ailes : à la retraite. Bottes-fusées : empruntées. Casque : un (1) bocal à poissons.',
     photo: 'La Terre vue depuis l’orbite. Photo NASA.',
   },
   iss: {
@@ -333,7 +333,7 @@ export const fr: Messages = {
       { t: 'T+00:42:22', who: 'STATION', text: 'Un cochon. Rose. Avec des lunettes de ski. Il vient de me faire coucou.' },
       { t: 'T+00:42:31', who: 'HOUSTON', text: '…' },
       { t: 'T+00:42:40', who: 'HOUSTON', text: 'Reçu. Je le consigne comme « météo ».' },
-      { t: 'T+00:42:51', who: 'STATION', text: 'Il porte un bocal à poissons. Et un propulseur dorsal.' },
+      { t: 'T+00:42:51', who: 'STATION', text: 'Il porte un bocal à poissons. Et des bottes-fusées.' },
       { t: 'T+00:42:52', who: 'HOUSTON', text: 'Vous aussi, Station.' },
     ],
   },

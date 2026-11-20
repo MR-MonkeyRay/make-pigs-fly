@@ -321,7 +321,7 @@ export const it: Messages = {
     title: 'Congratulazioni.',
     body: 'Tecnicamente, questo maiale ora è un astronauta.',
     patchNote: 'Motto della missione: SUS VOLAT — latino per «il maiale vola».',
-    helmet: 'Ali: in pensione. Zaino razzo: in prestito. Casco: una (1) boccia per pesci.',
+    helmet: 'Ali: in pensione. Stivali a razzo: in prestito. Casco: una (1) boccia per pesci.',
     photo: 'La Terra vista dall’orbita. Foto della NASA.',
   },
   iss: {
@@ -334,7 +334,7 @@ export const it: Messages = {
       { t: 'T+00:42:22', who: 'STAZIONE', text: 'Un maiale. Rosa. Occhialoni. Mi ha appena salutato.' },
       { t: 'T+00:42:31', who: 'HOUSTON', text: '…' },
       { t: 'T+00:42:40', who: 'HOUSTON', text: 'Ricevuto. Lo registro come «fenomeno meteorologico».' },
-      { t: 'T+00:42:51', who: 'STAZIONE', text: 'Ha una boccia per pesci in testa. E uno zaino razzo.' },
+      { t: 'T+00:42:51', who: 'STAZIONE', text: 'Ha una boccia per pesci in testa. E degli stivali a razzo.' },
       { t: 'T+00:42:52', who: 'HOUSTON', text: 'Anche lei, Stazione.' },
     ],
   },

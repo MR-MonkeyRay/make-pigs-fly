@@ -1127,35 +1127,27 @@ export function MissionPatch({ className }: { className?: string }) {
         {/* Swirling cloud wisps over Earth */}
         <path d="M 78,150 Q 108,144 134,150 M 142,162 Q 162,158 176,166" stroke="#fffaf0" strokeWidth="3.4" strokeLinecap="round" fill="none" opacity="0.8" />
 
-        {/* Hero Astronaut Pig in fishbowl helmet with borrowed rocket pack! */}
+        {/* Hero Astronaut Pig in fishbowl helmet and borrowed rocket boots! */}
         <g transform="translate(122 114) rotate(-14)">
-          {/* Blazing layered rocket flame */}
-          <g transform="translate(-32 16) rotate(20)">
-            <path d="M -9,0 C -13,16 -6,30 0,40 C 6,30 13,16 9,0 Z" fill={`url(#${flameGrad})`} />
-            <path d="M -5,0 C -7,11 -3,20 0,27 C 3,20 7,11 5,0 Z" fill="#fff7a8" />
-            <path d="M -2.5,0 C -3,7 -1,12 0,16 C 1,12 3,7 2.5,0 Z" fill="#ffffff" />
-          </g>
-
-          {/* Borrowed retro rocket pack (white/red twin tanks + yellow fin + nozzle) */}
-          <g transform="translate(-28 -4) rotate(12)">
-            <path d="M -11,8 L -19,20 L -9,17 Z" fill={YELLOW} stroke={PIG_O} strokeWidth="2.2" strokeLinejoin="round" />
-            <path d="M -9,16 H 7 L 9,23 H -11 Z" fill="#4f566e" stroke={PIG_O} strokeWidth="2.2" strokeLinejoin="round" />
-            <rect x="-12" y="-18" width="12" height="34" rx="6" fill="#eef4fc" stroke={PIG_O} strokeWidth="2.4" />
-            <rect x="-2" y="-20" width="13" height="36" rx="6.5" fill="#f1485b" stroke={PIG_O} strokeWidth="2.4" />
-            <path d="M 1,-13 V 8" stroke="#ffadb6" strokeWidth="2.4" strokeLinecap="round" />
-            <rect x="-13" y="-3" width="25" height="4.5" rx="1.5" fill="#5e6680" stroke={PIG_O} strokeWidth="1.8" />
-          </g>
-
           {/* Cute curly tail + chubby pig body + hooves */}
           <path d="M -28,12 C -36,6 -33,-4 -26,-1 C -23,1 -26,7 -30,6" stroke={PIG_O} strokeWidth="2.8" fill="none" strokeLinecap="round" />
           <path d="M -20,22 L -24,31 M -2,24 L 2,32" stroke={PIG_O} strokeWidth="7.5" strokeLinecap="round" />
           <path d="M -20,22 L -24,31 M -2,24 L 2,32" stroke="#ffb3d1" strokeWidth="4" strokeLinecap="round" />
           <path d="M -23,29 L -24,32 M 1,30 L 2,33" stroke="#6b3a2e" strokeWidth="4.2" strokeLinecap="round" />
+          {/* Rocket boot cuffs + flames under both hooves */}
+          <path d="M -21.4,25.4 L -22.5,27.8 M -0.6,27.2 L 0.4,29.6" stroke="#eef4fc" strokeWidth="4" strokeLinecap="round" />
+          {[
+            [-24.4, 32.6],
+            [2.3, 33.6],
+          ].map(([fx, fy], i) => (
+            <g key={i} transform={`translate(${fx} ${fy}) rotate(${i ? -26 : 24}) scale(0.5)`}>
+              <path d="M -9,0 C -13,16 -6,30 0,40 C 6,30 13,16 9,0 Z" fill={`url(#${flameGrad})`} />
+              <path d="M -5,0 C -7,11 -3,20 0,27 C 3,20 7,11 5,0 Z" fill="#fff7a8" />
+              <path d="M -2.5,0 C -3,7 -1,12 0,16 C 1,12 3,7 2.5,0 Z" fill="#ffffff" />
+            </g>
+          ))}
           <ellipse cx="-10" cy="14" rx="20" ry="14" fill="#ffb3d1" stroke={PIG_O} strokeWidth="3" />
           <ellipse cx="-8" cy="19" rx="12" ry="5" fill="#ffe6ef" opacity="0.75" />
-          {/* Rocket pack harness strap across chest */}
-          <path d="M -18,3 Q -6,12 -14,26" stroke={YELLOW} strokeWidth="4.2" fill="none" strokeLinecap="round" />
-          <path d="M -18,3 Q -6,12 -14,26" stroke={PIG_O} strokeWidth="1.4" fill="none" strokeLinecap="round" />
 
           {/* Reused PigHead from PigMark */}
           <g transform="translate(12 -5) scale(0.66) translate(-32 -36)">

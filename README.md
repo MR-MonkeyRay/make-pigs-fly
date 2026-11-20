@@ -14,7 +14,7 @@ Static frontend only: Vite + React + TypeScript, no backend. It deploys to GitHu
 - **One persistent pig actor**: an original chibi cartoon pig, built as a layered, cel-shaded SVG and driven by a single rAF scroll engine.
   - Wing flap, propeller tail and ears follow climb speed.
   - The big glossy eyes slosh with spring physics; moods change the face (smug, thrilled, panic, dizzy…).
-  - Costumes follow altitude: cardboard wings, feather wings, goggles, scarf, neck pillow, then past the Kármán line a fishbowl helmet, a borrowed rocket pack and rocket boots whose flames grow with climb speed.
+  - Costumes follow altitude: cardboard wings, feather wings, goggles, scarf, neck pillow, then past the Kármán line a fishbowl helmet and borrowed rocket boots whose flames grow with climb speed.
 - **11 languages** (en, 简体中文, 繁體中文, 日本語, 한국어, es, fr, de, pt-BR, it, ru) behind one globe button.
 - **A finale and a fall.** "Bring him home" drops the whole page in free fall, followed by an underpants parachute, mud splat and judges' scorecards.
 - **Easter eggs**:

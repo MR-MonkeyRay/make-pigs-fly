@@ -338,7 +338,7 @@ export const en = {
     title: 'Congratulations.',
     body: 'Technically, this pig is now an astronaut.',
     patchNote: 'Mission motto: SUS VOLAT — Latin for “the pig flies.”',
-    helmet: 'Wings: retired. Rocket pack: borrowed. Helmet: one (1) fishbowl.',
+    helmet: 'Wings: retired. Rocket boots: borrowed. Helmet: one (1) fishbowl.',
     photo: 'Earth, seen from orbit. NASA photo.',
   },
   iss: {
@@ -351,7 +351,7 @@ export const en = {
       { t: 'T+00:42:22', who: 'STATION', text: 'A pig. Pink. Goggles. It just waved at me.' },
       { t: 'T+00:42:31', who: 'HOUSTON', text: '…' },
       { t: 'T+00:42:40', who: 'HOUSTON', text: 'Copy. Logging it as “weather”.' },
-      { t: 'T+00:42:51', who: 'STATION', text: 'It’s wearing a fishbowl. And a rocket pack.' },
+      { t: 'T+00:42:51', who: 'STATION', text: 'It’s wearing a fishbowl. And rocket boots.' },
       { t: 'T+00:42:52', who: 'HOUSTON', text: 'So are you, Station.' },
     ],
   },
