@@ -230,7 +230,8 @@
   flex-direction: column;
   gap: 0.12em;
   max-width: min(62vw, calc(15ch / var(--fit, 1)));
-  font-size: calc(clamp(42px, min(6.8vw, 11vh), 108px) * var(--fit, 1));
+  /* a size that ends "runway." short of the pig's ears */
+  font-size: calc(clamp(42px, min(6.2vw, 10vh), 100px) * var(--fit, 1));
 }
 
 :lang(zh) .ground__title,

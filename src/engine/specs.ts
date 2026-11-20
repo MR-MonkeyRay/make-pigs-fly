@@ -58,7 +58,7 @@ export interface SectionSpec {
 }
 
 export const SECTIONS: SectionSpec[] = [
-  { id: 'ground', alt: [0, 0], pose: { x: 0.7, y: 0.6, s: 1 }, poseM: { x: 0.45, y: 0.6, s: 0.72 }, mood: 'smug', stops: [0] },
+  { id: 'ground', alt: [0, 0], pose: { x: 0.7, y: 0.628, s: 1 }, poseM: { x: 0.45, y: 0.628, s: 0.72 }, mood: 'smug', stops: [0] },
   { id: 'doubters', alt: [0, 12], pose: { x: 0.5, y: 0.5, s: 0.85 }, poseM: { x: 0.5, y: 0.5, s: 0.66 }, mood: 'calm', stops: [0, 1], clear: '.doubt__q', play: { hold: 1000, speed: 0.2 } },
   { id: 'science', alt: [12, 40], pose: { x: 0.5, y: 0.53, s: 0.82 }, poseM: { x: 0.5, y: 0.5, s: 0.56 }, mood: 'calm', stops: [0.25, 0.62, 0.78, 0.95], play: { hold: 1500, speed: 0.3 } },
   { id: 'birds', alt: [40, 180], pose: { x: 0.74, y: 0.46, s: 0.85 }, poseM: { x: 0.19, y: 0.75, s: 0.36 }, mood: 'smug', stops: [0.15, 0.4, 0.65, 0.92], play: { hold: 1500, speed: 0.25 } },
