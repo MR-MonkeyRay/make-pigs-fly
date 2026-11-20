@@ -222,10 +222,12 @@
 
 @media (max-width: 759px) {
   .karman__earth figcaption {
-    /* on the limb's upper edge: the bottom of the screen belongs to the pills here */
+    /* just above the bottom pills, small, so the hush line up in the dark stands alone */
     left: 16px;
-    top: 10px;
-    bottom: auto;
+    bottom: 88px;
+    font-size: 10px;
+    opacity: 0.8;
+    text-shadow: 0 1px 2px rgba(10, 12, 40, 0.8);
   }
 }
 
