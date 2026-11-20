@@ -115,6 +115,13 @@ export function Typewriter({
     <span className={className} aria-label={text}>
       <span aria-hidden="true">{chars.slice(0, n).join('')}</span>
       {active && n < chars.length ? <span className="tw-caret" aria-hidden="true" /> : null}
+      {/* the untyped rest still takes its room, so the box never grows while typing
+          (stops framed around it stay right, nothing below jumps) */}
+      {n < chars.length ? (
+        <span className="tw-rest" aria-hidden="true">
+          {chars.slice(n).join('')}
+        </span>
+      ) : null}
     </span>
   );
 }

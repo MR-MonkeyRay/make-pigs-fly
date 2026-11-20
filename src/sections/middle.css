@@ -788,6 +788,10 @@
   line-height: 1.5;
 }
 
+.tw-rest {
+  visibility: hidden;
+}
+
 .tw-caret {
   display: inline-block;
   width: 0.5em;
