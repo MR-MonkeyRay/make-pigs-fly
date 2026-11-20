@@ -839,3 +839,36 @@ export function DelegateArt({ id }: { id: Delegate }) {
     </svg>
   );
 }
+
+/**
+ * The chair's gavel that closes the summit, mid-strike over its sound block:
+ * kraft handle, pink head with paper bands, ink outlines, blue impact ticks.
+ */
+export function Gavel({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 120 100" aria-hidden="true">
+      {/* sound block */}
+      <path d="M 44,80 v 8 a 30,7 0 0 0 60,0 v -8 Z" fill="#c98a55" stroke={O} strokeWidth="3" strokeLinejoin="round" />
+      <ellipse cx="74" cy="80" rx="30" ry="7" fill="#e7b07a" stroke={O} strokeWidth="3" />
+      <path d="M 56,79 Q 74,75 92,79" fill="none" stroke="#fff3df" strokeWidth="2" strokeLinecap="round" opacity="0.8" />
+
+      {/* impact ticks */}
+      <g stroke={BLUE} strokeWidth="3.4" strokeLinecap="round">
+        <path d="M 48,66 L 40,62" />
+        <path d="M 52,58 L 47,50" />
+        <path d="M 96,66 L 104,61" />
+      </g>
+
+      {/* the gavel, tilted up-right along its handle */}
+      <g transform="translate(58 44) rotate(-37)">
+        <rect x="8" y="-4.5" width="58" height="9" rx="4.5" fill="#d6a774" stroke={O} strokeWidth="3" />
+        <path d="M 14,-1.5 H 60" stroke="#f3d3a8" strokeWidth="2" strokeLinecap="round" />
+        <circle cx="66" cy="0" r="6" fill="#d6a774" stroke={O} strokeWidth="3" />
+        <rect x="-12" y="-26" width="24" height="52" rx="7" fill={PINK} stroke={O} strokeWidth="3" />
+        <rect x="-14" y="-18" width="28" height="7" rx="2.5" fill={YELLOW} stroke={O} strokeWidth="2.4" />
+        <rect x="-14" y="11" width="28" height="7" rx="2.5" fill={YELLOW} stroke={O} strokeWidth="2.4" />
+        <path d="M -6,-8 V 6" stroke="#ffc2e4" strokeWidth="3" strokeLinecap="round" />
+      </g>
+    </svg>
+  );
+}

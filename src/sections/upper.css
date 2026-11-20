@@ -22,6 +22,8 @@
   font-family: var(--f-mono);
   font-size: 14px;
   color: var(--yellow);
+  /* yellow on the mid-blue stratosphere needs a little ink under it */
+  text-shadow: 0 1px 2px rgba(14, 18, 56, 0.75);
 }
 
 .summit__track {
@@ -32,6 +34,17 @@
   gap: 22px;
   width: max-content;
   will-change: transform;
+}
+
+/* desktop: cards fade out before they reach the altitude ruler on the left */
+@media (min-width: 900px) {
+  .summit__window {
+    /* room for the cards' tilt and offset shadows, which the mask would clip */
+    padding-block: 14px;
+    margin-block: -14px;
+    -webkit-mask-image: linear-gradient(to right, transparent calc(var(--hud-w) + 6px), #000 calc(var(--hud-w) + 46px));
+    mask-image: linear-gradient(to right, transparent calc(var(--hud-w) + 6px), #000 calc(var(--hud-w) + 46px));
+  }
 }
 
 .delegate {
@@ -113,6 +126,10 @@
   color: var(--pink-deep);
 }
 
+.delegate__idiom.is-upright {
+  font-style: normal;
+}
+
 .delegate__roman {
   margin: 0;
   font-family: var(--f-mono);
@@ -159,7 +176,9 @@
 }
 
 .summit__gavel {
-  font-size: 44px;
+  width: 92px;
+  height: auto;
+  filter: drop-shadow(3px 3px 0 var(--pink-deep));
 }
 
 @media (max-width: 759px), (max-aspect-ratio: 4/5) {

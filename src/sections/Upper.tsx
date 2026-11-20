@@ -6,7 +6,7 @@ import { fractionOf, SECTION_INDEX } from '../engine/specs';
 import { bringHome } from '../engine/fall';
 import { buildShareUrl, fmt, type Personal } from '../engine/params';
 import { sound } from '../engine/sound';
-import { DelegateArt } from '../art/Delegates';
+import { DelegateArt, Gavel } from '../art/Delegates';
 import { Hoofprint, MissionPatch } from '../art/Aloft';
 import { Constellation } from '../art/Constellation';
 import { holdPlayback, provideStops, refreshStops } from '../engine/pager';
@@ -14,6 +14,9 @@ import { Section, Typewriter, useSectionFrame, useSectionStep } from './Section'
 import './upper.css';
 
 const img = (name: string) => `${import.meta.env.BASE_URL}img/${name}`;
+
+/** scripts with no italic of their own: a synthetic slant only distorts them */
+const UPRIGHT = /[\u0600-\u06ff\u0750-\u077f\u3040-\u30ff\u3400-\u9fff\uac00-\ud7af]/;
 
 /* ─────────────────────────── 8 · SUMMIT ─────────────────────────── */
 
@@ -79,36 +82,36 @@ export function Summit() {
           <h2 className="display summit__title riso--paper">{s.title}</h2>
           <p className="summit__agenda">{s.agenda}</p>
         </header>
-        <ol className="summit__track" ref={track}>
-          {s.delegates.map((d) => (
-            <li key={d.id} className={`delegate${d.id === 'sun' ? ' is-observer' : ''}`}>
-              <div className="delegate__top">
-                <DelegateArt id={d.id} />
-                <div className="delegate__plate">
-                  <small>{d.id === 'sun' ? s.observer : s.delegate}</small>
-                  <strong>{d.name}</strong>
-                  <span>{d.lang}</span>
+        <div className="summit__window">
+          <ol className="summit__track" ref={track}>
+            {s.delegates.map((d) => (
+              <li key={d.id} className={`delegate${d.id === 'sun' ? ' is-observer' : ''}`}>
+                <div className="delegate__top">
+                  <DelegateArt id={d.id} />
+                  <div className="delegate__plate">
+                    <small>{d.id === 'sun' ? s.observer : s.delegate}</small>
+                    <strong>{d.name}</strong>
+                    <span>{d.lang}</span>
+                  </div>
                 </div>
-              </div>
-              <p className="delegate__idiom" dir="auto">
-                {d.idiom}
-              </p>
-              {d.roman && <p className="delegate__roman">{d.roman}</p>}
-              <p className="delegate__lit">
-                <b>{s.literally}:</b> {d.literal}
-              </p>
-              <p className="delegate__said">
-                <b>{s.statement}:</b> “{d.statement}”
-              </p>
+                <p className={`delegate__idiom${UPRIGHT.test(d.idiom) ? ' is-upright' : ''}`} dir="auto">
+                  {d.idiom}
+                </p>
+                {d.roman && <p className="delegate__roman">{d.roman}</p>}
+                <p className="delegate__lit">
+                  <b>{s.literally}:</b> {d.literal}
+                </p>
+                <p className="delegate__said">
+                  <b>{s.statement}:</b> “{d.statement}”
+                </p>
+              </li>
+            ))}
+            <li className="summit__close">
+              <Gavel className="summit__gavel" />
+              <p className="display">{s.closing}</p>
             </li>
-          ))}
-          <li className="summit__close">
-            <span className="summit__gavel" aria-hidden="true">
-              🔨
-            </span>
-            <p className="display">{s.closing}</p>
-          </li>
-        </ol>
+          </ol>
+        </div>
       </div>
     </Section>
   );
