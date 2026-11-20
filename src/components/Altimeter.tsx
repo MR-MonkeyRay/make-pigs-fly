@@ -13,8 +13,50 @@ export function Altimeter() {
   const layerRef = useRef<HTMLSpanElement>(null);
   const markerRef = useRef<HTMLDivElement>(null);
   const [marks, setMarks] = useState<number[]>([]);
+  const [cur, setCur] = useState(0);
+  const [open, setOpen] = useState(false);
+  const wrap = useRef<HTMLElement>(null);
+  const btn = useRef<HTMLButtonElement>(null);
+  const items = useRef<(HTMLButtonElement | null)[]>([]);
   const tRef = useRef(t);
   tRef.current = t;
+
+  // the floor list: close on a tap outside, focus the floor we are on
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: PointerEvent) => {
+      if (!wrap.current?.contains(e.target as Node)) setOpen(false);
+    };
+    window.addEventListener('pointerdown', onDown);
+    requestAnimationFrame(() => items.current[cur]?.focus());
+    return () => window.removeEventListener('pointerdown', onDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+
+  const jump = (i: number) => {
+    setOpen(false);
+    scrollToSection(i);
+  };
+
+  const onKey = (e: React.KeyboardEvent) => {
+    if (!open) return;
+    const list = items.current.filter(Boolean) as HTMLButtonElement[];
+    const i = list.indexOf(document.activeElement as HTMLButtonElement);
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      setOpen(false);
+      btn.current?.focus();
+    } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      const n = list.length;
+      list[(i + (e.key === 'ArrowDown' ? 1 : -1) + n) % n]?.focus();
+    } else if (e.key === 'Home' || e.key === 'End') {
+      e.preventDefault();
+      list[e.key === 'Home' ? 0 : list.length - 1]?.focus();
+    } else if (e.key === 'Tab') {
+      setOpen(false);
+    }
+  };
 
   useEffect(() => {
     let last = '';
@@ -41,6 +83,7 @@ export function Altimeter() {
       if (f.idx !== lastLayer || tag !== lastTag) {
         lastLayer = f.idx;
         lastTag = tag;
+        setCur(f.idx);
         if (layerRef.current) layerRef.current.textContent = tt.layers[f.idx] ?? '';
       }
       if (markerRef.current) markerRef.current.style.transform = `translateY(${((1 - f.progress) * 100).toFixed(2)}%)`;
@@ -55,8 +98,15 @@ export function Altimeter() {
   void frame;
 
   return (
-    <aside className="alt" aria-label={t.ui.altitude}>
-      <div className="alt__read">
+    <aside className={`alt${open ? ' is-open' : ''}`} aria-label={t.ui.altitude} ref={wrap} onKeyDown={onKey} data-own-keys>
+      <button
+        ref={btn}
+        type="button"
+        className="alt__read"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        onClick={() => setOpen((v) => !v)}
+      >
         <span className="alt__label">{t.ui.altitude}</span>
         <span className="alt__num">
           <span ref={valueRef}>0</span>
@@ -68,7 +118,33 @@ export function Altimeter() {
           {t.layers[0]}
         </span>
         <span className="alt__pigs" ref={pigsRef} />
-      </div>
+      </button>
+      {open && (
+        <div className="alt__menu" role="menu" aria-label={t.ui.altitude} data-own-scroll>
+          {SECTIONS.map((sec, i) => {
+            const a = formatAltitude(sec.alt[1], tag); // how high this floor reaches
+            return (
+              <button
+                key={sec.id}
+                ref={(el) => {
+                  items.current[i] = el;
+                }}
+                type="button"
+                role="menuitem"
+                className={`alt__floor${i === cur ? ' is-on' : ''}`}
+                style={{ order: SECTIONS.length - i }}
+                aria-current={i === cur ? 'location' : undefined}
+                onClick={() => jump(i)}
+              >
+                <span>{t.layers[i]}</span>
+                <small>
+                  {a.value} {t.ui.units[a.unit]}
+                </small>
+              </button>
+            );
+          })}
+        </div>
+      )}
       <nav className="alt__ruler" aria-label={t.ui.altitude}>
         <div className="alt__track">
           {marks.map((m, i) => (
