@@ -102,23 +102,42 @@ export interface AltitudeText {
   unit: 'm' | 'km' | 'ly';
 }
 
+/** Intl formatters are costly to build and the altimeter asks every frame */
+const fmtCache = new Map<string, Intl.NumberFormat>();
+function numFmt(locale: string, key: string, opts: Intl.NumberFormatOptions): Intl.NumberFormat {
+  const k = `${locale}|${key}`;
+  let f = fmtCache.get(k);
+  if (!f) {
+    f = new Intl.NumberFormat(locale, opts);
+    fmtCache.set(k, f);
+  }
+  return f;
+}
+
 export function formatAltitude(m: number, locale: string): AltitudeText {
-  const nf = (d: number) =>
-    new Intl.NumberFormat(locale, { maximumFractionDigits: d, minimumFractionDigits: d });
+  const nf = (d: number) => numFmt(locale, `f${d}`, { maximumFractionDigits: d, minimumFractionDigits: d });
   if (m < 1000) return { value: nf(0).format(Math.max(0, Math.round(m))), unit: 'm' };
   const km = m / 1000;
-  if (m < 1e13) {
+  if (km < 1e6) {
     const d = km < 10 ? 2 : km < 100 ? 1 : 0;
     return { value: nf(d).format(km), unit: 'km' };
   }
-  return { value: nf(2).format(m / LIGHT_YEAR), unit: 'ly' };
+  // Past a million km the digits stop meaning anything and no longer fit the
+  // readout ("347,727,739"): say it the way each language says big numbers
+  // (348M, 3.48亿, 348 Mio.), then switch to light-years.
+  if (m < 1e13) {
+    return { value: numFmt(locale, 'c3', { notation: 'compact', maximumSignificantDigits: 3 }).format(km), unit: 'km' };
+  }
+  // three significant digits, so the first stretch reads 0.00106, not 0.00
+  return {
+    value: numFmt(locale, 's3', { minimumSignificantDigits: 3, maximumSignificantDigits: 3 }).format(m / LIGHT_YEAR),
+    unit: 'ly',
+  };
 }
 
 /** a domestic pig standing up is roughly 0.9 m tall */
 export function pigsStacked(m: number, locale: string): string {
   const n = Math.max(0, Math.round(m / 0.9));
-  return new Intl.NumberFormat(locale, {
-    notation: n >= 1e6 ? 'compact' : 'standard',
-    maximumFractionDigits: 1,
-  }).format(n);
+  const compact = n >= 1e6;
+  return numFmt(locale, compact ? 'pc' : 'ps', { notation: compact ? 'compact' : 'standard', maximumFractionDigits: 1 }).format(n);
 }

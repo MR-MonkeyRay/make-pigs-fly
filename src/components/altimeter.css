@@ -34,7 +34,10 @@
   flex-wrap: wrap;
   align-items: baseline;
   column-gap: 5px;
-  font-size: 22px;
+  /* the readout is 100px wide inside; a monospace digit is 0.6em (fallback
+     glyphs like Cyrillic run wider), so seven characters fit at 22px and
+     longer values scale down to fit */
+  font-size: min(22px, calc(154px / var(--len, 7)));
   font-weight: 700;
   line-height: 1.05;
   font-variant-numeric: tabular-nums;
