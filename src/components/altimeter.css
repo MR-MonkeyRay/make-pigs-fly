@@ -217,6 +217,7 @@ html.is-dark .alt__mark {
   min-width: 210px;
   max-height: min(calc(100svh - 150px), 560px);
   overflow: auto;
+  overscroll-behavior: contain;
   padding: 6px;
   background: #fffef8;
   color: var(--ink);

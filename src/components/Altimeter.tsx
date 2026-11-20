@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { SECTIONS, formatAltitude, pigsStacked } from '../engine/specs';
 import { frame, maxScroll, scrollToSection, sectionStartY, subscribe } from '../engine/scroll';
+import { stopAutoplay } from '../engine/pager';
 import { useI18n } from '../i18n';
 import { fmt } from '../engine/params';
 import './altimeter.css';
@@ -17,6 +18,7 @@ export function Altimeter() {
   const [open, setOpen] = useState(false);
   const wrap = useRef<HTMLElement>(null);
   const btn = useRef<HTMLButtonElement>(null);
+  const menu = useRef<HTMLDivElement>(null);
   const items = useRef<(HTMLButtonElement | null)[]>([]);
   const tRef = useRef(t);
   tRef.current = t;
@@ -40,7 +42,7 @@ export function Altimeter() {
 
   const onKey = (e: React.KeyboardEvent) => {
     if (!open) return;
-    const list = items.current.filter(Boolean) as HTMLButtonElement[];
+    const list = [...(menu.current?.querySelectorAll<HTMLButtonElement>('.alt__floor') ?? [])];
     const i = list.indexOf(document.activeElement as HTMLButtonElement);
     if (e.key === 'Escape') {
       e.preventDefault();
@@ -98,14 +100,19 @@ export function Altimeter() {
   void frame;
 
   return (
-    <aside className={`alt${open ? ' is-open' : ''}`} aria-label={t.ui.altitude} ref={wrap} onKeyDown={onKey} data-own-keys>
+    // arrow keys belong to the menu only while it is open; otherwise they page the site
+    <aside className={`alt${open ? ' is-open' : ''}`} aria-label={t.ui.altitude} ref={wrap} onKeyDown={onKey} data-own-keys={open ? '' : undefined}>
       <button
         ref={btn}
         type="button"
         className="alt__read"
         aria-haspopup="menu"
         aria-expanded={open}
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => {
+          // choosing a floor is taking the controls: autoplay must not glide on underneath
+          if (!open) stopAutoplay();
+          setOpen((v) => !v);
+        }}
       >
         <span className="alt__label">{t.ui.altitude}</span>
         <span className="alt__num">
@@ -120,8 +127,9 @@ export function Altimeter() {
         <span className="alt__pigs" ref={pigsRef} />
       </button>
       {open && (
-        <div className="alt__menu" role="menu" aria-label={t.ui.altitude} data-own-scroll>
-          {SECTIONS.map((sec, i) => {
+        <div className="alt__menu" role="menu" aria-label={t.ui.altitude} ref={menu} data-own-scroll>
+          {/* top floor first, in the DOM too, so arrow keys and screen readers follow what is seen */}
+          {SECTIONS.map((sec, i) => ({ sec, i })).reverse().map(({ sec, i }) => {
             const a = formatAltitude(sec.alt[1], tag); // how high this floor reaches
             return (
               <button
@@ -132,7 +140,6 @@ export function Altimeter() {
                 type="button"
                 role="menuitem"
                 className={`alt__floor${i === cur ? ' is-on' : ''}`}
-                style={{ order: SECTIONS.length - i }}
                 aria-current={i === cur ? 'location' : undefined}
                 onClick={() => jump(i)}
               >

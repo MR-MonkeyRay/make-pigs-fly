@@ -117,7 +117,7 @@ function LangMenu({
   };
 
   return (
-    <div className={`lang${open ? ' is-open' : ''}`} ref={wrap} onKeyDown={onKey} data-own-keys>
+    <div className={`lang${open ? ' is-open' : ''}`} ref={wrap} onKeyDown={onKey} data-own-keys={open ? '' : undefined}>
       <button
         ref={btn}
         type="button"
