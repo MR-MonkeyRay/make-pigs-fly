@@ -191,7 +191,7 @@ export const zhTW: Messages = {
     ],
   },
   cruise: {
-    kicker: '圖 7 —— 23A 靠窗座位',
+    kicker: '圖 4 —— 23A 靠窗座位',
     captainLabel: '機長廣播',
     captain: '各位旅客您好，我是本班機機長。請往飛機左側窗外看……等等，給我一分鐘。',
     board: {
@@ -210,7 +210,7 @@ export const zhTW: Messages = {
     },
   },
   summit: {
-    kicker: '平流層 · 31 公里',
+    kicker: '平流層 · 緊急會議',
     title: '國際不可能動物聯合會緊急高峰會',
     agenda: '議程第一項：豬真的飛了，我們怎麼辦？',
     delegate: '代表',
@@ -311,7 +311,7 @@ export const zhTW: Messages = {
     photo: '從軌道上看到的地球。NASA 攝。',
   },
   iss: {
-    kicker: '圖 10 —— 天地通話紀錄，408 公里',
+    kicker: '圖 5 —— 天地通話紀錄，408 公里',
     photoCap: '國際太空站（NASA 攝）。豬就在畫面外，正在揮手。',
     title: '通話紀錄',
     log: [
@@ -325,7 +325,7 @@ export const zhTW: Messages = {
     ],
   },
   moon: {
-    kicker: '圖 11 —— 月球表面',
+    kicker: '圖 6 —— 月球表面',
     left: '1969 —— 一小步。',
     right: '今天 —— 一小蹄。',
     note: '請注意更優秀的胎紋。',

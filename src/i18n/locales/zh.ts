@@ -191,7 +191,7 @@ export const zh: Messages = {
     ],
   },
   cruise: {
-    kicker: '图 7 —— 23A 靠窗座位',
+    kicker: '图 4 —— 23A 靠窗座位',
     captainLabel: '机长广播',
     captain: '女士们先生们，我是本次航班的机长。请看飞机左侧窗外……算了，给我一分钟，让我冷静一下。',
     board: {
@@ -210,7 +210,7 @@ export const zh: Messages = {
     },
   },
   summit: {
-    kicker: '平流层 · 31 公里',
+    kicker: '平流层 · 紧急会议',
     title: '国际不可能动物联合会紧急峰会',
     agenda: '议程第一项：猪真的飞了，我们怎么办？',
     delegate: '代表',
@@ -311,7 +311,7 @@ export const zh: Messages = {
     photo: '从轨道上看到的地球。NASA 摄。',
   },
   iss: {
-    kicker: '图 10 —— 天地通话记录，408 公里',
+    kicker: '图 5 —— 天地通话记录，408 公里',
     photoCap: '国际空间站（NASA 摄）。猪就在画面外，正在招手。',
     title: '通话记录',
     log: [
@@ -325,7 +325,7 @@ export const zh: Messages = {
     ],
   },
   moon: {
-    kicker: '图 11 —— 月球表面',
+    kicker: '图 6 —— 月球表面',
     left: '1969 —— 一小步。',
     right: '今天 —— 一小蹄。',
     note: '请注意更优秀的胎纹。',

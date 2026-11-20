@@ -213,7 +213,7 @@ export const en = {
     ],
   },
   cruise: {
-    kicker: 'Fig. 7 — Seat 23A, window',
+    kicker: 'Fig. 4 — Seat 23A, window',
     captainLabel: 'Cabin announcement',
     captain:
       'Ladies and gentlemen, this is your captain speaking. If you look out of the left side of the aircraft… actually, give me a minute.',
@@ -233,7 +233,7 @@ export const en = {
     },
   },
   summit: {
-    kicker: 'Stratosphere · 31 km',
+    kicker: 'Stratosphere · Emergency session',
     title: 'Emergency Summit of the International Union of Impossible Animals',
     agenda: 'Agenda, item 1: The pig actually did it. Now what?',
     delegate: 'Delegate',
@@ -342,7 +342,7 @@ export const en = {
     photo: 'Earth, seen from orbit. NASA photo.',
   },
   iss: {
-    kicker: 'Fig. 10 — Air-to-ground loop, 408 km',
+    kicker: 'Fig. 5 — Air-to-ground loop, 408 km',
     photoCap: 'International Space Station (NASA). The pig is just out of frame. Waving.',
     title: 'Transcript',
     log: [
@@ -356,7 +356,7 @@ export const en = {
     ],
   },
   moon: {
-    kicker: 'Fig. 11 — Lunar surface',
+    kicker: 'Fig. 6 — Lunar surface',
     left: '1969 — one small step.',
     right: 'Today — one small trot.',
     note: 'Note the superior tread.',

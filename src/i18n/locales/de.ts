@@ -204,7 +204,7 @@ export const de: Messages = {
     ],
   },
   cruise: {
-    kicker: 'Abb. 7 — Sitz 23A, Fensterplatz',
+    kicker: 'Abb. 4 — Sitz 23A, Fensterplatz',
     captainLabel: 'Bordansage',
     captain:
       'Meine Damen und Herren, hier spricht Ihr Kapitän. Wenn Sie auf der linken Seite aus dem Flugzeug schauen … ähm, geben Sie mir bitte einen Moment.',
@@ -224,7 +224,7 @@ export const de: Messages = {
     },
   },
   summit: {
-    kicker: 'Stratosphäre · 31 km',
+    kicker: 'Stratosphäre · Dringlichkeitssitzung',
     title: 'Notgipfel der Internationalen Union unmöglicher Tiere',
     agenda: 'Tagesordnung, Punkt 1: Das Schwein hat es tatsächlich geschafft. Und jetzt?',
     delegate: 'Delegierter',
@@ -325,7 +325,7 @@ export const de: Messages = {
     photo: 'Die Erde, von der Umlaufbahn aus gesehen. NASA-Foto.',
   },
   iss: {
-    kicker: 'Abb. 10 — Luft-Boden-Schleife, 408 km',
+    kicker: 'Abb. 5 — Luft-Boden-Schleife, 408 km',
     photoCap: 'Internationale Raumstation (NASA). Das Schwein ist gerade außerhalb des Bildes. Winkt.',
     title: 'Transkript',
     log: [
@@ -339,7 +339,7 @@ export const de: Messages = {
     ],
   },
   moon: {
-    kicker: 'Abb. 11 — Mondoberfläche',
+    kicker: 'Abb. 6 — Mondoberfläche',
     left: '1969 — ein kleiner Schritt.',
     right: 'Heute — ein kleiner Trab.',
     note: 'Beachte das überlegene Profil.',

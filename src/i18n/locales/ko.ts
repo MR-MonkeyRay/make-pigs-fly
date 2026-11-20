@@ -204,7 +204,7 @@ export const ko: Messages = {
     ],
   },
   cruise: {
-    kicker: '그림 7 — 23A 창가 좌석',
+    kicker: '그림 4 — 23A 창가 좌석',
     captainLabel: '기내 방송',
     captain:
       '승객 여러분, 기장입니다. 기체 왼쪽 창밖을 보시면… 아, 잠깐만요. 1분만 주세요.',
@@ -224,7 +224,7 @@ export const ko: Messages = {
     },
   },
   summit: {
-    kicker: '성층권 · 31km',
+    kicker: '성층권 · 긴급 회의',
     title: '국제불가능동물연합 긴급 정상회의',
     agenda: '의제 1항: 돼지가 진짜 해냈다. 이제 어쩌지?',
     delegate: '대표',
@@ -325,7 +325,7 @@ export const ko: Messages = {
     photo: '궤도에서 본 지구. NASA 사진.',
   },
   iss: {
-    kicker: '그림 10 — 우주-지상 교신 루프, 408km',
+    kicker: '그림 5 — 우주-지상 교신 루프, 408km',
     photoCap: '국제우주정거장 (NASA). 돼지는 화면 바로 밖에 있습니다. 손을 흔드는 중.',
     title: '교신 기록',
     log: [
@@ -339,7 +339,7 @@ export const ko: Messages = {
     ],
   },
   moon: {
-    kicker: '그림 11 — 달 표면',
+    kicker: '그림 6 — 달 표면',
     left: '1969 — 작은 한 걸음.',
     right: '오늘 — 작은 종종걸음.',
     note: '바닥 무늬(트레드)가 우수한 점에 주목.',

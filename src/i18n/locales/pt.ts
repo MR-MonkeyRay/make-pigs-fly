@@ -203,7 +203,7 @@ export const pt: Messages = {
     ],
   },
   cruise: {
-    kicker: 'Fig. 7 — Poltrona 23A, janela',
+    kicker: 'Fig. 4 — Poltrona 23A, janela',
     captainLabel: 'Anúncio de bordo',
     captain:
       'Senhoras e senhores, aqui fala o seu comandante. Se olharem para a esquerda da aeronave… na verdade, me dêem um minuto.',
@@ -223,7 +223,7 @@ export const pt: Messages = {
     },
   },
   summit: {
-    kicker: 'Estratosfera · 31 km',
+    kicker: 'Estratosfera · Sessão de emergência',
     title: 'Cúpula de emergência da União Internacional de Animais Impossíveis',
     agenda: 'Pauta, item 1: O porco realmente conseguiu. E agora?',
     delegate: 'Delegado',
@@ -324,7 +324,7 @@ export const pt: Messages = {
     photo: 'A Terra vista da órbita. Foto da NASA.',
   },
   iss: {
-    kicker: 'Fig. 10 — Circuito ar-solo, 408 km',
+    kicker: 'Fig. 5 — Circuito ar-solo, 408 km',
     photoCap: 'Estação Espacial Internacional (NASA). O porco está logo fora do quadro. Acenando.',
     title: 'Transcrição',
     log: [
@@ -338,7 +338,7 @@ export const pt: Messages = {
     ],
   },
   moon: {
-    kicker: 'Fig. 11 — Superfície lunar',
+    kicker: 'Fig. 6 — Superfície lunar',
     left: '1969 — um pequeno passo.',
     right: 'Hoje — um pequeno trote.',
     note: 'Repare no solado superior.',

@@ -203,7 +203,7 @@ export const es: Messages = {
     ],
   },
   cruise: {
-    kicker: 'Fig. 7 — Asiento 23A, ventanilla',
+    kicker: 'Fig. 4 — Asiento 23A, ventanilla',
     captainLabel: 'Anuncio de cabina',
     captain:
       'Señoras y señores, les habla su capitán. Si miran por el lado izquierdo del avión… bueno, déjenme un minuto.',
@@ -223,7 +223,7 @@ export const es: Messages = {
     },
   },
   summit: {
-    kicker: 'Estratosfera · 31 km',
+    kicker: 'Estratosfera · Sesión de emergencia',
     title: 'Cumbre de emergencia de la Unión Internacional de Animales Imposibles',
     agenda: 'Orden del día, punto 1: El cerdo lo ha conseguido de verdad. ¿Y ahora qué?',
     delegate: 'Delegado',
@@ -324,7 +324,7 @@ export const es: Messages = {
     photo: 'La Tierra vista desde la órbita. Foto de la NASA.',
   },
   iss: {
-    kicker: 'Fig. 10 — Bucle aire-tierra, 408 km',
+    kicker: 'Fig. 5 — Bucle aire-tierra, 408 km',
     photoCap: 'Estación Espacial Internacional (NASA). El cerdo está justo fuera de cuadro. Saludando.',
     title: 'Transcripción',
     log: [
@@ -338,7 +338,7 @@ export const es: Messages = {
     ],
   },
   moon: {
-    kicker: 'Fig. 11 — Superficie lunar',
+    kicker: 'Fig. 6 — Superficie lunar',
     left: '1969 — un pequeño paso.',
     right: 'Hoy — un pequeño trote.',
     note: 'Nótese la suela superior.',

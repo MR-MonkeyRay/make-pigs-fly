@@ -204,7 +204,7 @@ export const it: Messages = {
     ],
   },
   cruise: {
-    kicker: 'Fig. 7 — Posto 23A, finestrino',
+    kicker: 'Fig. 4 — Posto 23A, finestrino',
     captainLabel: 'Annuncio di bordo',
     captain:
       'Signore e signori, vi parla il comandante. Se guardate dalla parte sinistra dell’aereo… anzi, datemi un minuto.',
@@ -224,7 +224,7 @@ export const it: Messages = {
     },
   },
   summit: {
-    kicker: 'Stratosfera · 31 km',
+    kicker: 'Stratosfera · Sessione straordinaria',
     title: 'Vertice d’emergenza dell’Unione Internazionale degli Animali Impossibili',
     agenda: 'Ordine del giorno, punto 1: il maiale ce l’ha fatta davvero. E adesso?',
     delegate: 'Delegato',
@@ -325,7 +325,7 @@ export const it: Messages = {
     photo: 'La Terra vista dall’orbita. Foto della NASA.',
   },
   iss: {
-    kicker: 'Fig. 10 — Anello aria-terra, 408 km',
+    kicker: 'Fig. 5 — Anello aria-terra, 408 km',
     photoCap: 'Stazione Spaziale Internazionale (NASA). Il maiale è appena fuori inquadratura. Saluta.',
     title: 'Trascrizione',
     log: [
@@ -339,7 +339,7 @@ export const it: Messages = {
     ],
   },
   moon: {
-    kicker: 'Fig. 11 — Superficie lunare',
+    kicker: 'Fig. 6 — Superficie lunare',
     left: '1969 — un piccolo passo.',
     right: 'Oggi — un piccolo trotto.',
     note: 'Notare il battistrada superiore.',

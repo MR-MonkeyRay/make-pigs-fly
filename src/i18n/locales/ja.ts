@@ -203,7 +203,7 @@ export const ja: Messages = {
     ],
   },
   cruise: {
-    kicker: '図 7 —— 23A 窓側席',
+    kicker: '図 4 —— 23A 窓側席',
     captainLabel: '機長アナウンス',
     captain:
       'お客様にご案内いたします。こちらは機長です。左手の窓の外をご覧いただくと……あ、すみません、少々お待ちいただけますか。',
@@ -223,7 +223,7 @@ export const ja: Messages = {
     },
   },
   summit: {
-    kicker: '成層圏 · 31km',
+    kicker: '成層圏 · 緊急会合',
     title: '国際不可能動物連合 緊急サミット',
     agenda: '議事第1項：豚が本当にやってしまった。さて、どうしましょう。',
     delegate: '代表',
@@ -324,7 +324,7 @@ export const ja: Messages = {
     photo: '軌道から見た地球。NASA撮影。',
   },
   iss: {
-    kicker: '図 10 —— 対地交信ループ、408km',
+    kicker: '図 5 —— 対地交信ループ、408km',
     photoCap: '国際宇宙ステーション（NASA）。豚は画面の外にいます。手を振っています。',
     title: '交信記録',
     log: [
@@ -338,7 +338,7 @@ export const ja: Messages = {
     ],
   },
   moon: {
-    kicker: '図 11 —— 月面',
+    kicker: '図 6 —— 月面',
     left: '1969年 —— 小さな一歩。',
     right: '今日 —— ぽこぽこ一歩。',
     note: 'ひづめの溝（トレッド）の優秀さにご注目。',

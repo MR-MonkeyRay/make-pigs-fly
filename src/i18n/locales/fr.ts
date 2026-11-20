@@ -203,7 +203,7 @@ export const fr: Messages = {
     ],
   },
   cruise: {
-    kicker: 'Fig. 7 — Siège 23A, hublot',
+    kicker: 'Fig. 4 — Siège 23A, hublot',
     captainLabel: 'Annonce à bord',
     captain:
       'Mesdames et messieurs, ici votre commandant de bord. Si vous regardez par le côté gauche de l’appareil… en fait, donnez-moi une minute.',
@@ -223,7 +223,7 @@ export const fr: Messages = {
     },
   },
   summit: {
-    kicker: 'Stratosphère · 31 km',
+    kicker: 'Stratosphère · Session extraordinaire',
     title: 'Sommet d’urgence de l’Union internationale des animaux impossibles',
     agenda: 'Ordre du jour, point 1 : Le cochon l’a vraiment fait. Et maintenant ?',
     delegate: 'Délégué',
@@ -324,7 +324,7 @@ export const fr: Messages = {
     photo: 'La Terre vue depuis l’orbite. Photo NASA.',
   },
   iss: {
-    kicker: 'Fig. 10 — Boucle air-sol, 408 km',
+    kicker: 'Fig. 5 — Boucle air-sol, 408 km',
     photoCap: 'Station spatiale internationale (NASA). Le cochon est juste hors cadre. Il salue.',
     title: 'Transcription',
     log: [
@@ -338,7 +338,7 @@ export const fr: Messages = {
     ],
   },
   moon: {
-    kicker: 'Fig. 11 — Surface lunaire',
+    kicker: 'Fig. 6 — Surface lunaire',
     left: '1969 — un petit pas.',
     right: 'Aujourd’hui — un petit trot.',
     note: 'Notez la semelle nettement supérieure.',
