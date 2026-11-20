@@ -356,8 +356,9 @@ export function Science() {
           ))}
         </div>
 
-        {/* below him, where the compliments set off from */}
-        <div className="science__label science__label--flatter" style={{ left: narrow ? 20 : cx - 220, top: narrow ? cy + 180 : cy + 150, '--a': 0.04 } as React.CSSProperties}>
+        {/* below him, where the compliments set off from; it turns up with the
+            upgraded wings, once the diagram's own compliments have landed */}
+        <div className="science__label science__label--flatter" style={{ left: narrow ? 20 : cx - 220, top: narrow ? cy + 180 : cy + 150, '--a': 0.3 } as React.CSSProperties}>
           <button type="button" className="science__flatter" onClick={flatter}>
             + {s.flatter}
           </button>
