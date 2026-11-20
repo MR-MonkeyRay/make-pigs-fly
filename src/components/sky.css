@@ -1,0 +1,251 @@
+.sky {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: var(--paper);
+}
+
+.sky__layer {
+  position: absolute;
+  inset: 0;
+  will-change: opacity;
+}
+
+.sky__dots {
+  position: absolute;
+  inset: 0 0 35% 0;
+  background-image: radial-gradient(circle, rgba(0, 120, 191, 0.2) 1.3px, transparent 1.8px);
+  background-size: 10px 10px;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.5) 45%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.5) 45%, transparent 100%);
+}
+
+.sky__stars {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  will-change: opacity;
+}
+
+/* ───── real views (on demand) ───── */
+.sky__photos {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.6s ease,
+    visibility 0s linear 0.6s;
+}
+
+html.is-gazing .sky__photos {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.6s ease;
+}
+
+.sky__photo {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #0b0e26;
+}
+
+.sky__photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.04);
+  transition:
+    opacity 0.6s ease,
+    transform 1.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.sky__photo.is-ready img {
+  opacity: 1;
+  transform: none;
+}
+
+.world {
+  transition: opacity 0.5s ease;
+}
+
+html.is-gazing .world {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ───── the button ───── */
+.skycap {
+  position: fixed;
+  right: max(14px, env(safe-area-inset-right));
+  bottom: max(14px, env(safe-area-inset-bottom));
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  max-width: min(420px, calc(100vw - 28px));
+  opacity: 0;
+  transform: translateY(14px) scale(0.96);
+  pointer-events: none;
+  transition:
+    opacity 0.35s ease,
+    transform 0.45s var(--ease-spring);
+}
+
+.skycap.is-on {
+  opacity: 1;
+  transform: none;
+}
+
+.skycap.is-on > * {
+  pointer-events: auto;
+}
+
+.skycap__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px 5px 5px;
+  border: 2.5px solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--f-mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  box-shadow: 3px 3px 0 var(--pink);
+  cursor: pointer;
+  transition:
+    transform 0.2s var(--ease-spring),
+    box-shadow 0.2s ease;
+}
+
+.skycap__btn:hover {
+  transform: translate(-1px, -1px) rotate(-1.5deg);
+  box-shadow: 5px 5px 0 var(--pink);
+}
+
+.skycap__btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--pink);
+}
+
+.skycap__eye {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--yellow);
+  border: 2px solid var(--ink);
+}
+
+.skycap__btn[aria-pressed='true'] .skycap__eye {
+  background: var(--pink);
+  color: #fff;
+}
+
+.skycap__label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.skycap__meta {
+  display: grid;
+  max-width: 100%;
+  padding: 8px 14px;
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  background: rgba(244, 238, 223, 0.94);
+  color: var(--ink);
+  line-height: 1.3;
+  text-align: right;
+  animation: skycap-in 0.45s ease both;
+}
+
+@keyframes skycap-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+.skycap__place {
+  overflow: hidden;
+  font-family: var(--f-body);
+  font-size: 14px;
+  font-weight: 700;
+  color: inherit;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-decoration: none;
+}
+
+.skycap__place:hover {
+  text-decoration: underline;
+}
+
+.skycap__by {
+  overflow: hidden;
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  opacity: 0.8;
+}
+
+html.is-dark .skycap__btn {
+  border-color: var(--paper);
+  background: #141d4c;
+  color: var(--paper);
+}
+
+html.is-dark .skycap__eye {
+  border-color: var(--paper);
+  color: var(--ink);
+}
+
+@media (max-width: 759px), (max-aspect-ratio: 4/5) {
+  .skycap {
+    left: auto;
+    right: 10px;
+    bottom: max(10px, env(safe-area-inset-bottom));
+    max-width: calc(100vw - 20px);
+  }
+  .skycap__label {
+    display: none;
+  }
+  .skycap__btn {
+    padding: 4px;
+  }
+  .skycap.is-gazing .skycap__label {
+    display: inline;
+  }
+  .skycap.is-gazing .skycap__btn {
+    padding-right: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sky__photo img {
+    transform: none;
+    transition: opacity 0.3s ease;
+  }
+}
+
+@media print {
+  .skycap,
+  .sky__photos {
+    display: none;
+  }
+}

@@ -35,8 +35,15 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile || pnpm install
 
+      - name: Configure GitHub Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
       - name: Build static site
         run: pnpm build
+        env:
+          # absolute URL for og:image / canonical (e.g. https://<user>.github.io/<repo>/)
+          VITE_SITE_URL: ${{ steps.pages.outputs.base_url }}/
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3

@@ -1,0 +1,89 @@
+.skip {
+  position: fixed;
+  left: 12px;
+  top: -60px;
+  z-index: 200;
+  padding: 8px 14px;
+  background: var(--yellow);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.skip:focus {
+  top: 12px;
+}
+
+.print-cert {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 12mm;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    height: auto !important;
+  }
+
+  body > #root > *:not(.print-cert) {
+    display: none !important;
+  }
+
+  .print-cert {
+    display: block;
+    color: #221e24;
+    font-family: var(--f-body);
+  }
+
+  .print-cert__frame {
+    position: relative;
+    padding: 18mm 22mm;
+    border: 3mm double #0078bf;
+    outline: 1mm solid #ff48b0;
+    outline-offset: -6mm;
+    text-align: center;
+    min-height: 170mm;
+  }
+
+  .print-cert__brand {
+    margin: 0;
+    font-family: var(--f-mono);
+    letter-spacing: 0.3em;
+    font-size: 11pt;
+    color: #0078bf;
+  }
+
+  .print-cert h2 {
+    margin: 6mm 0 2mm;
+    font-family: var(--f-display);
+    font-variation-settings: var(--display-vars);
+    font-weight: 900;
+    font-size: 34pt;
+    color: #ff48b0;
+  }
+
+  .print-cert__pig {
+    width: 55mm;
+    margin: 0 auto;
+  }
+
+  .print-cert p {
+    font-size: 13pt;
+    line-height: 1.5;
+    margin: 2mm 0;
+  }
+
+  .print-cert__sign {
+    margin-top: 8mm !important;
+    font-family: var(--f-display);
+    font-style: italic;
+    font-size: 16pt !important;
+  }
+}

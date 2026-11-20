@@ -1,36 +1,72 @@
+/* Risograph ink palette — the pig is printed, not rendered. */
 :root {
-  /* Luminous Editorial Sky & Cotton Paper Palette */
-  --bg-page: #fbfaf7;
-  --bg-surface: #ffffff;
-  --bg-subtle: #f3f1ec;
+  --paper: #f4eedf;
+  --paper-2: #ebe1c9;
+  --paper-3: #e2d5b6;
+  --ink: #221e24;
+  --ink-2: #4a4250;
+  --pink: #ff48b0;
+  --pink-deep: #e2288e;
+  --pig: #ff9fd0;
+  --pig-2: #ff7fc0;
+  --blue: #0078bf;
+  --blue-2: #3d9ad6;
+  --blue-soft: #a9d4ee;
+  --yellow: #ffe800;
+  --green: #00a95c;
+  --red: #f15060;
+  --mud: #93604b;
+  --mud-2: #6a3f31;
+  --kraft: #d6a774;
+  --navy: #0e1238;
+  --night: #080a1e;
 
-  --ink: #181e2e;
-  --ink-soft: #4e576c;
-  --ink-muted: #7d869b;
+  --f-display: 'Fraunces', 'Iowan Old Style', Georgia, serif;
+  --f-body: 'Bricolage Grotesque', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --f-mono: 'Space Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  --f-cjk-body: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
 
-  --line: rgba(24, 30, 46, 0.1);
-  --line-strong: rgba(24, 30, 46, 0.18);
+  --display-vars: 'SOFT' 100, 'WONK' 1, 'opsz' 144;
+  --gutter: clamp(16px, 4vw, 56px);
+  --hud-w: 0px;
+  --ease-spring: cubic-bezier(0.3, 1.6, 0.5, 1);
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  color-scheme: light;
+}
 
-  --sky-blue: #3b6fe8;
-  --sky-blue-soft: #eaf2ff;
-  --blush: #e55384;
-  --blush-soft: #fff0f5;
-  --coral: #e04d3c;
-  --gold: #d99b26;
+:root:lang(zh) {
+  --f-display: 'Fraunces', 'ZCOOL QingKe HuangYou', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --f-body: 'Bricolage Grotesque', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+  --f-mono: 'Space Mono', ui-monospace, 'PingFang SC', 'Microsoft YaHei', monospace;
+}
 
-  /* Typography */
-  --font-serif: 'Instrument Serif', 'Noto Serif SC', Georgia, serif;
-  --font-sans: 'Plus Jakarta Sans', 'Noto Sans SC', 'Noto Sans JP', system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+:root:lang(ja) {
+  --f-display: 'Fraunces', 'Mochiy Pop One', 'Hiragino Sans', 'Yu Gothic', sans-serif;
+  --f-body: 'Bricolage Grotesque', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Noto Sans JP', sans-serif;
+  --f-mono: 'Space Mono', ui-monospace, 'Hiragino Sans', 'Yu Gothic', monospace;
+}
 
-  /* Radii & Shadows */
-  --radius-sm: 12px;
-  --radius-md: 20px;
-  --radius-lg: 28px;
-  --radius-pill: 999px;
+:root:lang(zh-TW) {
+  --f-display: 'Fraunces', 'Chiron GoRound TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  --f-body: 'Bricolage Grotesque', 'PingFang TC', 'Microsoft JhengHei', 'Noto Sans TC', sans-serif;
+  --f-mono: 'Space Mono', ui-monospace, 'PingFang TC', 'Microsoft JhengHei', monospace;
+}
 
-  --shadow-card: 0 20px 50px -24px rgba(24, 30, 46, 0.14), 0 2px 8px -2px rgba(24, 30, 46, 0.05);
-  --shadow-float: 0 24px 64px -20px rgba(24, 30, 46, 0.22);
+:root:lang(ko) {
+  --f-display: 'Fraunces', 'Jua', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --f-body: 'Bricolage Grotesque', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif;
+  --f-mono: 'Space Mono', ui-monospace, 'Apple SD Gothic Neo', 'Malgun Gothic', monospace;
+}
 
-  --container: 1080px;
+/* Fraunces / Bricolage / Space Mono have no Cyrillic: Rubik carries Russian */
+:root:lang(ru) {
+  --f-display: 'Rubik', 'Fraunces', sans-serif;
+  --f-body: 'Rubik', ui-sans-serif, system-ui, sans-serif;
+  --f-mono: 'Space Mono', ui-monospace, 'Menlo', 'Consolas', monospace;
+}
+
+@media (min-width: 900px) {
+  :root {
+    --hud-w: 118px;
+  }
 }

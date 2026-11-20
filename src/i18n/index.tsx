@@ -1,91 +1,126 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { flushSync } from 'react-dom';
 import { en } from './locales/en';
 import { zh } from './locales/zh';
+import { zhTW } from './locales/zhTW';
 import { ja } from './locales/ja';
+import { ko } from './locales/ko';
 import { es } from './locales/es';
-import type { Locale, TranslationSchema } from './types';
+import { fr } from './locales/fr';
+import { de } from './locales/de';
+import { pt } from './locales/pt';
+import { it } from './locales/it';
+import { ru } from './locales/ru';
+import type { Locale, Messages } from './types';
 
-export const LOCALES: Record<Locale, TranslationSchema> = {
-  en,
-  zh,
-  ja,
-  es,
+export const LOCALES: Record<Locale, Messages> = { en, zh, zhTW, ja, ko, es, fr, de, pt, it, ru };
+export const LOCALE_ORDER: Locale[] = ['en', 'zh', 'zhTW', 'ja', 'ko', 'es', 'fr', 'de', 'pt', 'it', 'ru'];
+/** BCP-47 tags: <html lang>, Intl formatting and the ?lang= value we write */
+export const LOCALE_TAG: Record<Locale, string> = {
+  en: 'en',
+  zh: 'zh-CN',
+  zhTW: 'zh-TW',
+  ja: 'ja',
+  ko: 'ko',
+  es: 'es',
+  fr: 'fr',
+  de: 'de',
+  pt: 'pt-BR',
+  it: 'it',
+  ru: 'ru',
 };
+const STORAGE_KEY = 'makepigs.locale';
 
-export const SUPPORTED_LOCALES: Locale[] = ['en', 'zh', 'ja', 'es'];
-
-const STORAGE_KEY = 'makepigs_fly_locale';
-
-function normalizeLocale(raw: string | null | undefined): Locale | null {
+function normalize(raw: string | null | undefined): Locale | null {
   if (!raw) return null;
-  const lower = raw.toLowerCase().trim();
-  if (lower.startsWith('zh')) return 'zh';
-  if (lower.startsWith('ja')) return 'ja';
-  if (lower.startsWith('es')) return 'es';
-  if (lower.startsWith('en')) return 'en';
-  return null;
+  const v = raw.toLowerCase().trim().replace('_', '-');
+  if (v === 'zhtw' || /^zh-(tw|hk|mo|hant)/.test(v)) return 'zhTW';
+  const base = v.split('-')[0];
+  const direct: Record<string, Locale> = { en: 'en', zh: 'zh', ja: 'ja', ko: 'ko', es: 'es', fr: 'fr', de: 'de', pt: 'pt', it: 'it', ru: 'ru' };
+  return direct[base] ?? null;
 }
 
-function detectInitialLocale(): Locale {
+function detect(): Locale {
   try {
-    const params = new URLSearchParams(window.location.search);
-    const fromUrl = normalizeLocale(params.get('lang'));
+    const fromUrl = normalize(new URLSearchParams(window.location.search).get('lang'));
     if (fromUrl) return fromUrl;
-
-    const fromStorage = normalizeLocale(localStorage.getItem(STORAGE_KEY));
-    if (fromStorage) return fromStorage;
-
-    const browserLangs = navigator.languages?.length ? navigator.languages : [navigator.language];
-    for (const lang of browserLangs) {
-      const normalized = normalizeLocale(lang);
-      if (normalized) return normalized;
+    const stored = normalize(localStorage.getItem(STORAGE_KEY));
+    if (stored) return stored;
+    const langs = navigator.languages?.length ? navigator.languages : [navigator.language];
+    for (const l of langs) {
+      const n = normalize(l);
+      if (n) return n;
     }
   } catch {
-    // Ignore storage/URL access errors
+    /* ignore */
   }
   return 'en';
 }
 
-interface I18nContextValue {
+interface Ctx {
   locale: Locale;
-  setLocale: (next: Locale) => void;
-  t: TranslationSchema;
+  t: Messages;
+  /** BCP-47 tag for Intl APIs */
+  tag: string;
+  setLocale: (next: Locale, origin?: { x: number; y: number }) => void;
 }
 
-const I18nContext = createContext<I18nContextValue | null>(null);
+const I18nContext = createContext<Ctx | null>(null);
 
-export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [locale, setLocaleState] = useState<Locale>(() => detectInitialLocale());
+export function I18nProvider({ children }: { children: React.ReactNode }) {
+  const [locale, setLocaleState] = useState<Locale>(detect);
 
-  const setLocale = (next: Locale) => {
-    setLocaleState(next);
-    try {
-      localStorage.setItem(STORAGE_KEY, next);
-    } catch {
-      // Ignore private browsing errors
-    }
-  };
-
-  useEffect(() => {
-    const schema = LOCALES[locale];
-    document.title = schema.meta.title;
-    document.documentElement.lang = locale === 'zh' ? 'zh-CN' : locale;
-  }, [locale]);
-
-  const value = useMemo(
-    () => ({
-      locale,
-      setLocale,
-      t: LOCALES[locale],
-    }),
+  const setLocale = useCallback(
+    (next: Locale, origin?: { x: number; y: number }) => {
+      if (next === locale) return;
+      try {
+        localStorage.setItem(STORAGE_KEY, next);
+      } catch {
+        /* ignore */
+      }
+      const root = document.documentElement;
+      if (origin) {
+        root.style.setProperty('--vt-x', `${origin.x}px`);
+        root.style.setProperty('--vt-y', `${origin.y}px`);
+      }
+      const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+      const doc = document as Document & { startViewTransition?: (cb: () => void) => unknown };
+      if (doc.startViewTransition && !reduced) {
+        doc.startViewTransition(() => {
+          flushSync(() => setLocaleState(next));
+        });
+      } else {
+        setLocaleState(next);
+      }
+    },
     [locale]
   );
 
-  return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
-};
+  useEffect(() => {
+    const t = LOCALES[locale];
+    document.documentElement.lang = LOCALE_TAG[locale];
+    document.title = t.meta.title;
+    document.querySelector('meta[name="description"]')?.setAttribute('content', t.meta.description);
+    try {
+      const url = new URL(window.location.href);
+      if (url.searchParams.has('lang')) {
+        url.searchParams.set('lang', LOCALE_TAG[locale]);
+        window.history.replaceState(null, '', url.toString());
+      }
+    } catch {
+      /* ignore */
+    }
+  }, [locale]);
 
-export function useI18n(): I18nContextValue {
+  const value = useMemo<Ctx>(
+    () => ({ locale, t: LOCALES[locale], tag: LOCALE_TAG[locale], setLocale }),
+    [locale, setLocale]
+  );
+  return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
+}
+
+export function useI18n(): Ctx {
   const ctx = useContext(I18nContext);
-  if (!ctx) throw new Error('useI18n must be used inside I18nProvider');
+  if (!ctx) throw new Error('useI18n must be used inside <I18nProvider>');
   return ctx;
 }

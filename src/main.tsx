@@ -1,25 +1,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { I18nProvider } from './i18n';
-import { App } from './App';
 import './styles/tokens.css';
 import './styles/base.css';
-import './styles/components.css';
+import './styles/print.css';
+import { I18nProvider } from './i18n';
+import { App } from './App';
 
-if (typeof console !== 'undefined') {
-  console.log(
-    `%c
-   makepigs.fly — Yes, pigs actually fly now.
-         _,,_
-       ,'    \`.      ___
-      /  ^  ^  \\____/   \\  < Oink. Your move. >
-     (  ( oo )       ___/
-      \\  \`--'      /
-       \`--u----u--'
-`,
-    'color: #E05383; font-weight: 600; font-family: monospace; font-size: 12px;'
-  );
+try {
+  window.history.scrollRestoration = 'manual';
+} catch {
+  /* ignore */
 }
+
+console.log(
+  `%c
+        ,-.                 makepigs.fly
+   _   /   \\__              ─────────────
+  ( \\_/  o o  \\___          You scrolled the wrong way into the console.
+   \\    (  oo )    >        Respect.
+    \\    \`--'   _/
+     |  |    |  |           We're hiring pigs with wings.
+     ^^^^    ^^^^           Apply: type "oink" on the page.
+`,
+  'color:#ff48b0;font-family:monospace;font-weight:700'
+);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
