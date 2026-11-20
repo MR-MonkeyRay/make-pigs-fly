@@ -237,6 +237,9 @@ export function Cruise({ personal }: { personal: Personal }) {
               </div>
               <button type="button" className="window__shade" aria-label={c.shade} title={c.shade} onClick={pullShade}>
                 <i aria-hidden="true" />
+                <svg className="window__knock" viewBox="0 0 64 24" aria-hidden="true">
+                  <path d="M20 6 Q14 12 20 18 M13 2 Q4 12 13 22 M44 6 Q50 12 44 18 M51 2 Q60 12 51 22" />
+                </svg>
               </button>
             </div>
           </div>

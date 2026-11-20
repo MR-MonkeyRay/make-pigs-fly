@@ -828,6 +828,40 @@
   }
 }
 
+/* knock marks, so the knocks show with the sound off */
+.window__knock {
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  width: 72px;
+  height: 27px;
+  translate: -50% -50%;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  opacity: 0;
+}
+
+.window.is-knock .window__knock {
+  animation: shade-knock-marks 0.25s ease-out 2;
+}
+
+@keyframes shade-knock-marks {
+  0% {
+    opacity: 1;
+    scale: 0.7;
+  }
+  65% {
+    opacity: 1;
+    scale: 1.05;
+  }
+  100% {
+    opacity: 0;
+    scale: 1.15;
+  }
+}
+
 /* shoved back up, with a bounce */
 .window.is-peek .window__shade {
   transition: height 0.35s cubic-bezier(0.3, 1.5, 0.5, 1);

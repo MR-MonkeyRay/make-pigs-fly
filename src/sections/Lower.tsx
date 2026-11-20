@@ -365,7 +365,7 @@ export function Science() {
         </div>
 
         {/* the reader's own compliments, on their way up to him */}
-        <div className="science__boost" style={{ left: cx, top: cy + 110 * k }} aria-hidden="true">
+        <div className="science__boost" style={{ left: cx, top: cy + 124 * k }} aria-hidden="true">
           {bursts.map((b) => (
             <span
               key={b.id}
