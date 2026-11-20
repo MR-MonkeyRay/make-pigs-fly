@@ -86,7 +86,7 @@ export function provideStops(id: string, fn: StopProvider): () => void {
 /** The part of the screen the fixed chrome leaves free (top bar + altimeter above, buttons below). */
 export function freeBand(vh: number): { top: number; bottom: number } {
   let top = 64;
-  for (const sel of ['.topbar', frame.narrow ? '.alt__read' : '']) {
+  for (const sel of ['header.top', frame.narrow ? '.alt__read' : '']) {
     const el = sel && document.querySelector(sel);
     if (el) top = Math.max(top, el.getBoundingClientRect().bottom);
   }

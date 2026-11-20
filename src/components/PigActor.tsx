@@ -80,7 +80,7 @@ export function PigActor() {
     if (!bubble) return;
     const span = bubbleRef.current?.firstElementChild as HTMLElement | null;
     let chrome = 64;
-    for (const sel of ['.topbar', window.innerWidth < 900 ? '.alt__read' : '']) {
+    for (const sel of ['header.top', window.innerWidth < 900 ? '.alt__read' : '']) {
       const el = sel && document.querySelector(sel);
       if (el) chrome = Math.max(chrome, el.getBoundingClientRect().bottom);
     }
