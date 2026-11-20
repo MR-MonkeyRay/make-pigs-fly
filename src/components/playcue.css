@@ -21,9 +21,14 @@
   pointer-events: auto;
 }
 
-/* "real view" mode is for looking, not reading */
+/* "real view" mode is for looking, not reading: gone, not just see-through */
 .is-gazing .playcue {
   opacity: 0;
+  visibility: hidden;
+}
+
+.is-gazing .playcue .playcue__cue {
+  pointer-events: none;
 }
 
 .playcue__play {

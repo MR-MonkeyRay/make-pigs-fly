@@ -26,7 +26,7 @@ export function PlayCue() {
   }, [mode]);
 
   return (
-    <div className={`playcue${mode ? ' is-on' : ''} playcue--${face}`}>
+    <div className={`playcue${mode ? ' is-on' : ''} playcue--${face}`} aria-hidden={mode ? undefined : true}>
       {face === 'play' ? (
         <p className="playcue__play" aria-hidden="true">
           <span className="playcue__rec" />
