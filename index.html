@@ -2,120 +2,41 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>makepigs.fly — Make Pigs Fly</title>
-    <meta name="description" content="Promise something “when pigs fly”. Then watch a pig fly. Your move." />
-    <meta name="theme-color" content="#6cb4f8" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#070b1f" media="(prefers-color-scheme: dark)" />
-    <meta name="color-scheme" content="light dark" />
-    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>makepigs.fly — Scroll up. Pigs fly now.</title>
+    <meta
+      name="description"
+      content="Everyone said “when pigs fly.” So we built a runway. A website you scroll UP: one pig, from the mud to the Moon."
+    />
+    <meta name="theme-color" content="#F4EEDF" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://makepigs.fly/" />
-    <meta property="og:title" content="makepigs.fly — Make Pigs Fly" />
-    <meta property="og:description" content="Promise something “when pigs fly”. Then watch a pig fly. Your move." />
-    <meta property="og:image" content="https://makepigs.fly/og.png" />
+    <meta property="og:site_name" content="makepigs.fly" />
+    <meta property="og:title" content="makepigs.fly — Scroll up. Pigs fly now." />
+    <meta
+      property="og:description"
+      content="Everyone said “when pigs fly.” So we built a runway. Send this to whoever owes you a promise."
+    />
+    <meta property="og:url" content="%SITE%" />
+    <meta property="og:image" content="%SITE%og.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
-    <script>
-      // Apply the saved theme before first paint (no flash). Storage may be unavailable.
-      try {
-        var t = localStorage.getItem('mpf.theme');
-        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
-      } catch (e) {}
-    </script>
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Space+Mono:wght@400;700&family=ZCOOL+QingKe+HuangYou&family=Mochiy+Pop+One&family=Jua&family=Chiron+GoRound+TC:wght@700..900&family=Rubik:ital,wght@0,400..900;1,700..900&display=swap"
+    />
   </head>
   <body>
-    <header class="site-header">
-      <a class="brand" href="#/" aria-label="makepigs.fly">
-        <span class="brand-mark" aria-hidden="true"></span>
-        <span class="brand-text">
-          <span class="brand-name" data-i18n="site.name">Make Pigs Fly</span>
-          <span class="brand-domain">makepigs.fly</span>
-        </span>
-      </a>
-
-      <nav class="mode-nav" data-i18n-attr="aria-label:nav.label">
-        <span class="mode-pill" aria-hidden="true"></span>
-        <a class="mode-tab" href="#/" data-mode="dare">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M4.5 6.5A3 3 0 0 1 7.5 3.5h9a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3H11l-4.2 3.5V16.5h-.3a2 2 0 0 1-2-2z" />
-            <path d="M8.5 8.8h7M8.5 12h4.2" />
-          </svg>
-          <span data-i18n="nav.dare">The Dare</span>
-          <kbd class="mode-key" aria-hidden="true">1</kbd>
-        </a>
-        <a class="mode-tab" href="#/ways" data-mode="ways">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 3l2.2 5.4L20 9.2l-4.3 3.9 1.2 5.9L12 16.2 7.1 19l1.2-5.9L4 9.2l5.8-.8z" />
-          </svg>
-          <span data-i18n="nav.ways">Ways to Fly</span>
-          <kbd class="mode-key" aria-hidden="true">2</kbd>
-        </a>
-        <a class="mode-tab" href="#/run" data-mode="run">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 3.2c4.4 0 7.8 3.2 7.8 7.3 0 2.7-1.5 5-3.7 6.3L14 20.8l-2-1.8-2 1.8-2.1-4C5.7 15.5 4.2 13.2 4.2 10.5c0-4.1 3.4-7.3 7.8-7.3z" />
-            <circle cx="12" cy="10" r="2.2" />
-          </svg>
-          <span data-i18n="nav.run">Hog Wild</span>
-          <kbd class="mode-key" aria-hidden="true">3</kbd>
-        </a>
-      </nav>
-
-      <div class="site-controls">
-        <label class="lang-picker">
-          <span class="visually-hidden" data-i18n="ui.language">Language</span>
-          <svg class="lang-globe" viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="12" cy="12" r="9" />
-            <path d="M3.6 9h16.8M3.6 15h16.8M12 3c2.8 3 2.8 15 0 18M12 3c-2.8 3-2.8 15 0 18" />
-          </svg>
-          <select id="lang-select"></select>
-          <svg class="lang-caret" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M7 10l5 5 5-5" />
-          </svg>
-        </label>
-
-        <button class="icon-btn" id="sound-toggle" type="button" data-sound-state="on">
-          <svg class="ico-sound-on" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M11 5.5L6.5 9H3.5v6h3L11 18.5z" />
-            <path d="M15.2 8.8a4.5 4.5 0 0 1 0 6.4M18.2 6a8.2 8.2 0 0 1 0 12" />
-          </svg>
-          <svg class="ico-sound-off" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M11 5.5L6.5 9H3.5v6h3L11 18.5z" />
-            <path d="M16 9.5l5 5M21 9.5l-5 5" />
-          </svg>
-        </button>
-
-        <button class="icon-btn" id="theme-toggle" type="button" data-theme-state="auto">
-          <svg class="ico-auto" viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="12" cy="12" r="8.5" />
-            <path d="M12 3.5a8.5 8.5 0 0 1 0 17z" class="fill" />
-          </svg>
-          <svg class="ico-light" viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="12" cy="12" r="4.5" />
-            <path d="M12 2.2v2.4M12 19.4v2.4M2.2 12h2.4M19.4 12h2.4M5 5l1.7 1.7M17.3 17.3L19 19M5 19l1.7-1.7M17.3 6.7L19 5" />
-          </svg>
-          <svg class="ico-dark" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" />
-          </svg>
-        </button>
+    <noscript>
+      <div style="padding:2rem;font:600 1.25rem/1.5 system-ui;background:#F4EEDF;color:#221E24;min-height:100vh">
+        🐷 This pig needs JavaScript to fly. Without it, he is just a pig.<br />
+        这头猪需要 JavaScript 才能起飞，不然它就只是一头普通的猪。
       </div>
-    </header>
-
-    <main id="stage" class="mode-root" tabindex="-1">
-      <p class="boot" data-i18n="ui.loading">Fetching the pig…</p>
-      <noscript><p class="boot">This site needs JavaScript to make pigs fly.</p></noscript>
-    </main>
-
-    <footer class="site-footer">
-      <div class="footer-card">
-        <p class="footer-note" data-i18n="footer.note">No pigs were harmed. All valuations are fictional.</p>
-        <div class="footer-meta">
-          <code class="footer-egg-pill" data-i18n="footer.egg">Psst — open DevTools and run makePigs.fly()</code>
-          <a class="footer-link" href="https://github.com/MR-MonkeyRay/make-pigs-fly" rel="noopener" data-i18n="footer.source">Source</a>
-        </div>
-      </div>
-    </footer>
-
-    <div id="toast" class="toast" role="status" aria-live="polite"></div>
-    <script type="module" src="/src/main.ts"></script>
+    </noscript>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

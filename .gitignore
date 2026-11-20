@@ -1,6 +1,6 @@
-node_modules/
-dist/
-test-results/
-playwright-report/
-*.log
+node_modules
+dist
 .DS_Store
+*.local
+*.tsbuildinfo
+.omx

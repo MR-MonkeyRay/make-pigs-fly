@@ -1,24 +1,26 @@
 {
   "name": "make-pigs-fly",
+  "version": "2.0.0",
   "private": true,
-  "version": "0.1.0",
-  "description": "makepigs.fly — making the impossible slightly airborne.",
-  "license": "MIT",
   "type": "module",
+  "packageManager": "pnpm@11.17.0",
+  "description": "makepigs.fly — a website you scroll UP. A pig flies from the mud to the Moon.",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "tsc -b && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
-    "test:e2e": "playwright test",
-    "check": "pnpm typecheck && pnpm test && pnpm build"
+    "assets": "python3 -I scripts/riso.py"
+  },
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.65.1",
-    "typescript": "^7.0.2",
-    "vite": "^8.3.8",
-    "vitest": "^5.1.0"
-  },
-  "packageManager": "pnpm@11.17.0"
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@vitejs/plugin-react": "^4.4.1",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5"
+  }
 }

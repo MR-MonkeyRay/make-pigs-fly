@@ -1,0 +1,157 @@
+.fallfx {
+  position: fixed;
+  inset: 0;
+  z-index: 28;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.fallfx.is-on {
+  opacity: 1;
+}
+
+.fallfx__lines {
+  position: absolute;
+  inset: -50% 0;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 46px, rgba(255, 254, 248, 0.55) 46px 48px, transparent 48px 97px),
+    repeating-linear-gradient(90deg, transparent 0 131px, rgba(255, 72, 176, 0.45) 131px 134px, transparent 134px 211px);
+  -webkit-mask-image: repeating-linear-gradient(to bottom, #000 0 120px, transparent 120px 260px);
+  mask-image: repeating-linear-gradient(to bottom, #000 0 120px, transparent 120px 260px);
+}
+
+.fallfx.is-on .fallfx__lines {
+  animation: speed-lines 0.22s linear infinite;
+}
+
+html.is-chute .fallfx__lines {
+  animation-duration: 1.2s;
+  opacity: 0.4;
+}
+
+.fallfx__scream {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  writing-mode: vertical-rl;
+  font-family: var(--f-display);
+  font-variation-settings: var(--display-vars);
+  font-weight: 900;
+  font-size: clamp(42px, 9vw, 110px);
+  letter-spacing: -0.06em;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--yellow);
+  text-shadow:
+    4px 4px 0 var(--pink),
+    8px 8px 0 rgba(0, 120, 191, 0.7);
+  transform: translate(-50%, -50%) translateX(min(32vw, 380px)) scaleY(1.2);
+}
+
+.fallfx.is-on .fallfx__scream {
+  animation: scream-shake 0.08s linear infinite;
+}
+
+html.is-chute .fallfx__scream {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+@keyframes speed-lines {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-260px);
+  }
+}
+
+@keyframes scream-shake {
+  0% {
+    margin: 0;
+  }
+  25% {
+    margin: 2px 0 0 -2px;
+  }
+  50% {
+    margin: -1px 0 0 2px;
+  }
+  75% {
+    margin: 1px 0 0 1px;
+  }
+}
+
+/* ───── mud ───── */
+.splat {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+  animation: splat-fade 0.9s ease 3.1s forwards;
+}
+
+.splat__blob {
+  position: absolute;
+  margin: -60px 0 0 -60px;
+  transform: rotate(var(--r)) scale(0);
+  animation:
+    splat-hit 0.32s var(--ease-spring) var(--d) forwards,
+    splat-drip 3s ease-in calc(var(--d) + 0.5s) forwards;
+}
+
+@keyframes splat-hit {
+  from {
+    transform: rotate(var(--r)) scale(0);
+  }
+  to {
+    transform: rotate(var(--r)) scale(1);
+  }
+}
+
+@keyframes splat-drip {
+  from {
+    translate: 0 0;
+  }
+  to {
+    translate: 0 var(--drip);
+  }
+}
+
+@keyframes splat-fade {
+  to {
+    opacity: 0;
+  }
+}
+
+/* ───── migrating flock ───── */
+.flock {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.flock__pig {
+  position: absolute;
+  left: 0;
+  top: 38%;
+  width: 120px;
+  margin-top: calc(var(--dy) * 46px);
+  animation: flock-cross 6.6s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards;
+  animation-delay: calc(var(--i) * 40ms);
+  translate: calc(var(--dx) * 82px) 0;
+}
+
+@keyframes flock-cross {
+  from {
+    transform: translate(-20vw, 6vh) rotate(-4deg);
+  }
+  50% {
+    transform: translate(55vw, -6vh) rotate(3deg);
+  }
+  to {
+    transform: translate(130vw, -14vh) rotate(-2deg);
+  }
+}

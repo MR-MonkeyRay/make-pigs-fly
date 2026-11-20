@@ -1,196 +1,72 @@
-/* ─────────────────────────────────────────────────────────────────────────
-   Design Tokens — Make Pigs Fly (makepigs.fly)
-   Aesthetic: "Dreamy Cloudscape Atelier" — Sunlit Storybook Glass & Warm Tactility
-   Light = "Golden Cloudscape"  |  Dark = "Aurora Stratosphere"
-   ───────────────────────────────────────────────────────────────────────── */
+/* Risograph ink palette — the pig is printed, not rendered. */
 :root {
-  --font: ui-rounded, 'SF Pro Rounded', 'PingFang SC', 'Hiragino Maru Gothic ProN', 'Hiragino Sans GB',
-    'Microsoft YaHei', 'Noto Sans CJK SC', 'Noto Sans JP', system-ui, -apple-system, sans-serif;
-  --mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
+  --paper: #f4eedf;
+  --paper-2: #ebe1c9;
+  --paper-3: #e2d5b6;
+  --ink: #221e24;
+  --ink-2: #4a4250;
+  --pink: #ff48b0;
+  --pink-deep: #e2288e;
+  --pig: #ff9fd0;
+  --pig-2: #ff7fc0;
+  --blue: #0078bf;
+  --blue-2: #3d9ad6;
+  --blue-soft: #a9d4ee;
+  --yellow: #ffe800;
+  --green: #00a95c;
+  --red: #f15060;
+  --mud: #93604b;
+  --mud-2: #6a3f31;
+  --kraft: #d6a774;
+  --navy: #0e1238;
+  --night: #080a1e;
 
-  /* Full-Viewport Atmospheric Sky */
-  --sky-top: #5ca6f8;
-  --sky-mid: #a4d8ff;
-  --sky-horizon: #ffe6cf;
-  --sky-bottom: #fff5e9;
+  --f-display: 'Fraunces', 'Iowan Old Style', Georgia, serif;
+  --f-body: 'Bricolage Grotesque', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --f-mono: 'Space Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  --f-cjk-body: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
 
-  /* Stage Viewport Sky */
-  --stage-sky-top: #5ba9fc;
-  --stage-sky-mid: #9fd7ff;
-  --stage-sky-bottom: #fff0db;
-  --stage-orb-glow: rgba(255, 244, 198, 0.55);
-
-  /* Luminous Porcelain-Glass Surfaces */
-  --surface: rgba(255, 254, 251, 0.84);
-  --surface-strong: rgba(255, 254, 252, 0.96);
-  --surface-soft: rgba(246, 240, 232, 0.72);
-  --surface-tint: rgba(255, 245, 236, 0.9);
-  --glass: rgba(255, 255, 255, 0.68);
-  --glass-hover: rgba(255, 255, 255, 0.88);
-  --glass-border: rgba(255, 255, 255, 0.86);
-  --border-subtle: rgba(58, 33, 51, 0.1);
-  --border-strong: rgba(58, 33, 51, 0.18);
-
-  /* Editorial Ink Hierarchy */
-  --ink: #2a1b2e;
-  --ink-soft: #634f6b;
-  --ink-muted: #937f9c;
-
-  /* Brand Accents — Sunset Coral, Warm Apricot-Gold & Sky Azure */
-  --accent-grad: linear-gradient(135deg, #ff5884 0%, #ff8547 58%, #ffb830 100%);
-  --accent-grad-hover: linear-gradient(135deg, #ff4577 0%, #ff7635 55%, #ffad1a 100%);
-  --accent: #ff6b7c;
-  --accent-gold: #ffba30;
-  --accent-soft: rgba(255, 110, 128, 0.13);
-  --accent-gold-soft: rgba(255, 186, 48, 0.22);
-  --accent-ink: #ffffff;
-  --accent-glow: rgba(255, 98, 122, 0.34);
-
-  --go: #14a66a;
-  --go-soft: rgba(20, 166, 106, 0.14);
-  --stop: #e84359;
-  --stop-soft: rgba(232, 67, 89, 0.14);
-  --link: #2468d6;
-
-  /* Layered Diffused Elevation Shadows */
-  --shadow-sm: 0 2px 8px rgba(42, 27, 46, 0.06), 0 1px 2px rgba(42, 27, 46, 0.04);
-  --shadow-md: 0 10px 28px rgba(42, 27, 46, 0.09), 0 2px 6px rgba(42, 27, 46, 0.05);
-  --shadow-lg: 0 24px 60px rgba(42, 27, 46, 0.13), 0 6px 18px rgba(42, 27, 46, 0.06);
-  --shadow-inner: inset 0 1.5px 0 rgba(255, 255, 255, 0.92);
-
-  /* Stage Landscape Palette */
-  --grass: #68cb6c;
-  --grass-deep: #48a752;
-  --hill-far: #9ad2c7;
-  --hill-near: #78c494;
-  --cloud: #ffffff;
-
-  /* Illustrated Pig & Skit Art Palette */
-  --art-ink: #3a2133;
-  --pig: #ffa8c0;
-  --pig-deep: #eb7194;
-  --pig-light: #ffe0ea;
-  --pig-ink: var(--art-ink);
-  --pig-cheek: #ff5d8f;
-
-  /* Radii & Motion Curves */
-  --radius-sm: 12px;
-  --radius: 18px;
-  --radius-lg: 28px;
-  --radius-xl: 34px;
-
-  --ease-spring: cubic-bezier(0.22, 1.32, 0.36, 1);
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-
+  --display-vars: 'SOFT' 100, 'WONK' 1, 'opsz' 144;
+  --gutter: clamp(16px, 4vw, 56px);
+  --hud-w: 0px;
+  --ease-spring: cubic-bezier(0.3, 1.6, 0.5, 1);
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
   color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --sky-top: #070b1f;
-    --sky-mid: #121a45;
-    --sky-horizon: #261c4e;
-    --sky-bottom: #331e54;
-
-    --stage-sky-top: #0a102e;
-    --stage-sky-mid: #1c2459;
-    --stage-sky-bottom: #3c2a6b;
-    --stage-orb-glow: rgba(168, 185, 255, 0.16);
-
-    --surface: rgba(22, 20, 46, 0.78);
-    --surface-strong: rgba(28, 25, 58, 0.92);
-    --surface-soft: rgba(38, 34, 74, 0.68);
-    --surface-tint: rgba(45, 39, 86, 0.78);
-    --glass: rgba(24, 22, 52, 0.62);
-    --glass-hover: rgba(35, 32, 72, 0.82);
-    --glass-border: rgba(255, 255, 255, 0.14);
-    --border-subtle: rgba(255, 255, 255, 0.1);
-    --border-strong: rgba(255, 255, 255, 0.2);
-
-    --ink: #f8f3ff;
-    --ink-soft: #c0b4d6;
-    --ink-muted: #8b7fa8;
-
-    --accent-grad: linear-gradient(135deg, #ff5f8d 0%, #ff8c4c 55%, #ffd046 100%);
-    --accent-grad-hover: linear-gradient(135deg, #ff7099 0%, #ff995e 55%, #ffda66 100%);
-    --accent: #ff7599;
-    --accent-gold: #ffd046;
-    --accent-soft: rgba(255, 117, 153, 0.18);
-    --accent-gold-soft: rgba(255, 145, 115, 0.34);
-    --accent-ink: #ffffff;
-    --accent-glow: rgba(255, 110, 148, 0.42);
-
-    --go: #3ce096;
-    --go-soft: rgba(60, 224, 150, 0.18);
-    --stop: #ff6b81;
-    --stop-soft: rgba(255, 107, 129, 0.18);
-    --link: #8cc4ff;
-
-    --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.25);
-    --shadow-md: 0 14px 36px rgba(0, 0, 0, 0.36);
-    --shadow-lg: 0 28px 68px rgba(0, 0, 0, 0.48);
-    --shadow-inner: inset 0 1px 0 rgba(255, 255, 255, 0.12);
-
-    --grass: #388862;
-    --grass-deep: #246047;
-    --hill-far: #29295c;
-    --hill-near: #224a59;
-    --cloud: #9f98cf;
-
-    color-scheme: dark;
-  }
+:root:lang(zh) {
+  --f-display: 'Fraunces', 'ZCOOL QingKe HuangYou', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --f-body: 'Bricolage Grotesque', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+  --f-mono: 'Space Mono', ui-monospace, 'PingFang SC', 'Microsoft YaHei', monospace;
 }
 
-:root[data-theme='dark'] {
-  --sky-top: #070b1f;
-  --sky-mid: #121a45;
-  --sky-horizon: #261c4e;
-  --sky-bottom: #331e54;
+:root:lang(ja) {
+  --f-display: 'Fraunces', 'Mochiy Pop One', 'Hiragino Sans', 'Yu Gothic', sans-serif;
+  --f-body: 'Bricolage Grotesque', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Noto Sans JP', sans-serif;
+  --f-mono: 'Space Mono', ui-monospace, 'Hiragino Sans', 'Yu Gothic', monospace;
+}
 
-  --stage-sky-top: #0a102e;
-  --stage-sky-mid: #1c2459;
-  --stage-sky-bottom: #3c2a6b;
-  --stage-orb-glow: rgba(168, 185, 255, 0.16);
+:root:lang(zh-TW) {
+  --f-display: 'Fraunces', 'Chiron GoRound TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  --f-body: 'Bricolage Grotesque', 'PingFang TC', 'Microsoft JhengHei', 'Noto Sans TC', sans-serif;
+  --f-mono: 'Space Mono', ui-monospace, 'PingFang TC', 'Microsoft JhengHei', monospace;
+}
 
-  --surface: rgba(22, 20, 46, 0.78);
-  --surface-strong: rgba(28, 25, 58, 0.92);
-  --surface-soft: rgba(38, 34, 74, 0.68);
-  --surface-tint: rgba(45, 39, 86, 0.78);
-  --glass: rgba(24, 22, 52, 0.62);
-  --glass-hover: rgba(35, 32, 72, 0.82);
-  --glass-border: rgba(255, 255, 255, 0.14);
-  --border-subtle: rgba(255, 255, 255, 0.1);
-  --border-strong: rgba(255, 255, 255, 0.2);
+:root:lang(ko) {
+  --f-display: 'Fraunces', 'Jua', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --f-body: 'Bricolage Grotesque', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif;
+  --f-mono: 'Space Mono', ui-monospace, 'Apple SD Gothic Neo', 'Malgun Gothic', monospace;
+}
 
-  --ink: #f8f3ff;
-  --ink-soft: #c0b4d6;
-  --ink-muted: #8b7fa8;
+/* Fraunces / Bricolage / Space Mono have no Cyrillic: Rubik carries Russian */
+:root:lang(ru) {
+  --f-display: 'Rubik', 'Fraunces', sans-serif;
+  --f-body: 'Rubik', ui-sans-serif, system-ui, sans-serif;
+  --f-mono: 'Space Mono', ui-monospace, 'Menlo', 'Consolas', monospace;
+}
 
-  --accent-grad: linear-gradient(135deg, #ff5f8d 0%, #ff8c4c 55%, #ffd046 100%);
-  --accent-grad-hover: linear-gradient(135deg, #ff7099 0%, #ff995e 55%, #ffda66 100%);
-  --accent: #ff7599;
-  --accent-gold: #ffd046;
-  --accent-soft: rgba(255, 117, 153, 0.18);
-  --accent-gold-soft: rgba(255, 145, 115, 0.34);
-  --accent-ink: #ffffff;
-  --accent-glow: rgba(255, 110, 148, 0.42);
-
-  --go: #3ce096;
-  --go-soft: rgba(60, 224, 150, 0.18);
-  --stop: #ff6b81;
-  --stop-soft: rgba(255, 107, 129, 0.18);
-  --link: #8cc4ff;
-
-  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.25);
-  --shadow-md: 0 14px 36px rgba(0, 0, 0, 0.36);
-  --shadow-lg: 0 28px 68px rgba(0, 0, 0, 0.48);
-  --shadow-inner: inset 0 1px 0 rgba(255, 255, 255, 0.12);
-
-  --grass: #388862;
-  --grass-deep: #246047;
-  --hill-far: #29295c;
-  --hill-near: #224a59;
-  --cloud: #9f98cf;
-
-  color-scheme: dark;
+@media (min-width: 900px) {
+  :root {
+    --hud-w: 118px;
+  }
 }

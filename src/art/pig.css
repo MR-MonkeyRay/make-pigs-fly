@@ -1,0 +1,220 @@
+.pig {
+  overflow: visible;
+  width: 100%;
+  height: auto;
+}
+
+/* costume pieces pop in/out */
+.pig .c {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    transform 0.55s var(--ease-spring),
+    opacity 0.25s ease;
+}
+
+.pig:not([data-goggles]) .c-goggles,
+.pig:not([data-scarf]) .c-scarf,
+.pig:not([data-pillow]) .c-pillow,
+.pig:not([data-helmet]) .c-helmet,
+.pig:not([data-jet]) .c-jet,
+.pig:not([data-flag]) .c-flag,
+.pig:not([data-chute]) .c-chute,
+.pig:not([data-undies]) .c-undies,
+.pig:not([data-mud]) .c-mud,
+.pig:not([data-balloon]) .c-balloon,
+.pig[data-wings='feather'] .w-card,
+.pig[data-wings='cardboard'] .w-feather,
+.pig[data-wings='none'] .w-card,
+.pig[data-wings='none'] .w-feather {
+  opacity: 0;
+  transform: scale(0.15);
+}
+
+.pig .c-chute {
+  transform-origin: 50% 100%;
+}
+
+.pig .c-flag {
+  transform-origin: 0% 100%;
+}
+
+.pig .c-jet {
+  transform-origin: 30% 30%;
+}
+
+/* eyes: irises shrink in panic, grow when thrilled; spirals replace them when dizzy */
+.pig .iris {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 0.25s var(--ease-spring);
+}
+.pig[data-mood='panic'] .iris {
+  transform: scale(0.55);
+}
+.pig[data-mood='realize'] .iris {
+  transform: scale(0.72);
+}
+.pig[data-mood='thrilled'] .iris {
+  transform: scale(1.08);
+}
+.pig[data-mood='dizzy'] .iris {
+  opacity: 0;
+}
+/* swap open lashes & standard catch-lights for mood-specific details */
+.pig[data-mood='smug'] .eye-lash-open {
+  display: none;
+}
+.pig[data-mood='thrilled'] .iris-catch-std {
+  display: none;
+}
+
+/* rocket flame: JS sets the length (scaleY), CSS adds the flicker */
+.pig .jet-flame {
+  transform-box: fill-box;
+  transform-origin: 50% 0%;
+}
+.pig .jet-flame path {
+  transform-box: fill-box;
+  transform-origin: 50% 0%;
+  animation: flame-flicker 0.09s steps(2) infinite alternate;
+}
+.pig .boot-flame path {
+  transform-box: fill-box;
+  transform-origin: 50% 0%;
+  animation: flame-flicker 0.08s steps(2) infinite alternate;
+}
+.pig .jet-flame path:nth-child(2n),
+.pig .boot-flame path:nth-child(2n) {
+  animation-delay: -0.05s;
+}
+
+@keyframes flame-flicker {
+  from {
+    transform: scaleY(0.88) scaleX(1.06);
+  }
+  to {
+    transform: scaleY(1.06) scaleX(0.94);
+  }
+}
+
+/* moods: show only the matching face parts */
+.pig .mo {
+  display: none;
+}
+.pig[data-mood='calm'] .mo-calm,
+.pig[data-mood='smug'] .mo-smug,
+.pig[data-mood='thrilled'] .mo-thrilled,
+.pig[data-mood='panic'] .mo-panic,
+.pig[data-mood='realize'] .mo-realize,
+.pig[data-mood='dizzy'] .mo-dizzy {
+  display: inline;
+}
+/* panic & realize share the sweat drop */
+.pig[data-mood='realize'] .mo-panic.mo-realize {
+  display: inline;
+}
+
+.pig .dizzy-orbit {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pig-spin 1.6s linear infinite;
+}
+
+.pig .scarf-tail {
+  transform-box: fill-box;
+  transform-origin: 96% 86%;
+  animation: scarf-wave 0.5s ease-in-out infinite alternate;
+}
+
+.pig .flag-cloth {
+  transform-box: fill-box;
+  transform-origin: 0% 50%;
+  animation: flag-wave 1.1s ease-in-out infinite alternate;
+}
+
+@keyframes pig-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes scarf-wave {
+  from {
+    transform: skewY(-6deg) scaleX(0.96);
+  }
+  to {
+    transform: skewY(5deg) scaleX(1.04);
+  }
+}
+
+@keyframes flag-wave {
+  from {
+    transform: skewY(-4deg) scaleX(0.95);
+  }
+  to {
+    transform: skewY(4deg) scaleX(1.03);
+  }
+}
+
+/* ───── static copies of the pig animate themselves with CSS ───── */
+.pig--auto .part {
+  transform-box: fill-box;
+}
+.pig--auto .part--wing {
+  transform-origin: 96% 90%;
+  animation: wing-flap 0.36s ease-in-out infinite alternate;
+}
+.pig--auto [data-part='wingFar'] {
+  animation-delay: -0.12s;
+}
+.pig--auto .part--tail {
+  transform-origin: 50% 50%;
+  animation: pig-spin 0.5s linear infinite;
+}
+.pig--auto .part--leg {
+  transform-origin: 50% 14%;
+  animation: leg-dangle 0.9s ease-in-out infinite alternate;
+}
+.pig--auto .part--ear {
+  transform-origin: 50% 90%;
+  animation: ear-flutter 0.4s ease-in-out infinite alternate;
+}
+.pig--wave .part--wave {
+  transform-box: fill-box;
+  transform-origin: 50% 14%;
+  animation: hoof-wave 0.45s ease-in-out infinite alternate;
+}
+
+@keyframes wing-flap {
+  from {
+    transform: rotate(-22deg);
+  }
+  to {
+    transform: rotate(26deg);
+  }
+}
+@keyframes leg-dangle {
+  from {
+    transform: rotate(-12deg);
+  }
+  to {
+    transform: rotate(10deg);
+  }
+}
+@keyframes ear-flutter {
+  from {
+    transform: rotate(-8deg);
+  }
+  to {
+    transform: rotate(10deg);
+  }
+}
+@keyframes hoof-wave {
+  from {
+    transform: rotate(-150deg);
+  }
+  to {
+    transform: rotate(-110deg);
+  }
+}
