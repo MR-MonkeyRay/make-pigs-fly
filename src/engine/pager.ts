@@ -127,7 +127,8 @@ function anchorYs(root: HTMLElement, sel: string, vh: number): number[] {
       for (const r of rs) {
         if (r.top >= g.top - 1 && r.bottom <= g.bottom + 1) continue;
         const hh = r.bottom - r.top;
-        const f = Math.max(0, Math.min(r.bottom - y, vh) - Math.max(r.top - y, 0)) / hh;
+        // the bottom buttons count as the edge of the screen here: half under them is half cut
+        const f = Math.max(0, Math.min(r.bottom - y, band.bottom) - Math.max(r.top - y, 0)) / hh;
         c += Math.min(f, 1 - f) * hh;
       }
       if (c < bc) {
@@ -227,10 +228,25 @@ export function computeStops(): void {
 /** A section's layout changed (fonts, locale): recompute, keep the reader where they are. */
 export function refreshStops(): void {
   if (!started) return;
-  computeStops();
+  recompute();
+  // a glide or a scene in progress lands on the remapped floor by itself
   if (busy || playSec >= 0) return;
   target = nearest(window.scrollY);
   emit();
+}
+
+/**
+ * Recompute the stops and keep `target` pointing at the same floor (same
+ * section, same ordinal within it), even while a glide is under way.
+ * Returns the new index, or -1 if that section has no stops any more.
+ */
+function recompute(): number {
+  const was = stops[target];
+  const k = was ? target - stops.findIndex((s) => s.sec === was.sec) : 0;
+  computeStops();
+  const now = was ? sameFloor(was.sec, k) : -1;
+  target = now >= 0 ? now : Math.min(target, stops.length - 1);
+  return now;
 }
 
 function nearest(y: number): number {
@@ -305,7 +321,13 @@ function tweenTo(index: number, opts: TweenOpts = {}) {
       go(q);
       return;
     }
-    settle(index, opts);
+    // the stops may have been recomputed mid-glide (resize, fonts): land on the floor we meant
+    const i = target;
+    if (stops[i] && Math.abs(stops[i].y - y1) > 2) {
+      tweenTo(i, { ...opts, instant: true });
+      return;
+    }
+    settle(i, opts);
   };
   tweenRaf = requestAnimationFrame(step);
 }
@@ -363,6 +385,7 @@ function playStep() {
     const i = target;
     if (isLocked() || store.get().falling || stops[i]?.sec !== sec) {
       stopPlay();
+      scheduleCue();
       return;
     }
     const last = lastOfSection(i);
@@ -489,13 +512,24 @@ function wheelPx(e: WheelEvent): number {
 }
 
 /** popovers (language menu) keep their own native scrolling */
-function ownScroll(t: EventTarget | null): boolean {
-  return t instanceof Element && !!t.closest('[data-own-scroll]');
+/** a menu that scrolls by itself (language list, floor list) */
+function ownScroll(t: EventTarget | null): HTMLElement | null {
+  return t instanceof Element ? (t.closest('[data-own-scroll]') as HTMLElement | null) : null;
+}
+
+/** can `el` itself scroll any further in this direction (dy > 0 = down)? */
+function canScroll(el: HTMLElement, dy: number): boolean {
+  return dy < 0 ? el.scrollTop > 0 : el.scrollTop + el.clientHeight < el.scrollHeight - 1;
 }
 
 function onWheel(e: WheelEvent) {
   if (e.ctrlKey) return; // pinch-zoom on trackpads
-  if (ownScroll(e.target)) return;
+  const own = ownScroll(e.target);
+  if (own) {
+    // the menu scrolls; once it can't, the wheel stops there instead of scrolling the page
+    if (!canScroll(own, e.deltaY)) e.preventDefault();
+    return;
+  }
   e.preventDefault();
   if (isLocked() || store.get().booting) return;
   const now = performance.now();
@@ -510,12 +544,20 @@ function onWheel(e: WheelEvent) {
   lastAbs = abs;
 
   if (busy) {
-    // a fresh flick cuts into an autoplay glide right away; during the
-    // reader's own glide it is queued as the next move
-    if (fresh) {
-      if (autoTween) go(d < 0 ? 1 : -1);
-      else queued = d < 0 ? 1 : -1;
+    if (autoTween) {
+      // a clear flick cuts into an autoplay glide right away, but a grazed
+      // trackpad must not throw the page a floor: same 14px as at rest
+      if (fresh || gap > 260) acc = 0;
+      acc += d;
+      if (Math.abs(acc) >= 14) {
+        const dir = acc < 0 ? 1 : -1;
+        acc = 0;
+        go(dir);
+      }
+      return;
     }
+    // during the reader's own glide a fresh flick is queued as the next move
+    if (fresh) queued = d < 0 ? 1 : -1;
     return;
   }
   if (cooling && !fresh) return; // swallow the momentum tail of the last flick
@@ -570,7 +612,12 @@ function onTouchStart(e: TouchEvent) {
 
 function onTouchMove(e: TouchEvent) {
   // single-finger drags never scroll natively; pinch-zoom still works
-  if (ownScroll(e.target)) return;
+  const own = ownScroll(e.target);
+  if (own) {
+    // a menu short enough not to scroll must not drag the page behind it
+    if (own.scrollHeight <= own.clientHeight + 1 && e.cancelable) e.preventDefault();
+    return;
+  }
   if (e.touches.length === 1 && e.cancelable) e.preventDefault();
 }
 
@@ -621,11 +668,8 @@ export function startPager(): () => void {
   target = nearest(window.scrollY);
   setSectionJumper(goToSection);
   const offMeasured = onMeasured(() => {
-    const was = stops[target];
-    const k = was ? target - stops.findIndex((s) => s.sec === was.sec) : 0;
-    computeStops();
+    const now = recompute();
     if (busy || isLocked()) return;
-    const now = was ? sameFloor(was.sec, k) : -1;
     // the stop list may have changed shape (phone ↔ desktop): don't play on from a stale floor
     if (playSec >= 0 && (now < 0 || stops[now].sec !== playSec)) stopPlay();
     // keep the reader on the same floor after a resize / reflow
