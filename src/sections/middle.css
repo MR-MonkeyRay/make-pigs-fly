@@ -894,31 +894,51 @@
 }
 
 .flap__c {
-  display: inline-grid;
-  place-items: center;
+  /* fixed-size, fully contained cells: a glyph flipping inside one never
+     re-lays out the row, the board or the page around it */
+  display: inline-block;
+  flex: none;
+  width: 1.02em;
   min-width: 1.02em;
   height: 1.62em;
   padding: 0;
   border-radius: 3px;
   background: linear-gradient(#2c2933 0 49%, #000 49% 51%, #24212b 51%);
   color: #fffef8;
-  line-height: 1;
+  line-height: 1.62em;
+  text-align: center;
+  overflow: hidden;
+  contain: strict;
 }
 
 .flap__c.is-wide {
+  width: 1.6em;
   min-width: 1.6em;
 }
 
 .flap__c.is-space {
+  width: 0.45em;
   min-width: 0.45em;
   background: transparent;
 }
 
-.flap__c.is-flip {
-  animation: flap-flip 0.06s linear;
+/* two identical keyframes: alternating between them restarts the flip
+   without forcing a layout to reset the animation */
+.flap__c[data-f='a'] {
+  animation: flap-flip-a 0.06s linear;
 }
 
-@keyframes flap-flip {
+.flap__c[data-f='b'] {
+  animation: flap-flip-b 0.06s linear;
+}
+
+@keyframes flap-flip-a {
+  from {
+    transform: scaleY(0.2);
+  }
+}
+
+@keyframes flap-flip-b {
   from {
     transform: scaleY(0.2);
   }
