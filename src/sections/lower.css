@@ -680,7 +680,7 @@
   color: #fffef8;
   font-weight: 700;
   font-size: 13px;
-  translate: calc((var(--i) - var(--n) / 2) * 34px - 50%) 0;
+  translate: calc((var(--i) - var(--n) / 2) * 42px - 50%) 0;
   animation: fuel-rise 3.6s linear infinite;
   animation-delay: calc(var(--i) * -0.45s);
   animation-play-state: paused;
@@ -702,7 +702,7 @@
     opacity: 1;
   }
   100% {
-    transform: translateY(-60px) scale(1);
+    transform: translateY(-24px) scale(1);
     opacity: 0;
   }
 }
@@ -734,8 +734,13 @@
   .science__label span {
     font-size: 18px;
   }
+  /* the proverb explains the pig up the tree: keep it, small */
   .science__label small {
-    display: none;
+    font-size: 10.5px;
+  }
+  /* a narrower stream, so the outer compliments stay on the paper */
+  .science__fuel span {
+    translate: calc((var(--i) - var(--n) / 2) * 16px - 50%) 0;
   }
   .science__tree {
     left: 14px;

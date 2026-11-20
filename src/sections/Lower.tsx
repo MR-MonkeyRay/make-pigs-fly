@@ -258,7 +258,8 @@ export function Science() {
     if (narrow) {
       const half = cx - 30;
       if (key === 'lift') return { left: cx + 14, top: y2 - 6, maxWidth: half };
-      if (key === 'thrust') return { left: cx + 10, top: cy + 92, maxWidth: half };
+      // right under its own arrowhead, right-aligned, so it does not read as GRAVITY's label
+      if (key === 'thrust') return { right: 14, top: cy + 44, maxWidth: Math.min(half, 160), textAlign: 'right' };
       if (key === 'drag') return { left: 20, top: cy + 92, maxWidth: half };
       return { left: cx + 14, top: y2 - 12, maxWidth: half };
     }
@@ -327,7 +328,8 @@ export function Science() {
           <span>{s.wingsNote}</span>
         </div>
 
-        <div className="science__fuel" style={{ left: cx, top: cy + 60 * k }} aria-hidden="true">
+        {/* compliments rise from below and are used up at his hooves, never behind him */}
+        <div className="science__fuel" style={{ left: cx, top: cy + 110 * k }} aria-hidden="true">
           {s.compliments.map((c, i) => (
             <span key={c} style={{ '--i': i, '--n': s.compliments.length } as React.CSSProperties}>
               {c}
